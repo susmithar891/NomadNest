@@ -5,6 +5,7 @@ import Roomcard from './Roomcard'
 import hotels from '../media/input.json'
 
 
+
 export const Homepage = () => {
     return (
         <>
