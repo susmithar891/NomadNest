@@ -1,0 +1,153 @@
+[
+    {
+        "hotelId" : 1,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "comments": ["Amazing views!", "Great service", "Highly recommended"]
+    },
+    {
+        "hotelId" : 2,
+        "hotelname": "Mountain Lodge",
+        "preview": "Escape to nature's embrace",
+        "near_by_places": "Hiking Trails, Ski Resort",
+        "rating": {
+            "avg_rat": "4.2",
+            "1": "4",
+            "2": "4",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "comments": ["Beautiful location", "Cozy rooms", "Friendly staff"]
+    },
+    {
+        "hotelId" : 3,
+        "hotelname": "City Lights Inn",
+        "preview": "Stay in the heart of the city",
+        "near_by_places": "Museums, Theaters, Cafes",
+        "rating": {
+            "avg_rat": "4.8",
+            "1": "5",
+            "2": "5",
+            "3": "5",
+            "4": "4",
+            "5": "5"
+        },
+        "comments": ["Perfect location", "Modern amenities", "Excellent service"]
+    },
+    {
+        "hotelId" : 4,
+        "hotelname": "Tranquil Haven Retreat",
+        "preview": "Find peace in nature's sanctuary",
+        "near_by_places": "Nature Reserves, Spa",
+        "rating": {
+            "avg_rat": "4.7",
+            "1": "5",
+            "2": "4",
+            "3": "5",
+            "4": "5",
+            "5": "4"
+        },
+        "comments": ["Relaxing atmosphere", "Friendly staff", "Serene environment"]
+    },
+    {
+        "hotelId" : 5,
+        "hotelname": "Sunset Villa",
+        "preview": "Where every evening is magical",
+        "near_by_places": "Beach, Restaurants, Golf Course",
+        "rating": {
+            "avg_rat": "4.6",
+            "1": "4",
+            "2": "5",
+            "3": "4",
+            "4": "5",
+            "5": "5"
+        },
+        "comments": ["Breathtaking sunsets", "Luxurious stay", "Attentive staff"]
+    },
+    {
+        "hotelId" : 6,
+        "hotelname": "Riverside Retreat",
+        "preview": "Serenity by the flowing river",
+        "near_by_places": "Riverwalk, Picnic Spots",
+        "rating": {
+            "avg_rat": "4.4",
+            "1": "4",
+            "2": "4",
+            "3": "4",
+            "4": "5",
+            "5": "4"
+        },
+        "comments": ["Peaceful ambiance", "Scenic views", "Great for relaxation"]
+    },
+    {
+        "hotelId" : 7,
+        "hotelname": "Historic Manor",
+        "preview": "Step into the pages of history",
+        "near_by_places": "Historical Sites, Museums",
+        "rating": {
+            "avg_rat": "4.9",
+            "1": "5",
+            "2": "5",
+            "3": "5",
+            "4": "4",
+            "5": "5"
+        },
+        "comments": ["Charming atmosphere", "Knowledgeable staff", "Unique experience"]
+    },
+    {
+        "hotelId" : 8,
+        "hotelname": "Luxury Heights",
+        "preview": "Elevate your stay to new heights",
+        "near_by_places": "Shopping District, Fine Dining",
+        "rating": {
+            "avg_rat": "4.7",
+            "1": "4",
+            "2": "5",
+            "3": "5",
+            "4": "4",
+            "5": "5"
+        },
+        "comments": ["Stunning views", "Impeccable service", "Indulgent amenities"]
+    },
+    {
+        "hotelId" : 9,
+        "hotelname": "Forest Retreat",
+        "preview": "Escape to the tranquility of the woods",
+        "near_by_places": "Hiking Trails, Wildlife Reserve",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "4",
+            "2": "4",
+            "3": "5",
+            "4": "5",
+            "5": "4"
+        },
+        "comments": ["Nature's paradise", "Cozy cabins", "Friendly staff"]
+    },
+    {
+        "hotelId" : 10,
+        "hotelname": "Seaside Sanctuary",
+        "preview": "Your refuge by the ocean",
+        "near_by_places": "Beach, Seafood Restaurants",
+        "rating": {
+            "avg_rat": "4.6",
+            "1": "4",
+            "2": "4",
+            "3": "5",
+            "4": "5",
+            "5": "4"
+        },
+        "comments": ["Peaceful retreat", "Fresh seafood", "Relaxing atmosphere"]
+    }                                   
+    
+]
