@@ -37,7 +37,7 @@ const Login = () => {
                   </label>
                 </div> */}
                 <div className="form-outline mb-4">
-                  <input type="email" id="form3Example3" className="form-control" />
+                  <input type="email" id="form3Example3" className="form-control" required/>
                   <label className="form-label" htmlFor="form3Example3">
                     Email address
                   </label>
@@ -47,6 +47,7 @@ const Login = () => {
                     type="password"
                     id="form3Example4"
                     className="form-control"
+                    required
                   />
                   <label className="form-label" htmlFor="form3Example4">
                     Password

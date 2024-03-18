@@ -38,6 +38,7 @@ const Register = () => {
                         type="text"
                         id="form3Example1"
                         className="form-control"
+                        required
                       />
                       <label className="form-label" htmlFor="form3Example1">
                         First name
@@ -50,6 +51,7 @@ const Register = () => {
                         type="text"
                         id="form3Example2"
                         className="form-control"
+                        required
                       />
                       <label className="form-label" htmlFor="form3Example2">
                         Last name
@@ -58,7 +60,7 @@ const Register = () => {
                   </div>
                 </div>
                 <div className="form-outline mb-4">
-                  <input type="email" id="form3Example3" className="form-control" />
+                  <input type="email" id="form3Example3" className="form-control" required/>
                   <label className="form-label" htmlFor="form3Example3">
                     Email address
                   </label>
@@ -68,6 +70,7 @@ const Register = () => {
                     type="password"
                     id="form3Example4"
                     className="form-control"
+                    required
                   />
                   <label className="form-label" htmlFor="form3Example4">
                     Password
@@ -88,7 +91,7 @@ const Register = () => {
                 <button type="submit" className="btn btn-primary btn-block mb-4">
                   Sign Up
                 </button>
-
+              </form>
 
                 <div className="form-check d-flex justify-content-center mb-4">
                   <div className=''>
@@ -118,7 +121,7 @@ const Register = () => {
                     <i className="fab fa-github" />
                   </button>
                 </div>
-              </form>
+              
             </div>
           </div>
         </div>

@@ -1,0 +1,20 @@
+.incre-btn {
+    background-color: #ffffff; /* Default color */
+    border: 1px solid #8F8F8F;
+    border-radius: 5px;
+    color: #000000; /* Text color */
+    padding: 10px 20px; /* Padding inside the button */
+    text-align: center; /* Align text to center */
+    text-decoration: none; /* Remove underline from links */
+    display: inline-block; /* Allow setting dimensions */
+    font-size: 16px; /* Set font size */
+    
+    cursor: pointer; /* Change mouse cursor to pointer */
+    
+  }
+  
+  .incre-btn:hover {
+    background-color: #f0f6fd; /* Very light blue color on hover */
+  }
+  
+  
