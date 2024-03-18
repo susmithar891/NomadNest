@@ -27,12 +27,12 @@ const Landingpage = () => {
                     <div className="collapse navbar-collapse" id="navbarResponsive">
                         <ul className="navbar-nav ms-auto">
                             <li className="nav-item">
-                                <Link to='/register' className="nav-link">
+                                <Link to='/sign-up' className="nav-link">
                                     Register
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link to='/login' className="nav-link">
+                                <Link to='/sign-in' className="nav-link">
                                     Login
                                 </Link>
                             </li>
@@ -53,7 +53,7 @@ const Landingpage = () => {
                             <h2 className="text-white-50 mx-auto mt-2 mb-5">
 
                             </h2>
-                            <Link className="btn btn-primary" to="login">
+                            <Link className="btn btn-primary" to="sign-in">
                                 Get Started
                             </Link>
                         </div>
