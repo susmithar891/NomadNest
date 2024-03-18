@@ -1,11 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Roompage from './Roompage'
 import { Navbar } from './Navbar'
-import Numberinput from './Numberinput'
 import Roomcard from './Roomcard'
 import hotels from '../media/input.json'
-import {hotel1} from '../media/hotel1.jpeg'
+
 
 
 export const Homepage = () => {
