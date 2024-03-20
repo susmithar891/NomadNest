@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import axios from 'axios'
+import { Link ,useNavigate} from 'react-router-dom'
+import request from '../api/axios'
 
 const Login = () => {
+
+	const navigate = useNavigate()
 
 	const [email, setEmail] = useState("")
 	const [pass, setPass] = useState("")
@@ -12,8 +14,11 @@ const Login = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			const response = await axios.post("http://localhost:4000/sign-in", {email : email,password:pass});
-			console.log("Post created:", response.data);
+			const response = await request.post("/sign-in", {email : email,password:pass,remember : remember});
+			
+			if(response.data === "OK"){
+				navigate('/home')
+			}
 		} catch (error) {
 			console.error("Error creating post:", error);
 		}

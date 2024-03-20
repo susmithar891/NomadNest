@@ -22,12 +22,15 @@ const corsOption = {
     methods: ["GET", "POST", "PUT", "DELETE"],
 }
 app.use(cors(corsOption));
+
+
+
 app.use(session({
     name: "user_sid",
     secret: 'ed3a7a2101d71527f2df187812f4037ad4cb0ddf6e01ed78d21602175d413b80fd8a089c92cb1ee06c8377d6947eb475537f19893f016671b22fe6ac7728ad23',
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60, sameSite: false, secure: false, httpOnly: true }
+    cookie: { maxAge: 1000 * 60 * 60, secure: false, httpOnly: true }
 }))
 
 
@@ -97,6 +100,7 @@ app.post("/sign-in",redirectHome, async (req, res) => {
             }
             if (resp) {
                 req.session.userId = loggeduser.id
+                console.log(loggeduser.id)
                 return res.sendStatus(200)
             }
             else {
