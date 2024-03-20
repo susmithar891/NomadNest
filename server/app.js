@@ -16,6 +16,12 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 
+const corsOption = {
+    origin: ['http://localhost:3000'],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+}
+app.use(cors(corsOption));
 
 
 
@@ -24,7 +30,7 @@ app.get('/', (req, res) => {
 })
 
 
-app.post("/api/sign-up/", async (req, res) => {
+app.post("/sign-up", async (req, res) => {
 
     const checkaval_email = await user.findOne({ email: req.body.email });
 

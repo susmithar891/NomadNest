@@ -1,49 +1,32 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import axios from 'axios'
-
-
+import { Link,useNavigate } from 'react-router-dom'
+import request from '../api/axios'
 
 
 
 const Register = () => {
+
+	const navigate= useNavigate()
+	
 	const [firstName, setFirst] = useState("")
 	const [lastName, setLast] = useState("")
 	const [email, setEmail] = useState("")
 	const [pass, setPass] = useState("")
 	const [remeb, setRememb] = useState(false)
 
-	const handleSubmit = async(e) => {
-		e.preventDefault()
-		console.log("firstname : ",firstName)
-		console.log("lastname : ",lastName)
-		console.log("email : ",email)
-		console.log("password : ",pass)
-		console.log("remember me : ",remeb)
-
-		try{
-			const res = await axios.post('https://localhost:4000/api/sign-up',
-			JSON.stringify({"firstname" : firstName,"lastname" : lastName,"email" : email,"password" : pass,"remember" : remeb}),
-			{
-				headers:{"Accept":"application/json, text/plain, /","Content-Type": "multipart/form-data"},
-				withCredientials :true
-			})
-
-			console.log(res.data)
-		}catch(err){
-			// if(!err?.response){
-			// 	setErrMsg('No Server Response')
-			// }
-			// else if(err.response?.status === 409){
-			// 	setErrMsg('username taken')
-			// }
-			// else{
-			// 	setErrMSg('Registration failed')
-			// }
-			console.log(err)
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		try {
+			const response = await request.post("/sign-up", {firstname : firstName,lastname : lastName,email : email,password : pass,remember : remeb});
+			
+			console.log(response.data)
+			if(response.data === "OK"){
+				navigate('/home')
+			}
+		} catch (error) {
+			console.error("Error creating post:", error);
 		}
 
-	
 	}
 
 
