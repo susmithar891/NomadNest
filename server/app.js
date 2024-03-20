@@ -19,7 +19,13 @@ app.use(express.json())
 app.use(cors({
     origin: "*"
 }))
-
+app.use(session({
+    name: "user_sid",
+    secret: 'ed3a7a2101d71527f2df187812f4037ad4cb0ddf6e01ed78d21602175d413b80fd8a089c92cb1ee06c8377d6947eb475537f19893f016671b22fe6ac7728ad23',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60, sameSite: true, secure: false, httpOnly: true }
+}))
 
 
 app.get('/', (req, res) => {
@@ -41,6 +47,7 @@ app.post("/api/sign-up", async (req, res) => {
 
             const newUser = await new user({ firstName: req.body.firstname, lastName: req.body.lastname, email: req.body.email, password: hashedPass });
             await newUser.save();
+            req.session.userId = newUser.id;
             res.sendStatus(200)
 
         }
@@ -52,7 +59,6 @@ app.post("/api/sign-up", async (req, res) => {
 
 })
 
-
 app.post("/api/sign-in", async (req, res) => {    
 
     const loggeduser = await user.findOne({email : req.body.email})
@@ -62,8 +68,8 @@ app.post("/api/sign-in", async (req, res) => {
                 return res.sendStatus(400)
             }
             if (resp) {
+                req.session.userId = loggeduser.id
                 return res.sendStatus(200)
-
             }
             else {
                 return res.sendStatus(401)
