@@ -6,6 +6,7 @@ const cors = require('cors')
 const bcrypt = require('bcrypt')
 require('./conn')
 const user = require('./models/user.model')
+const hotels = require('./hotels.json')
 
 
 const app = express()
@@ -60,6 +61,38 @@ const redirectLogin = (req,res,next) => {
 
 app.get('/', (req, res) => {
     res.status(200).sendFile(path.join(__dirname, 'models', 'hotels.json'))
+})
+
+
+app.post('/data',async(req,res) => {
+    const loc = req.query.location;
+    var data;
+    if(loc === ""){
+        data = hotels
+    }
+    else{
+        data = hotels.map((ele)=>{
+            return ele.location === loc
+        })
+    }
+    
+    try{
+        const user_det = await user.findOne({id : req.session.userId}).select('-password -updatedAt -email -createdAt -__v -_id')
+        const qunt = {
+            username : user_det,
+            data : data
+        }
+    
+        res.status(200).send(qunt)
+    }
+    catch(err){
+        // res.status(400).send(err)
+        throw err
+    }
+    
+
+
+    
 })
 
 
