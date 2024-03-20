@@ -28,12 +28,36 @@ app.use(session({
 }))
 
 
+
+const redirectHome = (req,res,next) =>{
+    if(req.session.userId){
+        // res.redirect('/home')
+    }
+    else{
+        next()
+    }
+}
+
+const redirectLogin = (req,res,next) => {
+    if(!req.session.userId){
+        // res.redirect('/login')
+    }
+    else{
+        next()
+    }
+
+
+}
+
+
+
+
 app.get('/', (req, res) => {
     res.status(200).sendFile(path.join(__dirname, 'models', 'hotels.json'))
 })
 
 
-app.post("/api/sign-up", async (req, res) => {
+app.post("/api/sign-up",redirectHome, async (req, res) => {
 
     const checkaval_email = await user.findOne({ email: req.body.email });
 
@@ -59,7 +83,7 @@ app.post("/api/sign-up", async (req, res) => {
 
 })
 
-app.post("/api/sign-in", async (req, res) => {    
+app.post("/api/sign-in",redirectHome, async (req, res) => {    
 
     const loggeduser = await user.findOne({email : req.body.email})
     if (loggeduser) {
