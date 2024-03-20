@@ -9,22 +9,25 @@ const user = require('./models/user.model')
 
 
 const app = express()
-port = process.env.PORT || 3000
+port = process.env.PORT || 4000
 
 
 
 app.use(express.static(path.join(__dirname, '/public')))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-app.use(cors({
-    origin: "*"
-}))
+const corsOption = {
+    origin: ['http://localhost:3000'],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+}
+app.use(cors(corsOption));
 app.use(session({
     name: "user_sid",
     secret: 'ed3a7a2101d71527f2df187812f4037ad4cb0ddf6e01ed78d21602175d413b80fd8a089c92cb1ee06c8377d6947eb475537f19893f016671b22fe6ac7728ad23',
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60, sameSite: true, secure: false, httpOnly: true }
+    cookie: { maxAge: 1000 * 60 * 60, sameSite: false, secure: false, httpOnly: true }
 }))
 
 
@@ -83,7 +86,8 @@ app.post("/api/sign-up",redirectHome, async (req, res) => {
 
 })
 
-app.post("/api/sign-in",redirectHome, async (req, res) => {    
+app.post("/sign-in",redirectHome, async (req, res) => {  
+
 
     const loggeduser = await user.findOne({email : req.body.email})
     if (loggeduser) {
