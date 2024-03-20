@@ -3,6 +3,7 @@ require("dotenv").config()
 const session = require("express-session")
 const cors = require('cors')
 const bcrypt = require('bcrypt')
+require('./conn')
 
 
 
