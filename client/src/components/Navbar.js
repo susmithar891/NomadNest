@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import '../styling/navbar.css'
 
-const Navbar = () => {
+const Navbar = (props) => {
     return (
         <nav className="navbar navbar-expand-lg navbar-dark" 
         style={{
@@ -71,7 +71,9 @@ const Navbar = () => {
                             </ul>
                         </li> */}
                     </ul>
-                    <ul className="navbar-nav ms-auto mb-0 mb-lg-0 profile-menu">
+
+                    {props.profile ? <ul className="navbar-nav ms-auto mb-0 mb-lg-0 profile-menu">
+                        
                         <li className="nav-item dropdown">
                             <a
                                 className="nav-link dropdown-toggle rounded-circle"
@@ -111,7 +113,8 @@ const Navbar = () => {
                                 </li>
                             </ul>
                         </li>
-                    </ul>
+                    </ul> : null}
+                    
                 </div>
             </div>
         </nav>
