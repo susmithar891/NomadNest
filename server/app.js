@@ -103,6 +103,11 @@ app.post('/data', async (req, res) => {
 })
 
 
+app.post("/queries",(req,res) => [
+    console.log(req.body)
+])
+
+
 
 app.post("/api/sign-up", redirectHome, async (req, res) => {
 

@@ -1,7 +1,30 @@
-import React from 'react'
+import React,{useState} from 'react'
 import { Navbar } from './Navbar'
+import request from '../api/axios'
 
 const ContactUs = () => {
+
+	const[name,setName] = useState("")
+	const [email,setEmail] = useState("")
+	const[phone,setPhone] = useState("")
+	const[message,setMessage] = useState("")
+
+
+
+	const handleSubmit = async(e)=>{
+		e.preventDefault()
+		try{
+			const res = await request.post("/queries", {name : name,email:email,phone:phone,message : message});
+		}
+		catch(e){
+			console.log(e)
+		}
+		
+	}
+
+
+
+
 	return (
 		<>
 			<Navbar profile={false}/>
@@ -25,7 +48,7 @@ const ContactUs = () => {
 						<div className="row justify-content-lg-center">
 							<div className="col-12 col-lg-9">
 								<div className="bg-white border rounded shadow-sm overflow-hidden">
-									<form action="#!">
+									<form onSubmit={handleSubmit}>
 										<div className="row gy-4 gy-xl-5 p-4 p-xl-5">
 											<div className="col-12">
 												<label htmlFor="fullname" className="form-label">
@@ -37,7 +60,8 @@ const ContactUs = () => {
 													id="fullname"
 													name="fullname"
 													defaultValue=""
-													required=""
+													required
+													onChange={(e) => {setName(e.target.value)}}
 												/>
 											</div>
 											<div className="col-12 col-md-6">
@@ -63,7 +87,8 @@ const ContactUs = () => {
 														id="email"
 														name="email"
 														defaultValue=""
-														required=""
+														required
+														onChange={(e) => {setEmail(e.target.value)}}
 													/>
 												</div>
 											</div>
@@ -90,6 +115,8 @@ const ContactUs = () => {
 														id="phone"
 														name="phone"
 														defaultValue=""
+														required
+														onChange={(e) => {setPhone(e.target.value)}}
 													/>
 												</div>
 											</div>
@@ -102,8 +129,9 @@ const ContactUs = () => {
 													id="message"
 													name="message"
 													rows={3}
-													required=""
 													defaultValue={""}
+													required
+													onChange={(e) => {setMessage(e.target.value)}}
 												/>
 											</div>
 											<div className="col-12">
