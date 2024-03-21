@@ -16,21 +16,34 @@ export const Homepage = () => {
 
 
     useEffect(() => {
-                    request.post('/OnloadData', {
-                        headers: { 'Content-Type': 'application/json' },
-                    })
-                    .then((res) => {                        
-                        setData(res.data.data)
-                        setUser(res.data.username)
-                        setLocations(res.data.locations)
-                        setIsFetching(false)
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    })
-        }, []);
+        request.post('/OnloadData', {
+            headers: { 'Content-Type': 'application/json' },
+        })
+            .then((res) => {
+                setData(res.data.data)
+                setUser(res.data.username)
+                setLocations(res.data.locations)
+                setIsFetching(false)
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }, []);
 
-    
+    const getData = async (e) => {
+        setlocFilter(e.target.value)
+        try {
+            const res = await request.post(`/data?location=${ locFilter }`, {
+                headers: { 'Content-Type': 'application/json' },
+            })
+            console.log(res.data)
+            setData(res.data)
+        }
+        catch (e) {
+            console.log(e)
+        }
+
+    }
 
 
     return (
@@ -43,12 +56,12 @@ export const Homepage = () => {
                 </h2>
                 <form className="d-flex bd-highlight m-3 justify-content">
                     <div className="w-50 m-1">
-                        <select className="form-select p-3 max-height-30 overflow-auto" required >
-                                <option className="m-2" disabled defaultValue={""}>Select</option>
-                                {locations.map((loc,index) => {
-                                    return <option className="m-2" value={loc} key={index}>{loc}</option>
-                                })}
-                        
+                        <select className="form-select p-3 max-height-30 overflow-auto" required onChange={getData}>
+                            <option className="m-2" disabled selected   >Select</option>
+                            {locations.map((loc, index) => {
+                                return <option className="m-2" value={loc} key={index}>{loc}</option>
+                            })}
+
                         </select>
                     </div>
                     <div className="w-50 m-1" id="prefill">

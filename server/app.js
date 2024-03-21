@@ -90,6 +90,20 @@ app.post('/OnloadData', async (req, res) => {
 
 
 
+app.post('/data', async (req, res) => {
+    const loc = req.query.location;
+
+    var data = hotels.filter((ele) => {
+        return ele.location === loc
+    })
+
+
+    res.status(200).send(data)
+
+})
+
+
+
 app.post("/api/sign-up", redirectHome, async (req, res) => {
 
     const checkaval_email = await user.findOne({ email: req.body.email });
