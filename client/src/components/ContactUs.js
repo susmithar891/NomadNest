@@ -1,9 +1,10 @@
 import React from 'react'
+import { Navbar } from './Navbar'
 
 const ContactUs = () => {
 	return (
 		<>
-			<>
+			<Navbar profile={false}/>
 				{/* Contact 1 - Bootstrap Brain Component */}
 				<section className="bg-light py-3 py-md-5">
 					<h2 className="mb-4 display-5 text-center">Contact Us</h2>
@@ -119,8 +120,6 @@ const ContactUs = () => {
 						</div>
 					</div>
 				</section>
-
-			</>
 
 
 		</>

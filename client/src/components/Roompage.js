@@ -12,7 +12,7 @@ const Roompage = (props) => {
 	const maxRating = Math.max(...Object.values(hotel.rating).filter((key,val) => key !== 'avg_rat' && typeof(val) === 'number'));
 	return (
 		<>
-			<Navbar />
+			<Navbar profile={true}/>
 
 			<div className="container mt-5">
 				<div className="card">

@@ -48,7 +48,7 @@ export const Homepage = () => {
 
     return (
         <>
-            <Navbar />
+            <Navbar profile={true}/>
 
             <div className=' my-3 w-75 mx-auto'>
                 <h2 className='px-4 w-75 my-3'>
