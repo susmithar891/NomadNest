@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Navbar } from './Navbar'
 import Roomcard from './Roomcard'
-import hotels from '../media/input.json'
 import request from '../api/axios'
 
 
@@ -11,25 +10,27 @@ export const Homepage = () => {
 
     const [data, setData] = useState([]);
     const [user, setUser] = useState({});
-    const [location, setLocation] = useState("");
+    const [locFilter, setlocFilter] = useState("");
+    const [locations, setLocations] = useState([]);
+    const [isfetching, setIsFetching] = useState(true);
 
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await request.post('/data/?location=', {
-                    headers: { 'Content-Type': 'application/json' },
-                });
-                console.log(res);
-            } catch (err) {
-                console.log(err);
-            }
-        };
+                    request.post('/OnloadData', {
+                        headers: { 'Content-Type': 'application/json' },
+                    })
+                    .then((res) => {                        
+                        setData(res.data.data)
+                        setUser(res.data.username)
+                        setLocations(res.data.locations)
+                        setIsFetching(false)
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+        }, []);
 
-        fetchData();
-    }, []);
-
-
+    
 
 
     return (
@@ -42,11 +43,12 @@ export const Homepage = () => {
                 </h2>
                 <form className="d-flex bd-highlight m-3 justify-content">
                     <div className="w-50 m-1">
-                        <select className="form-select p-3" required>
-                            {/* <option  hidden>Location</option> */}
-                            <option className="m-2" value="1">One</option>
-                            <option className="m-2" value="2">Two</option>
-                            <option className="m-2" value="3">Three</option>
+                        <select className="form-select p-3 max-height-30 overflow-auto" required >
+                                <option className="m-2" disabled defaultValue={""}>Select</option>
+                                {locations.map((loc,index) => {
+                                    return <option className="m-2" value={loc} key={index}>{loc}</option>
+                                })}
+                        
                         </select>
                     </div>
                     <div className="w-50 m-1" id="prefill">
@@ -111,15 +113,9 @@ export const Homepage = () => {
                 </form>
             </div>
 
+            {isfetching ? <div>Loading Data..</div> : <div className='w-75 mx-auto p-3'>
 
-            {/* place,in - out dates,member count,search */}
-            {/* browse by property type -- hotels,aprt,resorts,vilas ,cabins */}
-
-
-
-            <div className='w-75 mx-auto p-3'>
-
-                {hotels.map(function (element) {
+                {data.map(function (element) {
                     return (
                         <Link className='m-3' to={'/home/' + element.hotelId} key={element.hotelId} style={{ textDecoration: 'none' }}>
                             <Roomcard hotelId={element.hotelId} hotelName={element.hotelname} hotelimg={'hotel' + element.hotelId + '.jpeg'} hotelpre={element.preview} />
@@ -129,7 +125,8 @@ export const Homepage = () => {
 
 
 
-            </div>
+            </div>}
+
         </>
     )
 }

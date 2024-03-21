@@ -36,20 +36,20 @@ app.use(session({
 
 
 
-const redirectHome = (req,res,next) =>{
-    if(req.session.userId){
+const redirectHome = (req, res, next) => {
+    if (req.session.userId) {
         // res.redirect('/home')
     }
-    else{
+    else {
         next()
     }
 }
 
-const redirectLogin = (req,res,next) => {
-    if(!req.session.userId){
+const redirectLogin = (req, res, next) => {
+    if (!req.session.userId) {
         // res.redirect('/login')
     }
-    else{
+    else {
         next()
     }
 
@@ -64,39 +64,33 @@ app.get('/', (req, res) => {
 })
 
 
-app.post('/data',async(req,res) => {
-    const loc = req.query.location;
-    var data;
-    if(loc === ""){
-        data = hotels
-    }
-    else{
-        data = hotels.map((ele)=>{
-            return ele.location === loc
-        })
-    }
+app.post('/OnloadData', async (req, res) => {
     
-    try{
-        const user_det = await user.findOne({id : req.session.userId}).select('-password -updatedAt -email -createdAt -__v -_id')
+    
+    const uniqueLocations = [...new Set(hotels.map(hotel => hotel.location))];
+
+
+    try {
+        const user_det = await user.findOne({ id: req.session.userId }).select('-password -updatedAt -email -createdAt -__v -_id')
         const qunt = {
-            username : user_det,
-            data : data
+            username: user_det,
+            locations: uniqueLocations,
+            data: hotels
         }
-    
+
         res.status(200).send(qunt)
     }
-    catch(err){
-        // res.status(400).send(err)
-        throw err
+    catch (err) {
+        res.status(400).send(err)
+        // throw err
     }
-    
 
 
-    
 })
 
 
-app.post("/api/sign-up",redirectHome, async (req, res) => {
+
+app.post("/api/sign-up", redirectHome, async (req, res) => {
 
     const checkaval_email = await user.findOne({ email: req.body.email });
 
@@ -122,10 +116,10 @@ app.post("/api/sign-up",redirectHome, async (req, res) => {
 
 })
 
-app.post("/sign-in",redirectHome, async (req, res) => {  
+app.post("/sign-in", redirectHome, async (req, res) => {
 
 
-    const loggeduser = await user.findOne({email : req.body.email})
+    const loggeduser = await user.findOne({ email: req.body.email })
     if (loggeduser) {
         await bcrypt.compare(req.body.password, loggeduser.password, (err, resp) => {
             if (err) {
