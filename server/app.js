@@ -17,13 +17,13 @@ port = process.env.PORT || 4000
 app.use(express.static(path.join(__dirname, '/public')))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+
 const corsOption = {
     origin: ['http://localhost:3000'],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
 }
 app.use(cors(corsOption));
-
 
 
 app.use(session({
@@ -109,7 +109,12 @@ app.post("/queries",(req,res) => [
 
 
 
-app.post("/api/sign-up", redirectHome, async (req, res) => {
+app.get('/', (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, 'models', 'hotels.json'))
+})
+
+
+app.post("/sign-up", async (req, res) => {
 
     const checkaval_email = await user.findOne({ email: req.body.email });
 
@@ -132,8 +137,6 @@ app.post("/api/sign-up", redirectHome, async (req, res) => {
         }
 
     }
-
-})
 
 app.post("/sign-in", redirectHome, async (req, res) => {
 
