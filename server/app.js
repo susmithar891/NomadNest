@@ -137,6 +137,7 @@ app.post("/sign-up", async (req, res) => {
         }
 
     }
+})
 
 app.post("/sign-in", redirectHome, async (req, res) => {
 
