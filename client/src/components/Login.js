@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState ,useEffect} from 'react'
 import { Link ,useNavigate} from 'react-router-dom'
 import request from '../api/axios'
 
@@ -19,11 +19,36 @@ const Login = () => {
 			if(response.data === "OK"){
 				navigate('/home')
 			}
+
+			if(response.data.redirect && response.data.redirect === "home"){
+				navigate('/home')
+			}
+			
 		} catch (error) {
 			console.error("Error creating post:", error);
 		}
 
 	}
+
+	useEffect(() => {
+
+        const checkToken = async() => {
+
+            try{
+                const res = await request.post('/api/check')
+                if(res.data.redirect === "home"){
+                    navigate('/home')
+                }
+            }
+            catch(e){
+                alert(e)
+            }
+
+        }
+
+        checkToken()
+
+	},[])
 
 
 	return (

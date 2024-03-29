@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { Link,useNavigate } from 'react-router-dom'
 import request from '../api/axios'
 
@@ -18,9 +18,11 @@ const Register = () => {
 		e.preventDefault();
 		try {
 			const response = await request.post("/sign-up", {firstname : firstName,lastname : lastName,email : email,password : pass,remember : remeb});
-			
 			console.log(response.data)
 			if(response.data === "OK"){
+				navigate('/home')
+			}
+			if(response.data.redirect && response.data.redirect === "home"){
 				navigate('/home')
 			}
 		} catch (error) {
@@ -28,6 +30,26 @@ const Register = () => {
 		}
 
 	}
+
+	useEffect(() => {
+
+        const checkToken = async() => {
+
+            try{
+                const res = await request.post('/api/check')
+                // if(res.data.redirect === "home"){
+                //     navigate('/home')
+                // }
+				console.log(res)
+            }
+            catch(e){
+                alert(e)
+            }
+
+        }
+
+        checkToken()
+	},[])
 
 
 	return (

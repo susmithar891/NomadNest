@@ -10,9 +10,29 @@ const Roompage = (props) => {
 	let params = useParams()
 	let hotel = hotels.find(obj => obj.hotelId.toString() === params.id)
 	const maxRating = Math.max(...Object.values(hotel.rating).filter((key,val) => key !== 'avg_rat' && typeof(val) === 'number'));
+
+	// useEffect(() => {
+    //     request.post('/OnloadData', {
+    //         headers: { 'Content-Type': 'application/json' },
+    //     })
+    //         .then((res) => {
+    //             console.log(res.data)
+    //             setData(res.data.data)
+    //             setUser(res.data.username)
+    //             setLocations(res.data.locations)
+    //             setIsFetching(false)
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         })
+    // }, []);
+
+
+
+
 	return (
 		<>
-			<Navbar profile={true}/>
+			{/* <Navbar profile={true}/> */}
 
 			<div className="container mt-5">
 				<div className="card">
@@ -78,37 +98,6 @@ const Roompage = (props) => {
 					</div>
 				</div>
 			</div>
-
-
-			{/* <div className="container my-5">
-				<div className="row">
-					<div className="col-md-6">
-						<div className="card">
-							<div className="card-header">
-								Ratings
-							</div>
-							<ul className="list-group list-group-flush">
-								<li className="list-group-item">Average Rating: {hotel.rating.avg_rat}</li>
-								{Object.entries(hotel.rating).filter(([key]) => key !== 'avg_rat').map(([key, value]) => (
-									<li className="list-group-item">Rating {key}: {value} stars</li>
-								))}
-							</ul>
-						</div>
-					</div>
-					<div className="col-md-6">
-						<div className="card">
-							<div className="card-header">
-								Comments
-							</div>
-							<ul className="list-group list-group-flush">
-								{hotel.comments.map((comment, index) => (
-									<li className="list-group-item" key={index}>{comment}</li>
-								))}
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div> */}
 
 			<div className="container my-5">
 				<div className="row">

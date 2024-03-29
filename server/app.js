@@ -55,10 +55,10 @@ function verifyUser(token){
 
 
 const redirectHome = (req, res, next) => {
-    if (req.cookies.session_token && verifyUser(req.cookies.session_token)) {
+    if (req.cookies && req.cookies.session_token && verifyUser(req.cookies.session_token)) {
         // res.redirect('/home')
         // res.send({"msg" : "this is home"})
-        res.status(307).send({redirect : 'home'})
+        res.status(200).send({redirect : 'home'})
     }
     else {
         next()
@@ -68,7 +68,7 @@ const redirectHome = (req, res, next) => {
 const redirectLogin = (req, res, next) => {
     if (!verifyUser(req.cookies.session_token)) {
         // res.redirect('/')
-        res.status(307).send({redirect : 'landing'})
+        res.status(403).send({redirect : 'landing'})
         // res.send({"msg" : "this is Login"})
     }
     else {
@@ -82,14 +82,23 @@ app.get('/',(req, res) => {
 })
 
 
-app.post('/OnloadData',redirectLogin, async (req, res) => {
+app.post('/OnloadData', async (req, res) => {
     
     
     const uniqueLocations = [...new Set(hotels.map(hotel => hotel.location))];
 
+    let def_user;
+    if(req.cookies){
+        def_user = verifyUser(req.cookies.session_token)
+        
+    }
+
 
     try {
-        const user_det = await user.findOne({ id: req.session.userId }).select('-password -updatedAt -email -createdAt -__v -_id')
+        let user_det = null
+        if(def_user){
+            user_det = await user.findOne({_id: def_user.id }).select('-password -updatedAt -email -createdAt -__v -_id')
+        }
         const qunt = {
             username: user_det,
             locations: uniqueLocations,
@@ -99,15 +108,17 @@ app.post('/OnloadData',redirectLogin, async (req, res) => {
         res.status(200).send(qunt)
     }
     catch (err) {
+        console.log(err)
         res.status(400).send(err)
+        
         // throw err
     }
 
 
 })
 
-app.post('/check',redirectHome,(req,res) => {
-
+app.post('/api/check',redirectHome,(req,res) => {
+    res.send({"msg" : "No session detected"});
 })
 
 
@@ -188,6 +199,11 @@ app.post("/sign-in",redirectHome, async (req, res) => {
 })
 
 
+app.post('/api/logout',redirectLogin,(req,res) => {
+    res.clearCookie('session_token');
+    res.end()
+    // res.status(200).json({"msg" : "user logged out successfully"})
+})
 
 
 

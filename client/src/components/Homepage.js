@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Navbar } from './Navbar'
 import Roomcard from './Roomcard'
 import request from '../api/axios'
@@ -8,6 +8,20 @@ import request from '../api/axios'
 
 export const Homepage = () => {
 
+    const logout = async () => {
+        request.post('/api/logout')
+        .then(() => {
+            setUser(null)
+            console.log(user)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+            
+        
+    }
+
+    const navigate = useNavigate();
     const [data, setData] = useState([]);
     const [user, setUser] = useState({});
     const [locFilter, setlocFilter] = useState("");
@@ -20,6 +34,7 @@ export const Homepage = () => {
             headers: { 'Content-Type': 'application/json' },
         })
             .then((res) => {
+                console.log(res.data)
                 setData(res.data.data)
                 setUser(res.data.username)
                 setLocations(res.data.locations)
@@ -48,7 +63,7 @@ export const Homepage = () => {
 
     return (
         <>
-            <Navbar profile={true}/>
+            <Navbar profile={true}  user={user} logout = {logout}/>
 
             <div className=' my-3 w-75 mx-auto'>
                 <h2 className='px-4 w-75 my-3'>
