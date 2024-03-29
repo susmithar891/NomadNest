@@ -1,6 +1,3 @@
-# NomadNest
-=======
-
 # Nomad Nest
 
 NomadNest supports digital nomads by providing affordable and flexible housing options tailored to their needs.
