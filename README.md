@@ -1,11 +1,9 @@
-<<<<<<< Updated upstream
 # NomadNest
 =======
 
 # Nomad Nest
 
 NomadNest supports digital nomads by providing affordable and flexible housing options tailored to their needs.
-
 
 ## Run Locally
 
@@ -56,5 +54,3 @@ Start the react server
 ```bash
   npm start
 ```
-
->>>>>>> Stashed changes
