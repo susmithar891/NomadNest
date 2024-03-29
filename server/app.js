@@ -4,6 +4,9 @@ const path = require('path')
 const session = require("express-session")
 const cors = require('cors')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const cookieparser = require('cookie-parser')
+
 require('./conn')
 const user = require('./models/user.model')
 const hotels = require('./hotels.json')
@@ -17,6 +20,7 @@ port = process.env.PORT || 4000
 app.use(express.static(path.join(__dirname, '/public')))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+app.use(cookieparser())
 
 const corsOption = {
     origin: ['http://localhost:3000'],
@@ -35,10 +39,26 @@ app.use(session({
 }))
 
 
+function createToken(user){
+    return jwt.sign(user,process.env.ACCESS_TOKEN_SECRET)
+}
+
+function verifyUser(token){
+    if(!token) return null;
+    try{
+        return jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
+    }
+    catch(e){
+        return null;
+    }
+}
+
 
 const redirectHome = (req, res, next) => {
-    if (req.session.userId) {
+    if (req.cookies.session_token && verifyUser(req.cookies.session_token)) {
         // res.redirect('/home')
+        // res.send({"msg" : "this is home"})
+        res.status(307).send({redirect : 'home'})
     }
     else {
         next()
@@ -46,25 +66,23 @@ const redirectHome = (req, res, next) => {
 }
 
 const redirectLogin = (req, res, next) => {
-    if (!req.session.userId) {
-        // res.redirect('/login')
+    if (!verifyUser(req.cookies.session_token)) {
+        // res.redirect('/')
+        res.status(307).send({redirect : 'landing'})
+        // res.send({"msg" : "this is Login"})
     }
     else {
         next()
     }
 
-
 }
 
-
-
-
-app.get('/', (req, res) => {
+app.get('/',(req, res) => {
     res.status(200).sendFile(path.join(__dirname, 'models', 'hotels.json'))
 })
 
 
-app.post('/OnloadData', async (req, res) => {
+app.post('/OnloadData',redirectLogin, async (req, res) => {
     
     
     const uniqueLocations = [...new Set(hotels.map(hotel => hotel.location))];
@@ -88,9 +106,12 @@ app.post('/OnloadData', async (req, res) => {
 
 })
 
+app.post('/check',redirectHome,(req,res) => {
+
+})
 
 
-app.post('/data', async (req, res) => {
+app.post('/data',redirectLogin, async (req, res) => {
     const loc = req.query.location;
 
     var data = hotels.filter((ele) => {
@@ -108,13 +129,7 @@ app.post("/queries",(req,res) => [
 ])
 
 
-
-app.get('/', (req, res) => {
-    res.status(200).sendFile(path.join(__dirname, 'models', 'hotels.json'))
-})
-
-
-app.post("/sign-up", async (req, res) => {
+app.post("/sign-up",redirectHome, async (req, res) => {
 
     const checkaval_email = await user.findOne({ email: req.body.email });
 
@@ -127,20 +142,25 @@ app.post("/sign-up", async (req, res) => {
             const hashedPass = await bcrypt.hash(req.body.password, salt);
 
             const newUser = await new user({ firstName: req.body.firstname, lastName: req.body.lastname, email: req.body.email, password: hashedPass });
+            
+
+            const def_user = {firstname : newUser.firstname , id : newUser.id, lastName : newUser.lastname , email : newUser.email}
+            
+            const token = createToken(def_user);
+            res.cookie("session_token",token,{httpOnly : true});
+            
             await newUser.save();
-            req.session.userId = newUser.id;
-            res.sendStatus(200)
+            res.sendStatus(200);
 
         }
         catch (err) {
-            res.status(400).send(err);
+            res.status(400).send(err)
         }
 
     }
 })
 
-app.post("/sign-in", redirectHome, async (req, res) => {
-
+app.post("/sign-in",redirectHome, async (req, res) => {
 
     const loggeduser = await user.findOne({ email: req.body.email })
     if (loggeduser) {
@@ -149,8 +169,10 @@ app.post("/sign-in", redirectHome, async (req, res) => {
                 return res.sendStatus(400)
             }
             if (resp) {
-                req.session.userId = loggeduser.id
-                console.log(loggeduser.id)
+                const user = {firstname : loggeduser.firstname , id : loggeduser.id, lastName : loggeduser.lastname , email : loggeduser.email}
+                const token = createToken(user);
+                res.cookie("session_token",token,{httpOnly : true})
+
                 return res.sendStatus(200)
             }
             else {
@@ -164,6 +186,8 @@ app.post("/sign-in", redirectHome, async (req, res) => {
     }
 
 })
+
+
 
 
 
