@@ -82,65 +82,7 @@ app.get('/',(req, res) => {
 })
 
 
-app.post('/OnloadData', async (req, res) => {
-    
-    
-    const uniqueLocations = [...new Set(hotels.map(hotel => hotel.location))];
-
-    let def_user;
-    if(req.cookies){
-        def_user = verifyUser(req.cookies.session_token)
-        
-    }
-
-
-    try {
-        let user_det = null
-        if(def_user){
-            user_det = await user.findOne({_id: def_user.id }).select('-password -updatedAt -email -createdAt -__v -_id')
-        }
-        const qunt = {
-            username: user_det,
-            locations: uniqueLocations,
-            data: hotels
-        }
-
-        res.status(200).send(qunt)
-    }
-    catch (err) {
-        console.log(err)
-        res.status(400).send(err)
-        
-        // throw err
-    }
-
-
-})
-
-app.post('/api/check',redirectHome,(req,res) => {
-    res.send({"msg" : "No session detected"});
-})
-
-
-app.post('/data',redirectLogin, async (req, res) => {
-    const loc = req.query.location;
-
-    var data = hotels.filter((ele) => {
-        return ele.location === loc
-    })
-
-
-    res.status(200).send(data)
-
-})
-
-
-app.post("/queries",(req,res) => [
-    console.log(req.body)
-])
-
-
-app.post("/sign-up",redirectHome, async (req, res) => {
+app.post("/api/sign-up",redirectHome, async (req, res) => {
 
     const checkaval_email = await user.findOne({ email: req.body.email });
 
@@ -171,7 +113,7 @@ app.post("/sign-up",redirectHome, async (req, res) => {
     }
 })
 
-app.post("/sign-in",redirectHome, async (req, res) => {
+app.post("/api/ sign-in",redirectHome, async (req, res) => {
 
     const loggeduser = await user.findOne({ email: req.body.email })
     if (loggeduser) {
@@ -198,11 +140,94 @@ app.post("/sign-in",redirectHome, async (req, res) => {
 
 })
 
-
 app.post('/api/logout',redirectLogin,(req,res) => {
     res.clearCookie('session_token');
     res.end()
     // res.status(200).json({"msg" : "user logged out successfully"})
+})
+
+
+
+app.post('/api/home/OnloadData', async (req, res) => {
+    const maxLimit = 10
+    const pageStart = ((req.query.page-1)*maxLimit)
+    const pageEnd = req.query.page*maxLimit
+    
+    const pageData = hotels.slice(pageStart,pageEnd)
+    const pageCount = Math.ceil(hotels.length / maxLimit);
+
+    
+    const uniqueLocations = [...new Set(hotels.map(hotel => hotel.location))];
+
+    let def_user;
+    if(req.cookies){
+        def_user = verifyUser(req.cookies.session_token)
+    }
+
+
+    try {
+        let user_det = null
+        if(def_user){
+            user_det = await user.findOne({_id: def_user.id }).select('-password -updatedAt -email -createdAt -__v -_id')
+        }
+        const qunt = {
+            username: user_det,
+            locations: uniqueLocations,
+            pageCount : pageCount,
+            data: pageData
+        }
+
+        res.status(200).send(qunt)
+    }
+    catch (err) {
+        console.log(err)
+        res.status(400).send(err)
+        
+        // throw err
+    }
+
+
+})
+
+
+app.post('/api/home/data', async (req, res) => {
+    const loc = req.query.location;
+    const maxLimit = 10
+    const pageStart = ((req.query.page-1)*maxLimit)
+    const pageEnd = req.query.page*maxLimit
+    var c
+    
+    
+    var data;
+    if(loc === ""){
+        pageCount = Math.ceil(hotels.length / maxLimit);
+        data = hotels.slice(pageStart,pageEnd)
+    }
+    else{
+        filtered_hotels = hotels.filter((ele) => {
+            return ele.location === loc
+        })
+        pageCount = Math.ceil(filtered_hotels.length / maxLimit)
+        data = filtered_hotels.slice(pageStart,pageEnd)
+    }
+
+    res.status(200).send({
+        data : data,
+        location : loc,
+        pageCount : pageCount,
+    })
+
+})
+
+
+app.post('/api/hotel/:id',async(req,res) => {
+
+
+    const hotel = hotels.find(ele => ele.hotelId.toString() === req.params.id)
+    res.status(200).send({
+        hotel : hotel
+    })
+
 })
 
 

@@ -1,31 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import hotels from '../media/input.json'
 import { Navbar } from './Navbar'
 import '../styling/roompage.css'
 import RatingBar from './RatingBar'
+import request from '../api/axios'
 
 
 const Roompage = (props) => {
 	let params = useParams()
-	let hotel = hotels.find(obj => obj.hotelId.toString() === params.id)
-	const maxRating = Math.max(...Object.values(hotel.rating).filter((key,val) => key !== 'avg_rat' && typeof(val) === 'number'));
+	const [hotel,setHotel] = useState({})
 
-	// useEffect(() => {
-    //     request.post('/OnloadData', {
-    //         headers: { 'Content-Type': 'application/json' },
-    //     })
-    //         .then((res) => {
-    //             console.log(res.data)
-    //             setData(res.data.data)
-    //             setUser(res.data.username)
-    //             setLocations(res.data.locations)
-    //             setIsFetching(false)
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         })
-    // }, []);
+	const [maxRating,setmaxRating] = useState(0)
+	
+
+	useEffect(() => {
+        request.post(`/api/hotel/${params.id}`, {
+            headers: { 'Content-Type': 'application/json' },
+        })
+            .then((res) => {
+                
+				setHotel(res.data.hotel)
+				const maxRat = Math.max(...Object.values(hotel.rating).filter((key) => key !== 'avg_rat').map(Number));
+				setmaxRating(maxRat)
+                
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }, []);
 
 
 
@@ -128,7 +131,7 @@ const Roompage = (props) => {
 									<li className="list-group-item d-flex align-items-center" key={index}>
 										<img src="path-to-default-profile-pic.jpg" alt="User" style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '10px' }} />
 										<div>
-											<strong>User Name</strong> {/* Replace 'User Name' with dynamic data if available */}
+											<strong>User Name</strong>
 											<p>{comment}</p>
 										</div>
 									</li>
