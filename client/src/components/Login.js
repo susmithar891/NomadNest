@@ -1,6 +1,8 @@
-import React, { useState ,useEffect} from 'react'
-import { Link ,useNavigate} from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import request from '../api/axios'
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+
 
 const Login = () => {
 
@@ -14,16 +16,16 @@ const Login = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			const response = await request.post("/sign-in", {email : email,password:pass,remember : remember});
-			
-			if(response.data === "OK"){
+			const response = await request.post("/sign-in", { email: email, password: pass, remember: remember });
+
+			if (response.data === "OK") {
 				navigate('/home')
 			}
 
-			if(response.data.redirect && response.data.redirect === "home"){
+			if (response.data.redirect && response.data.redirect === "home") {
 				navigate('/home')
 			}
-			
+
 		} catch (error) {
 			console.error("Error creating post:", error);
 		}
@@ -32,23 +34,23 @@ const Login = () => {
 
 	useEffect(() => {
 
-        const checkToken = async() => {
+		const checkToken = async () => {
 
-            try{
-                const res = await request.post('/api/check')
-                if(res.data.redirect === "home"){
-                    navigate('/home')
-                }
-            }
-            catch(e){
-                alert(e)
-            }
+			try {
+				const res = await request.post('/api/check')
+				if (res.data.redirect === "home") {
+					navigate('/home')
+				}
+			}
+			catch (e) {
+				alert(e)
+			}
 
-        }
+		}
 
-        checkToken()
+		checkToken()
 
-	},[])
+	}, [])
 
 
 	return (
@@ -98,7 +100,7 @@ const Login = () => {
 										Password
 									</label>
 								</div>
-								<div className="form-check d-flex justify-content-center mb-4">
+								{/* <div className="form-check d-flex justify-content-center mb-4">
 									<input
 										className="form-check-input me-2"
 										type="checkbox"
@@ -110,13 +112,26 @@ const Login = () => {
 									<label className="form-check-label" htmlFor="remember">
 										Remember me
 									</label>
+								</div> */}
+								<div>
+									<button type="submit" className="btn btn-primary btn-block mb-4">
+										Sign In
+									</button>
+									<div>
+										<GoogleOAuthProvider clientId="<your_client_id>">
+												<GoogleLogin className="btn btn-link btn-floating mx-1"
+													onSuccess={credentialResponse => {
+														console.log(credentialResponse);
+													}}
+													onError={() => {
+														console.log('Login Failed');
+													}}
+													/>
+										</GoogleOAuthProvider>
+									</div>
 								</div>
 
-								<button type="submit" className="btn btn-primary btn-block mb-4">
-									Sign In
-								</button>
-
-								<div className="form-check d-flex justify-content-center mb-4">
+								<div className="form-check d-flex justify-content-center m-4">
 									<div className=''>
 										<span className='m-2'>
 											Create new account
@@ -126,21 +141,8 @@ const Login = () => {
 								</div>
 
 
-								<div className="text-center">
-									<p>or sign up with:</p>
-									<button type="button" className="btn btn-link btn-floating mx-1">
-										<i className="fab fa-facebook-f" />
-									</button>
-									<button type="button" className="btn btn-link btn-floating mx-1">
-										<i className="fab fa-google" />
-									</button>
-									<button type="button" className="btn btn-link btn-floating mx-1">
-										<i className="fab fa-twitter" />
-									</button>
-									<button type="button" className="btn btn-link btn-floating mx-1">
-										<i className="fab fa-github" />
-									</button>
-								</div>
+
+
 							</form>
 						</div>
 					</div>
