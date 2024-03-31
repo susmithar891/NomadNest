@@ -2,14 +2,11 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import '../styling/navbar.css'
 import request from '../api/axios'
+import PropTypes from 'prop-types'
+
 
 const Navbar = (props) => {
     // const navigate = useNavigate()
-
-    
-
-
-
 
     return (
         <nav className="navbar navbar-expand-lg navbar-dark"
@@ -21,7 +18,7 @@ const Navbar = (props) => {
         >
             <div className="container-fluid">
                 <a className="navbar-brand" href="/">
-                    Nomad Nest
+                    NomadNest
                 </a>
                 <button
                     className="navbar-toggler"
@@ -79,8 +76,8 @@ const Navbar = (props) => {
                             </ul>
                         </li> */}
                     </ul>
-
-                    {props.user ?
+                    {props.profile ?
+                     props.user ?
                         <ul className="navbar-nav ms-auto mb-0 mb-lg-0 profile-menu">
 
                             <li className="nav-item dropdown">
@@ -98,8 +95,6 @@ const Navbar = (props) => {
                                             alt="Profile Picture"
                                         />
                                     </div>
-                                    {/* You can also use icon as follows: */}
-                                    {/*  <i class="fas fa-user"></i> */}
                                 </a>
                                 <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <li>
@@ -126,12 +121,24 @@ const Navbar = (props) => {
                                 <Link to="/sign-in" className="dropdown-item">Sign In</Link>
                             </li>
 
-                        </ul>}
+                        </ul> : <></> }
 
                 </div>
             </div>
         </nav>
     )
 }
+
+
+Navbar.propTypes = {
+    profile : PropTypes.bool,
+    user : PropTypes.object,
+    logout : PropTypes.func
+}
+
+
+Navbar.defaultProps = {
+    profile: true,
+};
 
 export { Navbar }
