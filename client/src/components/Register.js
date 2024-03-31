@@ -17,7 +17,7 @@ const Register = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			const response = await request.post("/sign-up", {firstname : firstName,lastname : lastName,email : email,password : pass,remember : remeb});
+			const response = await request.post("/api/sign-up", {firstname : firstName,lastname : lastName,email : email,password : pass,remember : remeb});
 			console.log(response.data)
 			if(response.data === "OK"){
 				navigate('/home')

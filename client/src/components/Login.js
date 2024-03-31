@@ -16,7 +16,7 @@ const Login = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			const response = await request.post("/sign-in", { email: email, password: pass, remember: remember });
+			const response = await request.post("/api/sign-in", { email: email, password: pass, remember: remember });
 
 			if (response.data === "OK") {
 				navigate('/home')
