@@ -78,8 +78,8 @@ const Landingpage = () => {
                             <h2 className="text-white-50 mx-auto mt-2 mb-5">
 
                             </h2>
-                            <Link className="btn btn-primary" to="sign-in">
-                                Get Started
+                            <Link className="btn btn-primary" to="home">
+                                Start booking
                             </Link>
                         </div>
                     </div>
