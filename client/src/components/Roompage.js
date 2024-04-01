@@ -35,7 +35,7 @@ const Roompage = (props) => {
 
 	return (
 		<>
-			{/* <Navbar profile={true}/> */}
+			<Navbar/>
 
 			<div className="container mt-5">
 				<div className="card">

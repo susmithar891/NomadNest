@@ -1,3 +1,4 @@
+//packages
 const express = require("express")
 require("dotenv").config()
 const path = require('path')
@@ -7,29 +8,35 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookieparser = require('cookie-parser')
 
+
+// exports-imports
 require('./conn')
-const user = require('./models/user.model')
 const hotels = require('./hotels.json')
+const user = require('./models/user.model')
+const hotel = require('./models/hotel.model')
+const roomType = require('./models/roomType.model')
+const room = require('./models/room.model')
+const comment = require('./models/comment.model')
+const booking = require('./models/bookings.model')
+const reserve = require('./models/reserve.model')
 
 
+
+//definitions
 const app = express()
 port = process.env.PORT || 4000
-
-
-
-app.use(express.static(path.join(__dirname, '/public')))
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
-app.use(cookieparser())
-
 const corsOption = {
     origin: ['http://localhost:3000'],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
 }
+
+//middlewares
+app.use(express.static(path.join(__dirname, '/public')))
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+app.use(cookieparser())
 app.use(cors(corsOption));
-
-
 app.use(session({
     name: "user_sid",
     secret: 'ed3a7a2101d71527f2df187812f4037ad4cb0ddf6e01ed78d21602175d413b80fd8a089c92cb1ee06c8377d6947eb475537f19893f016671b22fe6ac7728ad23',
@@ -39,6 +46,7 @@ app.use(session({
 }))
 
 
+//functions
 function createToken(user){
     return jwt.sign(user,process.env.ACCESS_TOKEN_SECRET)
 }
@@ -52,7 +60,6 @@ function verifyUser(token){
         return null;
     }
 }
-
 
 const redirectHome = (req, res, next) => {
     if (req.cookies && req.cookies.session_token && verifyUser(req.cookies.session_token)) {
@@ -77,10 +84,11 @@ const redirectLogin = (req, res, next) => {
 
 }
 
+
+//api-endpoints
 app.get('/',(req, res) => {
     res.status(200).sendFile(path.join(__dirname, 'models', 'hotels.json'))
 })
-
 
 app.post("/api/sign-up",redirectHome, async (req, res) => {
 
@@ -112,8 +120,7 @@ app.post("/api/sign-up",redirectHome, async (req, res) => {
 
     }
 })
-
-app.post("/api/ sign-in",redirectHome, async (req, res) => {
+app.post("/api/sign-in",redirectHome, async (req, res) => {
 
     const loggeduser = await user.findOne({ email: req.body.email })
     if (loggeduser) {
@@ -139,15 +146,11 @@ app.post("/api/ sign-in",redirectHome, async (req, res) => {
     }
 
 })
-
 app.post('/api/logout',redirectLogin,(req,res) => {
     res.clearCookie('session_token');
     res.end()
     // res.status(200).json({"msg" : "user logged out successfully"})
 })
-
-
-
 app.post('/api/home/OnloadData', async (req, res) => {
     const maxLimit = 10
     const pageStart = ((req.query.page-1)*maxLimit)
@@ -188,8 +191,6 @@ app.post('/api/home/OnloadData', async (req, res) => {
 
 
 })
-
-
 app.post('/api/home/data', async (req, res) => {
     const loc = req.query.location;
     const maxLimit = 10
@@ -218,8 +219,6 @@ app.post('/api/home/data', async (req, res) => {
     })
 
 })
-
-
 app.post('/api/hotel/:id',async(req,res) => {
 
 
