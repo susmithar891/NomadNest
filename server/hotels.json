@@ -21,6 +21,573 @@
         ]
     },
     {
+        "hotelId": 15,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 16,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 17,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 18,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 19,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 20,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 21,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 22,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 23,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 24,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 25,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 26,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 27,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 28,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 29,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 30,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 31,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 32,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 33,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 34,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 35,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 36,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 37,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 38,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 39,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 40,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
+        "hotelId": 41,
+        "hotelname": "Oceanview Resort",
+        "preview": "Experience luxury by the sea",
+        "near_by_places": "Beach, Shopping Mall, Restaurants",
+        "rating": {
+            "avg_rat": "4.5",
+            "1": "5",
+            "2": "5",
+            "3": "4",
+            "4": "4",
+            "5": "5"
+        },
+        "location": "Miami",
+        "price_of_room": 250,
+        "comments": [
+            "Amazing views!",
+            "Great service",
+            "Highly recommended"
+        ]
+    },
+    {
         "hotelId": 2,
         "hotelname": "Mountain Retreat",
         "preview": "Escape to the tranquility of the mountains",

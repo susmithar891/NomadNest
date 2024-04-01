@@ -1,18 +1,41 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import hotels from '../media/input.json'
 import { Navbar } from './Navbar'
 import '../styling/roompage.css'
 import RatingBar from './RatingBar'
+import request from '../api/axios'
 
 
 const Roompage = (props) => {
 	let params = useParams()
-	let hotel = hotels.find(obj => obj.hotelId.toString() === params.id)
-	const maxRating = Math.max(...Object.values(hotel.rating).filter((key,val) => key !== 'avg_rat' && typeof(val) === 'number'));
+	const [hotel,setHotel] = useState({})
+
+	const [maxRating,setmaxRating] = useState(0)
+	
+
+	useEffect(() => {
+        request.post(`/api/hotel/${params.id}`, {
+            headers: { 'Content-Type': 'application/json' },
+        })
+            .then((res) => {
+                
+				setHotel(res.data.hotel)
+				const maxRat = Math.max(...Object.values(hotel.rating).filter((key) => key !== 'avg_rat').map(Number));
+				setmaxRating(maxRat)
+                
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }, []);
+
+
+
+
 	return (
 		<>
-			<Navbar profile={true}/>
+			<Navbar/>
 
 			<div className="container mt-5">
 				<div className="card">
@@ -79,37 +102,6 @@ const Roompage = (props) => {
 				</div>
 			</div>
 
-
-			{/* <div className="container my-5">
-				<div className="row">
-					<div className="col-md-6">
-						<div className="card">
-							<div className="card-header">
-								Ratings
-							</div>
-							<ul className="list-group list-group-flush">
-								<li className="list-group-item">Average Rating: {hotel.rating.avg_rat}</li>
-								{Object.entries(hotel.rating).filter(([key]) => key !== 'avg_rat').map(([key, value]) => (
-									<li className="list-group-item">Rating {key}: {value} stars</li>
-								))}
-							</ul>
-						</div>
-					</div>
-					<div className="col-md-6">
-						<div className="card">
-							<div className="card-header">
-								Comments
-							</div>
-							<ul className="list-group list-group-flush">
-								{hotel.comments.map((comment, index) => (
-									<li className="list-group-item" key={index}>{comment}</li>
-								))}
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div> */}
-
 			<div className="container my-5">
 				<div className="row">
 					<div className="col-md-6">
@@ -139,7 +131,7 @@ const Roompage = (props) => {
 									<li className="list-group-item d-flex align-items-center" key={index}>
 										<img src="path-to-default-profile-pic.jpg" alt="User" style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '10px' }} />
 										<div>
-											<strong>User Name</strong> {/* Replace 'User Name' with dynamic data if available */}
+											<strong>User Name</strong>
 											<p>{comment}</p>
 										</div>
 									</li>

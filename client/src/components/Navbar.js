@@ -1,19 +1,24 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import '../styling/navbar.css'
+import request from '../api/axios'
+import PropTypes from 'prop-types'
+
 
 const Navbar = (props) => {
+    // const navigate = useNavigate()
+
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark" 
-        style={{
-            background: "#3a447a",
-            color:"white",
-            font:"Simplifica",
-        }}
+        <nav className="navbar navbar-expand-lg navbar-dark"
+            style={{
+                background: "#3a447a",
+                color: "white",
+                font: "Simplifica",
+            }}
         >
             <div className="container-fluid">
                 <a className="navbar-brand" href="/">
-                    Nomad Nest
+                    NomadNest
                 </a>
                 <button
                     className="navbar-toggler"
@@ -71,54 +76,69 @@ const Navbar = (props) => {
                             </ul>
                         </li> */}
                     </ul>
+                    {props.profile ?
+                     props.user ?
+                        <ul className="navbar-nav ms-auto mb-0 mb-lg-0 profile-menu">
 
-                    {props.profile ? <ul className="navbar-nav ms-auto mb-0 mb-lg-0 profile-menu">
-                        
-                        <li className="nav-item dropdown">
-                            <a
-                                className="nav-link dropdown-toggle rounded-circle"
-                                href="#"
-                                id="navbarDropdown"
-                                role="button"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                            >
-                                <div className="profile-pic">
-                                    <img
-                                        src="https://source.unsplash.com/250x250?girl"
-                                        alt="Profile Picture"
-                                    />
-                                </div>
-                                {/* You can also use icon as follows: */}
-                                {/*  <i class="fas fa-user"></i> */}
-                            </a>
-                            <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li>
-                                    <a className="dropdown-item" href="#">
-                                        <i className="fas fa-sliders-h fa-fw" /> Account
-                                    </a>
-                                </li>
-                                <li>
-                                    <a className="dropdown-item" href="#">
-                                        <i className="fas fa-cog fa-fw" /> Settings
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr className="dropdown-divider" />
-                                </li>
-                                <li>
-                                    <a className="dropdown-item" href="#">
-                                        <i className="fas fa-sign-out-alt fa-fw" /> Log Out
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul> : null}
-                    
+                            <li className="nav-item dropdown">
+                                <a
+                                    className="nav-link dropdown-toggle rounded-circle"
+                                    href="#"
+                                    id="navbarDropdown"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                >
+                                    <div className="profile-pic">
+                                        <img
+                                            src="https://source.unsplash.com/250x250?girl"
+                                            alt="Profile Picture"
+                                        />
+                                    </div>
+                                </a>
+                                <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <Link className="dropdown-item" to="/home/profile">
+                                            <i className="fas fa-sliders-h fa-fw" /> Account
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <hr className="dropdown-divider" />
+                                    </li>
+                                    <li>
+                                        <Link className="dropdown-item" onClick={props.logout}>
+                                            <i className="fas fa-sign-out-alt fa-fw" /> Log Out
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        : <ul className="navbar-nav ms-auto mb-0 mb-lg-0 profile-menu">
+                            <li className="nav-item dropdown m-3">
+                                <Link to="/sign-up" className="dropdown-item">Sign Up</Link>
+                            </li>
+                            <li className="nav-item dropdown m-3">
+                                <Link to="/sign-in" className="dropdown-item">Sign In</Link>
+                            </li>
+
+                        </ul> : <></> }
+
                 </div>
             </div>
         </nav>
     )
 }
+
+
+Navbar.propTypes = {
+    profile : PropTypes.bool,
+    user : PropTypes.object,
+    logout : PropTypes.func
+}
+
+
+Navbar.defaultProps = {
+    profile: true,
+};
 
 export { Navbar }

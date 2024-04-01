@@ -1,10 +1,35 @@
-import React from 'react'
-import { Routes,Link, Route } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Routes,Link, Route, useNavigate } from 'react-router-dom'
 import Login from './Login';
 import Register from './Register';
 import '../styles.css'
+import request from '../api/axios';
 
 const Landingpage = () => {
+    const navigate = useNavigate()
+
+    useEffect(() => {
+
+        const checkToken = async() => {
+
+            try{
+                const res = await request.post('/api/check')
+                if(res.data.redirect === "home"){
+                    navigate('/home')
+                }
+            }
+            catch(e){
+                alert(e)
+            }
+
+        }
+        checkToken()
+
+
+    },[])
+
+
+
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
@@ -53,8 +78,8 @@ const Landingpage = () => {
                             <h2 className="text-white-50 mx-auto mt-2 mb-5">
 
                             </h2>
-                            <Link className="btn btn-primary" to="sign-in">
-                                Get Started
+                            <Link className="btn btn-primary" to="home">
+                                Start booking
                             </Link>
                         </div>
                     </div>

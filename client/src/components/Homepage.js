@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Navbar } from './Navbar'
 import Roomcard from './Roomcard'
 import request from '../api/axios'
@@ -8,21 +8,39 @@ import request from '../api/axios'
 
 export const Homepage = () => {
 
+    const logout = async () => {
+        request.post('/api/logout')
+            .then(() => {
+                setUser(null)
+                console.log(user)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+
+
+    }
+
+    const navigate = useNavigate();
     const [data, setData] = useState([]);
     const [user, setUser] = useState({});
     const [locFilter, setlocFilter] = useState("");
     const [locations, setLocations] = useState([]);
     const [isfetching, setIsFetching] = useState(true);
+    const [pageCount, setpageCount] = useState(0);
+    const [page, setPage] = useState(1);
 
 
     useEffect(() => {
-        request.post('/OnloadData', {
+        request.post(`/api/home/OnloadData/?page=${1}`, {
             headers: { 'Content-Type': 'application/json' },
         })
             .then((res) => {
+                console.log(res.data)
                 setData(res.data.data)
                 setUser(res.data.username)
                 setLocations(res.data.locations)
+                setpageCount(res.data.pageCount)
                 setIsFetching(false)
             })
             .catch((err) => {
@@ -30,14 +48,27 @@ export const Homepage = () => {
             })
     }, []);
 
-    const getData = async (e) => {
-        setlocFilter(e.target.value)
+
+    const select_val_change = (e,pageIndex) => {
+        const val = e.target.value
+        console.log(`value : ${val}`)
+        getData(val,pageIndex)
+    }
+
+
+
+    const getData = async (location,pageIndex) => {    
         try {
-            const res = await request.post(`/data?location=${ locFilter }`, {
+            const res = await request.post(`/api/home/data?location=${location}&page=${pageIndex}`, {
                 headers: { 'Content-Type': 'application/json' },
             })
+
             console.log(res.data)
-            setData(res.data)
+            setlocFilter(res.data.location)
+            setData(res.data.data)
+            setpageCount(res.data.pageCount)
+            setPage(pageIndex)
+            console.log(locFilter)
         }
         catch (e) {
             console.log(e)
@@ -48,16 +79,16 @@ export const Homepage = () => {
 
     return (
         <>
-            <Navbar profile={true}/>
+            <Navbar profile={true} user={user} logout={logout} />
 
             <div className=' my-3 w-75 mx-auto'>
                 <h2 className='px-4 w-75 my-3'>
                     Search for rooms.....
                 </h2>
-                <form className="d-flex bd-highlight m-3 justify-content">
+                <form className="d-flex bd-highlight m-3 justify-content">  
                     <div className="w-50 m-1">
-                        <select className="form-select p-3 max-height-30 overflow-auto" required onChange={getData}>
-                            <option className="m-2" disabled selected   >Select</option>
+                        <select className="form-select p-3 max-height-30 overflow-auto" defaultValue="" required onChange={(e)=>select_val_change(e,1)}>
+                            <option className="m-2" disabled selected>Select</option>
                             {locations.map((loc, index) => {
                                 return <option className="m-2" value={loc} key={index}>{loc}</option>
                             })}
@@ -139,6 +170,30 @@ export const Homepage = () => {
 
 
             </div>}
+            {
+                pageCount <= 1 ? (
+                    <></>
+                ) : (
+                    <nav aria-label="Page navigation example">
+                        <ul className="pagination justify-content-center">
+                            <li className={`page-item ${page <= 1 ? 'disabled' : 'cursor-pointer'}`}>
+                                <a className="page-link" onClick={() => getData(locFilter,page-1)} tabIndex="-1">Previous</a>
+                            </li>
+                            {[...Array(pageCount)].map((_, index) => (
+                                <li className={`pointer page-item ${index + 1 === page ? 'active' : ''}`} key={index}>
+                                    <a className="page-link" onClick={() => getData(locFilter,index+1)}>{index + 1}</a>
+                                </li>
+                            ))}
+                            <li className={`page-item ${page >= pageCount ? 'disabled' : 'cursor-pointer'}`}>
+                                <a className="page-link" onClick={() => getData(locFilter,page+1)}>Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                )
+            }
+
+
+
 
         </>
     )

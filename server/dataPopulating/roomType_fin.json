@@ -1,0 +1,272 @@
+[
+  {
+    "hotelId": "6609fa242ee85f16d0490285",
+    "capacity": {
+      "adult": 1,
+      "child": 1
+    },
+    "roomType": "Single",
+    "price": 100
+  },
+  {
+    "hotelId": "6609fa242ee85f16d0490285",
+    "capacity": {
+      "adult": 2,
+      "child": 1
+    },
+    "roomType": "Double",
+    "price": 150
+  },
+  {
+    "hotelId": "6609fa242ee85f16d0490285",
+    "capacity": {
+      "adult": 2,
+      "child": 2
+    },
+    "roomType": "Suite",
+    "price": 200
+  },
+  {
+    "hotelId": "6609fa242ee85f16d0490286",
+    "capacity": {
+      "adult": 1,
+      "child": 1
+    },
+    "roomType": "Single",
+    "price": 100
+  },
+  {
+    "hotelId": "6609fa242ee85f16d0490286",
+    "capacity": {
+      "adult": 2,
+      "child": 1
+    },
+    "roomType": "Double",
+    "price": 150
+  },
+  {
+    "hotelId": "6609fa242ee85f16d0490286",
+    "capacity": {
+      "adult": 2,
+      "child": 2
+    },
+    "roomType": "Suite",
+    "price": 200
+  },
+  {
+    "hotelId": "6609fa242ee85f16d0490287",
+    "capacity": {
+      "adult": 1,
+      "child": 1
+    },
+    "roomType": "Single",
+    "price": 100
+  },
+  {
+    "hotelId": "6609fa242ee85f16d0490287",
+    "capacity": {
+      "adult": 2,
+      "child": 1
+    },
+    "roomType": "Double",
+    "price": 150
+  },
+  {
+    "hotelId": "6609fa242ee85f16d0490287",
+    "capacity": {
+      "adult": 2,
+      "child": 2
+    },
+    "roomType": "Suite",
+    "price": 200
+  },
+  {
+    "hotelId": "6609fa242ee85f16d0490288",
+    "capacity": {
+      "adult": 1,
+      "child": 1
+    },
+    "roomType": "Single",
+    "price": 100
+  },
+  {
+    "hotelId": "6609fa242ee85f16d0490288",
+    "capacity": {
+      "adult": 2,
+      "child": 1
+    },
+    "roomType": "Double",
+    "price": 150
+  },
+  {
+    "hotelId": "6609fa242ee85f16d0490288",
+    "capacity": {
+      "adult": 2,
+      "child": 2
+    },
+    "roomType": "Suite",
+    "price": 200
+  },
+  {
+    "hotelId": "6609fa242ee85f16d0490289",
+    "capacity": {
+      "adult": 1,
+      "child": 1
+    },
+    "roomType": "Single",
+    "price": 100
+  },
+  {
+    "hotelId": "6609fa242ee85f16d0490289",
+    "capacity": {
+      "adult": 2,
+      "child": 1
+    },
+    "roomType": "Double",
+    "price": 150
+  },
+  {
+    "hotelId": "6609fa242ee85f16d0490289",
+    "capacity": {
+      "adult": 2,
+      "child": 2
+    },
+    "roomType": "Suite",
+    "price": 200
+  },
+  {
+    "hotelId": "6609fa242ee85f16d049028a",
+    "capacity": {
+      "adult": 1,
+      "child": 1
+    },
+    "roomType": "Single",
+    "price": 100
+  },
+  {
+    "hotelId": "6609fa242ee85f16d049028a",
+    "capacity": {
+      "adult": 2,
+      "child": 1
+    },
+    "roomType": "Double",
+    "price": 150
+  },
+  {
+    "hotelId": "6609fa242ee85f16d049028a",
+    "capacity": {
+      "adult": 2,
+      "child": 2
+    },
+    "roomType": "Suite",
+    "price": 200
+  },
+  {
+    "hotelId": "6609fa242ee85f16d049028b",
+    "capacity": {
+      "adult": 1,
+      "child": 1
+    },
+    "roomType": "Single",
+    "price": 100
+  },
+  {
+    "hotelId": "6609fa242ee85f16d049028b",
+    "capacity": {
+      "adult": 2,
+      "child": 1
+    },
+    "roomType": "Double",
+    "price": 150
+  },
+  {
+    "hotelId": "6609fa242ee85f16d049028b",
+    "capacity": {
+      "adult": 2,
+      "child": 2
+    },
+    "roomType": "Suite",
+    "price": 200
+  },
+  {
+    "hotelId": "6609fa242ee85f16d049028c",
+    "capacity": {
+      "adult": 1,
+      "child": 1
+    },
+    "roomType": "Single",
+    "price": 100
+  },
+  {
+    "hotelId": "6609fa242ee85f16d049028c",
+    "capacity": {
+      "adult": 2,
+      "child": 1
+    },
+    "roomType": "Double",
+    "price": 150
+  },
+  {
+    "hotelId": "6609fa242ee85f16d049028c",
+    "capacity": {
+      "adult": 2,
+      "child": 2
+    },
+    "roomType": "Suite",
+    "price": 200
+  },
+  {
+    "hotelId": "6609fa242ee85f16d049028d",
+    "capacity": {
+      "adult": 1,
+      "child": 1
+    },
+    "roomType": "Single",
+    "price": 100
+  },
+  {
+    "hotelId": "6609fa242ee85f16d049028d",
+    "capacity": {
+      "adult": 2,
+      "child": 1
+    },
+    "roomType": "Double",
+    "price": 150
+  },
+  {
+    "hotelId": "6609fa242ee85f16d049028d",
+    "capacity": {
+      "adult": 2,
+      "child": 2
+    },
+    "roomType": "Suite",
+    "price": 200
+  },
+  {
+    "hotelId": "6609fa242ee85f16d049028e",
+    "capacity": {
+      "adult": 1,
+      "child": 1
+    },
+    "roomType": "Single",
+    "price": 100
+  },
+  {
+    "hotelId": "6609fa242ee85f16d049028e",
+    "capacity": {
+      "adult": 2,
+      "child": 1
+    },
+    "roomType": "Double",
+    "price": 150
+  },
+  {
+    "hotelId": "6609fa242ee85f16d049028e",
+    "capacity": {
+      "adult": 2,
+      "child": 2
+    },
+    "roomType": "Suite",
+    "price": 200
+  }
+]
