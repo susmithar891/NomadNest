@@ -1,0 +1,93 @@
+[
+    {
+      "isAC": true,
+      "roomType": "Single",
+      "hotelId": "hotel_id_1",
+      "preview": "https://example.com/preview1.jpg",
+      "roomNo": 101,
+      "reservedDates": [],
+      "price": 100
+    },
+    {
+      "isAC": true,
+      "roomType": "Double",
+      "hotelId": "hotel_id_2",
+      "preview": "https://example.com/preview2.jpg",
+      "roomNo": 201,
+      "reservedDates": [],
+      "price": 150
+    },
+    {
+      "isAC": false,
+      "roomType": "Suite",
+      "hotelId": "hotel_id_3",
+      "preview": "https://example.com/preview3.jpg",
+      "roomNo": 301,
+      "reservedDates": [],
+      "price": 200
+    },
+    {
+      "isAC": true,
+      "roomType": "Single",
+      "hotelId": "hotel_id_4",
+      "preview": "https://example.com/preview4.jpg",
+      "roomNo": 102,
+      "reservedDates": [],
+      "price": 110
+    },
+    {
+      "isAC": false,
+      "roomType": "Double",
+      "hotelId": "hotel_id_5",
+      "preview": "https://example.com/preview5.jpg",
+      "roomNo": 202,
+      "reservedDates": [],
+      "price": 160
+    },
+    {
+      "isAC": true,
+      "roomType": "Suite",
+      "hotelId": "hotel_id_6",
+      "preview": "https://example.com/preview6.jpg",
+      "roomNo": 302,
+      "reservedDates": [],
+      "price": 210
+    },
+    {
+      "isAC": false,
+      "roomType": "Single",
+      "hotelId": "hotel_id_7",
+      "preview": "https://example.com/preview7.jpg",
+      "roomNo": 103,
+      "reservedDates": [],
+      "price": 120
+    },
+    {
+      "isAC": true,
+      "roomType": "Double",
+      "hotelId": "hotel_id_8",
+      "preview": "https://example.com/preview8.jpg",
+      "roomNo": 203,
+      "reservedDates": [],
+      "price": 170
+    },
+    {
+      "isAC": false,
+      "roomType": "Suite",
+      "hotelId": "hotel_id_9",
+      "preview": "https://example.com/preview9.jpg",
+      "roomNo": 303,
+      "reservedDates": [],
+      "price": 220
+    },
+    {
+      "isAC": true,
+      "roomType": "Single",
+      "hotelId": "hotel_id_10",
+      "preview": "https://example.com/preview10.jpg",
+      "roomNo": 104,
+      "reservedDates": [],
+      "price": 130
+    }
+  ]
+  
