@@ -90,6 +90,9 @@ app.get('/',(req, res) => {
     res.status(200).sendFile(path.join(__dirname, 'models', 'hotels.json'))
 })
 
+app.post('/api/check',redirectHome,(req,res) => {
+    res.send({"msg" : "No session detected"});
+})
 app.post("/api/sign-up",redirectHome, async (req, res) => {
 
     const checkaval_email = await user.findOne({ email: req.body.email });
