@@ -12,8 +12,7 @@ const Roomcard = (props) => {
                 </div>
                 <div className="mx-3 card-body">
                     <h5 className="card-title">{props.hotelname}</h5>
-                    {/* <h5 className="card-title">wbsbsb</h5> */}
-                    {/* <p className="card-text">{props.hotelpre}</p> */}
+                    
                 </div>
             </div>
         </div>

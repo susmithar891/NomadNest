@@ -11,7 +11,7 @@ const roomSchema = mongoose.Schema({
         required : true
     },
     hotelId : {
-        type : mongoose.Schema.Types.ObjectId,
+        type : String,
         ref : 'hotel',
         required : true
     },

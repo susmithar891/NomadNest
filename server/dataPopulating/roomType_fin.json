@@ -6,7 +6,9 @@
       "child": 1
     },
     "roomType": "Single",
-    "price": 100
+    "price": 100,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d0490285",
@@ -15,7 +17,9 @@
       "child": 1
     },
     "roomType": "Double",
-    "price": 150
+    "price": 150,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d0490285",
@@ -24,7 +28,9 @@
       "child": 2
     },
     "roomType": "Suite",
-    "price": 200
+    "price": 200,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d0490286",
@@ -33,7 +39,9 @@
       "child": 1
     },
     "roomType": "Single",
-    "price": 100
+    "price": 100,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d0490286",
@@ -42,7 +50,9 @@
       "child": 1
     },
     "roomType": "Double",
-    "price": 150
+    "price": 150,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d0490286",
@@ -51,7 +61,9 @@
       "child": 2
     },
     "roomType": "Suite",
-    "price": 200
+    "price": 200,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d0490287",
@@ -60,7 +72,9 @@
       "child": 1
     },
     "roomType": "Single",
-    "price": 100
+    "price": 100,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d0490287",
@@ -69,7 +83,9 @@
       "child": 1
     },
     "roomType": "Double",
-    "price": 150
+    "price": 150,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d0490287",
@@ -78,7 +94,9 @@
       "child": 2
     },
     "roomType": "Suite",
-    "price": 200
+    "price": 200,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d0490288",
@@ -87,7 +105,9 @@
       "child": 1
     },
     "roomType": "Single",
-    "price": 100
+    "price": 100,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d0490288",
@@ -96,7 +116,9 @@
       "child": 1
     },
     "roomType": "Double",
-    "price": 150
+    "price": 150,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d0490288",
@@ -105,7 +127,9 @@
       "child": 2
     },
     "roomType": "Suite",
-    "price": 200
+    "price": 200,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d0490289",
@@ -114,7 +138,9 @@
       "child": 1
     },
     "roomType": "Single",
-    "price": 100
+    "price": 100,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d0490289",
@@ -123,7 +149,9 @@
       "child": 1
     },
     "roomType": "Double",
-    "price": 150
+    "price": 150,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d0490289",
@@ -132,7 +160,9 @@
       "child": 2
     },
     "roomType": "Suite",
-    "price": 200
+    "price": 200,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d049028a",
@@ -141,7 +171,9 @@
       "child": 1
     },
     "roomType": "Single",
-    "price": 100
+    "price": 100,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d049028a",
@@ -150,7 +182,9 @@
       "child": 1
     },
     "roomType": "Double",
-    "price": 150
+    "price": 150,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d049028a",
@@ -159,7 +193,9 @@
       "child": 2
     },
     "roomType": "Suite",
-    "price": 200
+    "price": 200,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d049028b",
@@ -168,7 +204,9 @@
       "child": 1
     },
     "roomType": "Single",
-    "price": 100
+    "price": 100,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d049028b",
@@ -177,7 +215,9 @@
       "child": 1
     },
     "roomType": "Double",
-    "price": 150
+    "price": 150,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d049028b",
@@ -186,7 +226,9 @@
       "child": 2
     },
     "roomType": "Suite",
-    "price": 200
+    "price": 200,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d049028c",
@@ -195,7 +237,9 @@
       "child": 1
     },
     "roomType": "Single",
-    "price": 100
+    "price": 100,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d049028c",
@@ -204,7 +248,9 @@
       "child": 1
     },
     "roomType": "Double",
-    "price": 150
+    "price": 150,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d049028c",
@@ -213,7 +259,9 @@
       "child": 2
     },
     "roomType": "Suite",
-    "price": 200
+    "price": 200,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d049028d",
@@ -222,7 +270,9 @@
       "child": 1
     },
     "roomType": "Single",
-    "price": 100
+    "price": 100,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d049028d",
@@ -231,7 +281,9 @@
       "child": 1
     },
     "roomType": "Double",
-    "price": 150
+    "price": 150,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d049028d",
@@ -240,7 +292,9 @@
       "child": 2
     },
     "roomType": "Suite",
-    "price": 200
+    "price": 200,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d049028e",
@@ -249,7 +303,9 @@
       "child": 1
     },
     "roomType": "Single",
-    "price": 100
+    "price": 100,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d049028e",
@@ -258,7 +314,9 @@
       "child": 1
     },
     "roomType": "Double",
-    "price": 150
+    "price": 150,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   },
   {
     "hotelId": "6609fa242ee85f16d049028e",
@@ -267,6 +325,8 @@
       "child": 2
     },
     "roomType": "Suite",
-    "price": 200
+    "price": 200,
+    "avaliableRooms": 10,
+    "reservedRooms": 0
   }
 ]

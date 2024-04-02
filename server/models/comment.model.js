@@ -2,12 +2,12 @@ const mongoose = require('mongoose')
 
 const commentSchema = mongoose.Schema({
     hotelId : {
-        type : mongoose.Schema.Types.ObjectId,
+        type : String,
         ref : 'hotel',
         required : true
     },
     userId : {
-        type : mongoose.Schema.Types.ObjectId,
+        type : String,
         ref : 'user',
         requried : true
     },
