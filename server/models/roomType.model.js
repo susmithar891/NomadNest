@@ -26,6 +26,16 @@ const roomTypeSchema = mongoose.Schema({
         type : Number,
         min : 0,
         required : true
+    },
+    avaliableRooms : {
+        type:Number,
+        min:0,
+        requried : true
+    },
+    reservedRooms:{
+        type : Number,
+        min : 0,
+        required : true
     }
 })
 
