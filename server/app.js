@@ -11,7 +11,7 @@ const cookieparser = require('cookie-parser')
 
 // exports-imports
 require('./conn')
-const hotels = require('./hotels.json')
+// const hotels = require('./hotels.json')
 const user = require('./models/user.model')
 const hotel = require('./models/hotel.model')
 const roomType = require('./models/roomType.model')
@@ -155,15 +155,33 @@ app.post('/api/logout',redirectLogin,(req,res) => {
     // res.status(200).json({"msg" : "user logged out successfully"})
 })
 app.post('/api/home/OnloadData', async (req, res) => {
-    const maxLimit = 10
-    const pageStart = ((req.query.page-1)*maxLimit)
+    const maxLimit = 4
+    const pageStart = ((parseInt(req.query.page)-1)*maxLimit)
     const pageEnd = req.query.page*maxLimit
     
-    const pageData = hotels.slice(pageStart,pageEnd)
-    const pageCount = Math.ceil(hotels.length / maxLimit);
+    // const pageData = hotels.slice(pageStart,pageEnd)
+    let pageCount = 0
+    let pageData = []
+
+    try{
+        const hotelsCount = await hotel.countDocuments({})
+        pageCount = Math.ceil(hotelsCount / maxLimit);
+    }
+    catch(e){
+        console.log(e)
+        res.status(500).send(err)
+    }
+
+    try{
+        pageData = await hotel.find({}).skip(pageEnd).limit(maxLimit)
+        // console.log(hotels)
+    }catch(e){
+        console.log(e)
+        res.status(500).send(err)
+    }
 
     
-    const uniqueLocations = [...new Set(hotels.map(hotel => hotel.location))];
+    // const uniqueLocations = [...new Set(hotels.map(hotel => hotel.location))];
 
     let def_user;
     if(req.cookies){
@@ -178,7 +196,6 @@ app.post('/api/home/OnloadData', async (req, res) => {
         }
         const qunt = {
             username: user_det,
-            locations: uniqueLocations,
             pageCount : pageCount,
             data: pageData
         }
@@ -187,8 +204,7 @@ app.post('/api/home/OnloadData', async (req, res) => {
     }
     catch (err) {
         console.log(err)
-        res.status(400).send(err)
-        
+        res.status(500).send(err)
         // throw err
     }
 
@@ -196,38 +212,70 @@ app.post('/api/home/OnloadData', async (req, res) => {
 })
 app.post('/api/home/data', async (req, res) => {
     const loc = req.query.location;
-    const maxLimit = 10
-    const pageStart = ((req.query.page-1)*maxLimit)
-    const pageEnd = req.query.page*maxLimit
-    var c
+    const minP = parseInt(req.query.minPrice)
+    const maxP = parseInt(req.query.maxPrice)
+    const maxLimit = 4
+    const pageStart = ((parseInt(req.query.page)-1)*maxLimit)
+    console.log(req.query)
     
-    
-    var data;
+    let pageCount = 0
+    let pageData = []
     if(loc === ""){
-        pageCount = Math.ceil(hotels.length / maxLimit);
-        data = hotels.slice(pageStart,pageEnd)
+        try{
+            const hotelsCount = await hotel.countDocuments({ minPrice : {$lt : maxP} , MaxPrice : {$gt : minP}})
+            pageCount = Math.ceil(hotelsCount / maxLimit);
+        }
+        catch(e){
+            res.status(500).send(e)
+        }
+
+        try{
+            pageData = await hotel.find({ minPrice : {$lt : maxP} , MaxPrice : {$gt : minP}}).skip(pageStart).limit(maxLimit)
+        }catch(e){
+            console.log(e)
+            res.status(500).send(err)
+        }
     }
     else{
-        filtered_hotels = hotels.filter((ele) => {
-            return ele.location === loc
-        })
-        pageCount = Math.ceil(filtered_hotels.length / maxLimit)
-        data = filtered_hotels.slice(pageStart,pageEnd)
+        try{
+            const hotelsCount = await hotel.countDocuments({ location : loc ,minPrice : {$lt : maxP} , MaxPrice : {$gt : minP}})
+            pageCount = Math.ceil(hotelsCount / maxLimit);
+        }
+        catch(e){
+            console.log(e)
+            res.status(500).send(e)
+        }
+
+        try{
+            pageData = await hotel.find({ location : loc ,minPrice : {$lt : maxP} , MaxPrice : {$gt : minP}}).skip(pageStart).limit(maxLimit)
+        }catch(e){
+            console.log(e)
+            res.status(500).send(e)
+        }
     }
 
     res.status(200).send({
-        data : data,
+        data : pageData,
         location : loc,
         pageCount : pageCount,
+        min : minP,
+        max : maxP
     })
 
 })
 app.post('/api/hotel/:id',async(req,res) => {
 
+    let hotelData
+    try{
+        hotelData = await hotel.find({_id : req.params.id})
+    }
+    catch(e){
+        console.log(e)
+        res.status(500).send(e)
+    }
 
-    const hotel = hotels.find(ele => ele.hotelId.toString() === req.params.id)
     res.status(200).send({
-        hotel : hotel
+        hotel : hotelData
     })
 
 })

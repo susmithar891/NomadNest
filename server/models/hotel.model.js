@@ -5,6 +5,10 @@ const hotelSchema = mongoose.Schema({
         type : String,
         requried : true
     },
+    hotelName:{
+        type:String,
+        required : true 
+    },
     mapsLocation : {
         latitude: {
             type: Number,
@@ -18,6 +22,16 @@ const hotelSchema = mongoose.Schema({
             min: -180,
             max: 180
           }
+    },
+    minPrice : {
+        type : Number,
+        required : true,
+        min : 0
+    },
+    maxPrice : {
+        type : Number,
+        required : true,
+        min : 0
     },
     images : {
         type : Array(String),

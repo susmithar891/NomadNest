@@ -4,6 +4,8 @@ const fs = require('fs');
 
 const roomTypes = [];
 
+const Hotels = [];
+
 let count = 0;
 for (let i = 0; i < hotels.length; i++) {
     for (let j = 0; j < roomtypes.length; j++) {
@@ -17,6 +19,7 @@ for (let i = 0; i < hotels.length; i++) {
 
 const jsonData = JSON.stringify(roomTypes, null, 2); // Convert roomTypes array to JSON string
 
+
 fs.writeFile('roomType_fin.json', jsonData, (err) => {
     if (err) {
         console.error('Error writing to file:', err);
@@ -24,3 +27,4 @@ fs.writeFile('roomType_fin.json', jsonData, (err) => {
         console.log('Data written to file successfully.');
     }
 });
+
