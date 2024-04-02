@@ -267,16 +267,36 @@ app.post('/api/hotel/:id',async(req,res) => {
 
     let hotelData
     try{
-        hotelData = await hotel.find({_id : req.params.id})
+        hotelData = await hotel.findOne({_id : req.params.id})
     }
     catch(e){
         console.log(e)
         res.status(500).send(e)
     }
 
-    res.status(200).send({
-        hotel : hotelData
-    })
+    let def_user;
+    if(req.cookies){
+        def_user = verifyUser(req.cookies.session_token)
+    }
+
+    
+    try {
+        let user_det = null
+        if(def_user){
+            user_det = await user.findOne({_id: def_user.id }).select('-password -updatedAt -email -createdAt -__v -_id')
+        }
+        const qunt = {
+            username: user_det,
+            data: hotelData
+        }
+
+        res.status(200).send(qunt)
+    }
+    catch (err) {
+        console.log(err)
+        res.status(500).send(err)
+        // throw err
+    }
 
 })
 

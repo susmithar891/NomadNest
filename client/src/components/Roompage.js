@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import hotels from '../media/input.json'
 import { Navbar } from './Navbar'
 import '../styling/roompage.css'
@@ -8,27 +8,74 @@ import request from '../api/axios'
 
 
 const Roompage = (props) => {
-	let params = useParams()
-	const [hotel,setHotel] = useState({})
+	// const location = useLocation()
+	const params = useParams()
+	const hotelModel = {
+		"_id": "", // String
+		"hotelName": "", // String
+		"location": "", // String
+		"mapsLocation": {
+			"latitude": 0, // Number
+			"longitude": 0 // Number
+		},
+		"images": [], // Array of strings
+		"ratings": {
+			"1": 0, // Number
+			"2": 0, // Number
+			"3": 0, // Number
+			"4": 0, // Number
+			"5": 0 // Number
+		},
+		"roomTypes": [], // Array of strings
+		"amenities": [], // Array of strings
+		"contactInfo": {
+			"phone": [
+				{
+					"countryCode": "", // String
+					"phoneNumber": "" // String
+				},
+				{
+					"countryCode": "", // String
+					"phoneNumber": "" // String
+				}
+			],
+			"email": "" // String
+		},
+		"minPrice": 0, // Number
+		"MaxPrice": 0 // Number
+	}
 
-	const [maxRating,setmaxRating] = useState(0)
-	
+	const [hotel, setHotel] = useState(hotelModel)
+	const [maxRating, setmaxRating] = useState(0)
 
 	useEffect(() => {
-        request.post(`/api/hotel/${params.id}`, {
-            headers: { 'Content-Type': 'application/json' },
-        })
-            .then((res) => {
-                
-				setHotel(res.data.hotel)
-				const maxRat = Math.max(...Object.values(hotel.rating).filter((key) => key !== 'avg_rat').map(Number));
-				setmaxRating(maxRat)
-                
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    }, []);
+		request.post(`/api/hotel/${params.id}`, {
+			headers: { 'Content-Type': 'application/json' },
+		})
+			.then((res) => {
+				console.log(res.data)
+				hotelModel._id = res.data.data._id;
+				hotelModel.hotelName = res.data.data.hotelName;
+				hotelModel.location = res.data.data.location;
+				hotelModel.mapsLocation = res.data.data.mapsLocation;
+				hotelModel.images = res.data.data.images;
+				hotelModel.ratings = res.data.data.ratings;
+				hotelModel.roomTypes = res.data.data.roomTypes;
+				hotelModel.amenities = res.data.data.amenities;
+				hotelModel.contactInfo = res.data.data.contactInfo;
+				hotelModel.minPrice = res.data.data.minPrice;
+				hotelModel.MaxPrice = res.data.data.MaxPrice;
+				console.log(hotel)
+				const maxRat = Math.max(...Object.values(hotel.ratings).map(Number));
+				console.log(maxRat)
+				setmaxRating(maxRat + Math.ceil(maxRat*30/100))
+				console.log(maxRating)
+
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+	}, []);
 
 
 
@@ -36,12 +83,12 @@ const Roompage = (props) => {
 	return (
 		<>
 			<Navbar/>
-
+		
 			<div className="container mt-5">
 				<div className="card">
 					<div className="row no-gutters">
 						<div className="col-lg-6">
-							<img src={require('../media/hotel' + hotel.hotelId + '.jpeg')} className="card-img" alt="Oceanview Resort" />
+							<img src={require('../media/hotel2.jpeg')} className="card-img" alt="Oceanview Resort" />
 						</div>
 						<div className="col-lg-6">
 							<div className="card-body">
@@ -110,8 +157,7 @@ const Roompage = (props) => {
 								Ratings
 							</div>
 							<div className="card-body">
-								<h6 className="card-title">Average Rating: {hotel.rating.avg_rat}</h6>
-								{Object.entries(hotel.rating).filter(([key]) => key !== 'avg_rat').map(([key, value]) => (
+								{Object.entries(hotel.ratings).map(([key, value]) => (
 									<div key={key} className="mb-2">
 										<div className="text-muted">Rating {key}: </div>
 										<RatingBar rating={value} maxRating={maxRating} />
@@ -127,15 +173,7 @@ const Roompage = (props) => {
 								Comments
 							</div>
 							<ul className="list-group list-group-flush" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-								{hotel.comments.map((comment, index) => (
-									<li className="list-group-item d-flex align-items-center" key={index}>
-										<img src="path-to-default-profile-pic.jpg" alt="User" style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '10px' }} />
-										<div>
-											<strong>User Name</strong>
-											<p>{comment}</p>
-										</div>
-									</li>
-								))}
+
 							</ul>
 						</div>
 					</div>
