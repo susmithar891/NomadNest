@@ -3,12 +3,12 @@ const mongoose = require('mongoose')
 const reserveSchema = mongoose.Schema({
 
     hotelId : {
-        type : mongoose.Schema.Types.ObjectId,
+        type : String,
         ref : 'hotel',
         required : true
     },
     userId : {
-        type : mongoose.Schema.Types.ObjectId,
+        type : String,
         ref : 'user',
         required : true
     },
@@ -34,7 +34,7 @@ const reserveSchema = mongoose.Schema({
         type : String,
     },
     reservedRoomIds : {
-        type : Array(mongoose.Schema.Types.ObjectId),
+        type : Array(String),
         ref : 'room',
         required : true
     },
@@ -55,7 +55,7 @@ const reserveSchema = mongoose.Schema({
         deafult : false
     },
     bookingId : {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref : 'booking',
     }
 

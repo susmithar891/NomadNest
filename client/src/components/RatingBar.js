@@ -6,7 +6,7 @@ const RatingBar = ({ rating, maxRating }) => {
     return (
         <div className="progress" style={{ height: '20px', marginBottom: '10px' }}>
             <div
-                className="progress-bar"
+                className="progress-bar progress-bar-striped progress-bar-animated"
                 role="progressbar"
                 style={{ width: `${widthPercentage}%` }}
                 aria-valuenow={rating}

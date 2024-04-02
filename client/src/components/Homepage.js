@@ -122,7 +122,8 @@ export const Homepage = () => {
                             key={element._id}
                             style={{ textDecoration: 'none' }}
                         >
-                            <Roomcard hotelId={element._id} hotelname={element.hotelName} hotelimg={'hotel1.jpeg'} />
+                            <Roomcard hotelId={element._id} hotelname={element.hotelName} hotelimg={'hotel1.jpeg'} location = {element.location} amenities
+ = {element.amenities} />
                         </Link>
 
                     );
