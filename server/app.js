@@ -344,6 +344,57 @@ app.post('/api/hotel/:id', async (req, res) => {
 })
 
 
+app.post('/api/hotel/data', async (req, res) => {
+
+
+    console.log("bdhfdvs")
+    // try {
+
+    //     const fetch_rooms = await room.find({ hotelId: req.params.id })
+    //     const aval_rooms = fetch_rooms.filter((ele) => {
+    //         const aval = ele.reservedDates.filter((ele) => {
+    //             // return !((req.body.outDate <= ele.in_date) || (req.body.inDate >= ele.out_date))
+    //             return ((req.body.outDate > ele.in_date) && (req.body.inDate < ele.out_date))
+    //         })
+    //         return aval.length === 0
+    //     })
+
+    // }
+    // catch(e){
+    //     console.log(e)
+    //     res.status(500).send(e)
+    // }
+
+})
+
+
+app.post('/api/data', async (req, res) => {
+    try {
+        const roomtypes = await roomType.find({hotelId : req.body.hotelId})
+        const data = {}
+        for(let i=0;i<roomtypes.length;i++){
+            let rt = roomtypes[i]
+            const fetch_rooms = await room.find({hotelId : req.body.hotelId,roomType : rt.roomType})
+            const aval_rooms = await fetch_rooms.filter((ele) => {
+                const aval = ele.reservedDates.filter((ele) => {
+                    // return !((req.body.outDate <= ele.in_date) || (req.body.inDate >= ele.out_date))
+                    return ((req.body.outDate > ele.in_date) && (req.body.inDate < ele.out_date))
+                })
+                return aval.length === 0
+            })
+
+            data[rt.roomType] = aval_rooms            
+        }
+
+        res.send(data)
+    }
+    catch (e) {
+        console.log(e)
+        res.status(500).send(e)
+    }
+})
+
+
 
 app.listen(port, () => {
     console.log(`server started at port ${port}`)

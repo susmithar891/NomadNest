@@ -111,8 +111,10 @@ const Roompage = (props) => {
 				const maxRat = Math.max(...Object.values(hotel.ratings).map(Number));
 				setmaxRating(maxRat + Math.ceil(maxRat * 30 / 100))
 				setUser(res.data.username)
+				let roomtypesData = res.data.roomtypes.map((ele) => {
+					return {...ele , "rooms" : []}
+				})
 				setroomType(res.data.roomtypes)
-
 				let len = res.data.roomtypes.length;
 				const rc = [];
 				for (let i = 0; i < len; i++) {
@@ -125,8 +127,24 @@ const Roompage = (props) => {
 			})
 	}, []);
 
-	const handleCheck = (e) => {
+
+	const getData = async() => {
+		request.post(`/api/data`,{hotelId : params.id , inDate : startDate , outDate : endDate})
+		.then((res) => {
+			console.log(res)
+		})
+		.catch((err) => {
+			console.log(err)
+		})
+	}
+
+	const handleCheck = async(e) => {
 		e.preventDefault()
+		if(!startDate || !endDate){
+			alert('Pick in and out dates to check avaliablity of rooms')
+			return 
+		}
+		getData()
 	}
 
 	return (
@@ -161,7 +179,6 @@ const Roompage = (props) => {
 														startDate={startDate}
 														endDate={endDate}
 														selectsRange
-														required
 													/>
 												</div>
 												<button type="submit" className="btn btn-primary mt-3" onClick={handleCheck}>Check avaliablity</button>
