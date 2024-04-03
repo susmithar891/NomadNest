@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import hotels from '../media/input.json'
 import { Navbar } from './Navbar'
 import '../styling/roompage.css'
 import RatingBar from './RatingBar'
 import request from '../api/axios'
+import InputBox from './InputBox'
 
 
 const Roompage = (props) => {
@@ -60,6 +63,33 @@ const Roompage = (props) => {
 	const [user, setUser] = useState({})
 	const [maxRating, setmaxRating] = useState(0)
 	const [roomType, setroomType] = useState([])
+	const [adultsCount, setadultsCount] = useState(0);
+	const [childCount, setchildCount] = useState(0)
+	const [startDate, setStartDate] = useState();
+	const [endDate, setEndDate] = useState();
+	const [roomCount, setroomCount] = useState([]);
+	const [checkedAval , setCheckedAval] = useState(false)
+
+	const handleDateChange = (range) => {
+		const [startDate, endDate] = range;
+		setStartDate(startDate);
+		setEndDate(endDate);
+	};
+
+	const handleRoomcountChange = (e, index, inc) => {
+		e.preventDefault()
+		if (inc) {
+			roomCount[index] += 1
+			setroomCount([...roomCount])
+		}
+		else {
+			if (roomCount[index] > 0) {
+				roomCount[index] -= 1
+				setroomCount([...roomCount])
+			}
+		}
+	}
+
 
 	useEffect(() => {
 		request.post(`/api/hotel/${params.id}`, {
@@ -83,12 +113,21 @@ const Roompage = (props) => {
 				setUser(res.data.username)
 				setroomType(res.data.roomtypes)
 
+				let len = res.data.roomtypes.length;
+				const rc = [];
+				for (let i = 0; i < len; i++) {
+					rc.push(0);
+				}
+				setroomCount([...rc])
 			})
 			.catch((err) => {
 				console.log(err);
 			})
 	}, []);
 
+	const handleCheck = (e) => {
+		e.preventDefault()
+	}
 
 	return (
 		<>
@@ -108,48 +147,25 @@ const Roompage = (props) => {
 										<h5 className="card-title">Reserve Your Stay</h5>
 										<form>
 											<div className="row align-items-center">
-
-												<div className="col">
-													<label className=''>Adults</label>
-													<div className="input-group">
-														<button className='incre-btn' type="button">−</button>
-														<input type="text text-center" className="form-control" value="2" />
-														<button className='incre-btn' type="button">+</button>
-													</div>
-												</div>
-
-												<div className="col">
-													<label>Children</label>
-													<div className="input-group">
-														<button className='incre-btn' type="button">−</button>
-														<input type="text" className="form-control" value="0" />
-														<button className='incre-btn' type="button">+</button>
-													</div>
-												</div>
-
-												<div className="col">
-													<label>Rooms</label>
-													<div className="input-group">
-														<button className='incre-btn' type="button">−</button>
-														<input type="text" className="form-control" value="1" />
-														<button className='incre-btn' type="button">+</button>
-													</div>
-												</div>
+												<InputBox label="Adults" state={adultsCount} stateFunc={setadultsCount} />
+												<InputBox label="Childs" state={childCount} stateFunc={setchildCount} />
 											</div>
 
 											<div className="row mt-3">
-												<div className="col">
-													<label htmlFor="inputCheckIn">Check-In</label>
-													<input type="date" className="form-control" id="inputCheckIn" />
+												<div className='mx-auto w-75'>
+													<label className='m-3'>Pick In and Out Dates</label>
+													<DatePicker
+														className='form-control'
+														selected={startDate}
+														onChange={handleDateChange}
+														startDate={startDate}
+														endDate={endDate}
+														selectsRange
+														required
+													/>
 												</div>
-												<div className="col">
-													<label htmlFor="inputCheckOut">Check-Out</label>
-													<input type="date" className="form-control" id="inputCheckOut" />
-												</div>
-												<button type="submit" className="btn btn-primary mt-3">Check avaliablity</button>
+												<button type="submit" className="btn btn-primary mt-3" onClick={handleCheck}>Check avaliablity</button>
 											</div>
-
-
 										</form>
 									</div>
 								</div>
@@ -170,14 +186,24 @@ const Roompage = (props) => {
 									<p className="card-text">Adult Capacity: {room.capacity.adult}</p>
 									<p className="card-text">Child Capacity: {room.capacity.child}</p>
 								</div>
-								<div className="col my-auto">
-									<label className=''>Rooms</label>
+								<div className='col my-auto '>
+									<label className='m-1'>
+										Rooms
+									</label>
 									<div className="input-group">
-										<button className='incre-btn' type="button">−</button>
-										<input type="text text-center" className="form-control" value="2" />
-										<button className='incre-btn' type="button">+</button>
+									<button className='incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, false)}>−</button>
+										<input type="text" className="form-control text-center" value={roomCount[index]} />
+										<button className='incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, true)}>+</button>
 									</div>
 								</div>
+								{/* <div className="col my-auto">
+									<label className=''>Rooms</label>
+									<div className="input-group">
+										<button className='incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, false)}>−</button>
+										<input type="text text-center" className="form-control" value={roomCount[index]} />
+										<button className='incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, true)}>+</button>
+									</div>
+								</div> */}
 							</div>
 						</div>
 					</div>
