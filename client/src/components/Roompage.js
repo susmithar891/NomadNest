@@ -76,11 +76,13 @@ const Roompage = (props) => {
 		setEndDate(endDate);
 	};
 
-	const handleRoomcountChange = (e, index, inc) => {
+	const handleRoomcountChange = (e, index, inc,maxVal) => {
 		e.preventDefault()
 		if (inc) {
-			roomCount[index] += 1
-			setroomCount([...roomCount])
+			if(roomCount[index] < maxVal){
+				roomCount[index] += 1
+				setroomCount([...roomCount])
+			}
 		}
 		else {
 			if (roomCount[index] > 0) {
@@ -114,7 +116,7 @@ const Roompage = (props) => {
 				let roomtypesData = res.data.roomtypes.map((ele) => {
 					return {...ele , "rooms" : []}
 				})
-				setroomType(res.data.roomtypes)
+				setroomType(roomtypesData)
 				let len = res.data.roomtypes.length;
 				const rc = [];
 				for (let i = 0; i < len; i++) {
@@ -130,8 +132,14 @@ const Roompage = (props) => {
 
 	const getData = async() => {
 		request.post(`/api/data`,{hotelId : params.id , inDate : startDate , outDate : endDate})
-		.then((res) => {
-			console.log(res)
+		.then((res) => {	
+			setroomType(roomType => roomType.map((rt) => {
+				if(res.data[rt.roomType]){
+					rt.rooms = res.data[rt.roomType]
+				}
+				console.log(rt)
+				return rt
+			}))
 		})
 		.catch((err) => {
 			console.log(err)
@@ -202,15 +210,16 @@ const Roompage = (props) => {
 									<p className="card-text">Price: {room.price}</p>
 									<p className="card-text">Adult Capacity: {room.capacity.adult}</p>
 									<p className="card-text">Child Capacity: {room.capacity.child}</p>
+									<p className="card-text">Avaliable rooms: {room.rooms && room.rooms.length}</p>
 								</div>
 								<div className='col my-auto '>
 									<label className='m-1'>
 										Rooms
 									</label>
 									<div className="input-group">
-									<button className='incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, false)}>−</button>
+									<button className='incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, false,-1)}>−</button>
 										<input type="text" className="form-control text-center" value={roomCount[index]} />
-										<button className='incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, true)}>+</button>
+										<button className='incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, true,room.rooms.length)}>+</button>
 									</div>
 								</div>
 								{/* <div className="col my-auto">

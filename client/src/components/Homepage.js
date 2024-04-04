@@ -9,7 +9,7 @@ import MultiRangeSlider from "multi-range-slider-react";
 
 export const Homepage = () => {
 
-    const locations = ["New York", "London", "Tokyo", "Paris", "Los Angeles", "Berlin", "Sydney", "Rome", "Toronto", "Moscow", "Singapore", "Dubai",];
+    const locations = ["New York", "London", "Tokyo", "Paris", "Los Angeles", "Berlin", "Sydney", "Rome", "Toronto", "Moscow", "Singapore", "Dubai"];
 
 
     const logout = async () => {
