@@ -52,12 +52,12 @@ const Landingpage = () => {
                     <div className="collapse navbar-collapse" id="navbarResponsive">
                         <ul className="navbar-nav ms-auto">
                             <li className="nav-item">
-                                <Link to='/sign-up' className="nav-link">
+                                <Link to='/sign-up' state={{navigateTo : "/home"}} className="nav-link">
                                     Register
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link to='/sign-in' className="nav-link">
+                                <Link to='/sign-in' state={{navigateTo : "/home"}} className="nav-link">
                                     Login
                                 </Link>
                             </li>

@@ -11,7 +11,7 @@ const roomSchema = mongoose.Schema({
         required : true
     },
     hotelId : {
-        type : mongoose.Schema.Types.ObjectId,
+        type : String,
         ref : 'hotel',
         required : true
     },
@@ -34,10 +34,10 @@ const roomSchema = mongoose.Schema({
                 required: true
             }
         }),
-        default: [],
-        set : function(array) {
-            return array.sort((a, b) => new Date(a.in_date) - new Date(b.in_date));
-        }
+        // default: [],
+        // set : function(array) {
+        //     return array.sort((a, b) => new Date(a.in_date) - new Date(b.in_date));
+        // }
     },
     price : {
         type : Number,

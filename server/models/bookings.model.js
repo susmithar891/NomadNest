@@ -1,14 +1,10 @@
 const mongoose = require('mongoose')
 
 const bookingSchema = mongoose.Schema({
-    password : {
-        type : String,
-        requried : true
-    },
-    refNo : {
-        type : String,
-        required : true
-    },
+    // refNo : {
+    //     type : String,
+    //     required : true
+    // },
     transactionId : {
         type : String,
         requied : true
@@ -18,40 +14,45 @@ const bookingSchema = mongoose.Schema({
         required : true
     },
     userId : {
-        type : mongoose.Schema.Types.ObjectId,
+        type : String,
         ref : 'user',
         requried : true
     },
-    hotelId : {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : 'hotel',
-        required : true,
+    reservedId : {
+        type : "String",
+        ref  : "reserve",
+        requried : true
     },
-    bookedRoomIds : {
-        type : Array(mongoose.Schema.Types.ObjectId),
-        ref : 'room',
-        required : true
-    },
+    // hotelId : {
+    //     type : String,
+    //     ref : 'hotel',
+    //     required : true,
+    // },
+    // bookedRoomIds : {
+    //     type : Array(String),
+    //     ref : 'room',
+    //     required : true
+    // },
     amountPaid : {
         type : Number,
         required  :true
-    },
-    adults : {
-        type : Number,
-        required : true
-    },
-    children : {
-        type : Number,
-        required : true
-    },
-    inDate : {
-        type : Date,
-        requried : true
-    },
-    outDate : {
-        type : Date,
-        requried : true
     }
+    // adults : {
+    //     type : Number,
+    //     required : true
+    // },
+    // children : {
+    //     type : Number,
+    //     required : true
+    // },
+    // inDate : {
+    //     type : Date,
+    //     requried : true
+    // },
+    // outDate : {
+    //     type : Date,
+    //     requried : true
+    // }
 })
 
 
