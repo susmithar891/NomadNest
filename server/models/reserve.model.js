@@ -1,7 +1,11 @@
 const mongoose = require('mongoose')
 
 const reserveSchema = mongoose.Schema({
-
+    password : {
+        type : String,
+        requried : true,
+        default : "password"
+    },
     hotelId : {
         type : String,
         ref : 'hotel',
@@ -34,8 +38,7 @@ const reserveSchema = mongoose.Schema({
         type : String,
     },
     reservedRoomIds : {
-        type : Array(String),
-        ref : 'room',
+        type : Array(),
         required : true
     },
     inDate : {

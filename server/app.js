@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookieparser = require('cookie-parser')
 const mongoose = require('mongoose')
+const _ = require("lodash")
 
 
 // exports-imports
@@ -51,6 +52,14 @@ app.use(session({
 //functions
 function createToken(user) {
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1)); // Generate random index
+        [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+    }
+    return array;
 }
 
 function verifyUser(token) {
@@ -344,47 +353,23 @@ app.post('/api/hotel/:id', async (req, res) => {
 })
 
 
-app.post('/api/hotel/data', async (req, res) => {
-
-
-    console.log("bdhfdvs")
-    // try {
-
-    //     const fetch_rooms = await room.find({ hotelId: req.params.id })
-    //     const aval_rooms = fetch_rooms.filter((ele) => {
-    //         const aval = ele.reservedDates.filter((ele) => {
-    //             // return !((req.body.outDate <= ele.in_date) || (req.body.inDate >= ele.out_date))
-    //             return ((req.body.outDate > ele.in_date) && (req.body.inDate < ele.out_date))
-    //         })
-    //         return aval.length === 0
-    //     })
-
-    // }
-    // catch(e){
-    //     console.log(e)
-    //     res.status(500).send(e)
-    // }
-
-})
-
-
 app.post('/api/data', async (req, res) => {
     try {
-        const roomtypes = await roomType.find({hotelId : req.body.hotelId})
+        const roomtypes = await roomType.find({ hotelId: req.body.hotelId })
         const data = {}
-        for(let i=0;i<roomtypes.length;i++){
+        for (let i = 0; i < roomtypes.length; i++) {
             let rt = roomtypes[i]
-            const fetch_rooms = await room.find({hotelId : req.body.hotelId,roomType : rt.roomType})
-            const aval_rooms = await fetch_rooms.filter((ele) => {
-                const aval = ele.reservedDates.filter((ele) => {
-                    // return !((req.body.outDate <= ele.in_date) || (req.body.inDate >= ele.out_date))
-                    return ((req.body.outDate > ele.in_date) && (req.body.inDate < ele.out_date))
-                })
-                return aval.length === 0
-            })
+            const fetch_rooms = await room.find({ hotelId: req.body.hotelId, roomType: rt.roomType })
+            const aval_rooms = await fetch_rooms.filter((room) => {
+                const aval = room.reservedDates.reduce((acc, reservation) => {
+                    return acc && (new Date(req.body.outDate) <= reservation.in_date || new Date(req.body.inDate) >= reservation.out_date);
+                }, true);
+                return aval;
+            });
 
-            data[rt.roomType] = aval_rooms            
+            data[rt.roomType] = aval_rooms
         }
+        console.log("done")
 
         res.send(data)
     }
@@ -392,6 +377,59 @@ app.post('/api/data', async (req, res) => {
         console.log(e)
         res.status(500).send(e)
     }
+})
+
+
+app.post('/api/:id/reserve', async (req, res) => {
+    let reserved_rooms = []
+    let def_user;
+    if (req.cookies) {
+        def_user = verifyUser(req.cookies.session_token)
+    }
+    if (!def_user) {
+        res.status(401).send("Unauthoriazed")
+    }
+    let total_price = 0
+    const dates = { in_date: req.body.inDate, out_date: req.body.outDate }
+
+    await Promise.all(Object.entries(req.body.reserve).map(async ([key, value]) => {    
+        const fetch_rooms = await room.find({ hotelId: req.params.id, roomType: key })
+        let aval_rooms = await fetch_rooms.filter((room) => {
+            const aval = room.reservedDates.reduce((acc, reservation) => {
+                return acc && (new Date(req.body.outDate) <= reservation.in_date || new Date(req.body.inDate) >= reservation.out_date);
+            }, true);
+            return aval;
+        });
+        if (aval_rooms.length < value) {
+            res.send(new Error("error : avaliable rooms mismatch"))
+        }
+        aval_rooms = shuffleArray(aval_rooms)
+        const bookrooms = aval_rooms.slice(0, value)
+        
+        const rooms = await Promise.all(bookrooms.map(async (element) => {
+            try {
+                const updatedRoom = await room.updateOne(
+                    { _id: element._id }, // Filter criteria
+                    { $push: { reservedDates: dates } },// Update operation
+                );
+                if(!updatedRoom){
+                    res.status(500).send({"msg" : "error in reserving room"})
+                }
+                total_price += element.price
+                const obj = {"roomID":element._id,"roomNo" : element.roomNo , "price" : element.price}
+                return obj
+                
+            } catch (error) {
+                console.error('Error adding reservation:', error);
+            }
+        }));
+        reserved_rooms = [...reserved_rooms,...rooms]
+
+    }))
+    const reser = await new reserve({hotelId : req.params.id,reservedRoomIds : reserved_rooms,userId : def_user.id,adults : req.body.totalAdult,children : req.body.totalChild,price : total_price})
+    reser.save()
+    res.send({reserved_rooms,total_price})
+
 })
 
 
