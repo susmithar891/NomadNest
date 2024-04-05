@@ -11,15 +11,12 @@ const GeneralAccount = () => {
                         className="d-block ui-w-80 rounded"
                     />
                 </div>
-                
+
                 <div className='m-1'>
                     <label className="btn btn-outline-primary m-1">
                         Upload new photo
                         <input type="file" className="account-settings-fileinput" />
                     </label>
-                    <button type="button" className="btn btn-default md-btn-flat mx-2">
-                        Reset
-                    </button>
                     <div className="text-light small mt-1">
                         Allowed JPG, GIF or PNG. Max size of 800K
                     </div>
@@ -51,12 +48,17 @@ const GeneralAccount = () => {
                         className="form-control mb-1"
                         defaultValue="nmaxwell@mail.com"
                     />
-                    <div className="alert alert-warning mt-3">
+                    {/* <div className="alert alert-warning mt-3">
                         Your email is not confirmed. Please check your inbox.
                         <br />
                         <a href="javascript:void(0)">Resend confirmation</a>
-                    </div>
+                    </div> */}
                 </div>
+            </div>
+            <div className="d-flex justify-content-end m-2">
+                <button type="button" className="btn btn-primary">
+                    Save changes
+                </button>
             </div>
         </div>
     )

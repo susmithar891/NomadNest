@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AccountInfo = () => {
+const ReserveInfo = () => {
     return (
         <div className="tab-pane fade active show" id="account-info">
             <div className="card">
@@ -40,4 +40,4 @@ const AccountInfo = () => {
     )
 }
 
-export default AccountInfo
+export default ReserveInfo

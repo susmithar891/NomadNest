@@ -18,8 +18,13 @@ const ChangePass = () => {
                     <input type="password" className="form-control" />
                 </div>
             </div>
+            <div className="d-flex justify-content-end m-1 p-2">
+                <button type="button" className="btn btn-primary m-1">
+                    Save changes
+                </button>
+            </div>
         </div>
-        
+
     )
 }
 

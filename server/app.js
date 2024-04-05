@@ -21,6 +21,7 @@ const room = require('./models/room.model')
 const comment = require('./models/comment.model')
 const booking = require('./models/bookings.model')
 const reserve = require('./models/reserve.model')
+const { accessSync } = require("fs")
 // const { toNamespacedPath } = require("path/win32")
 
 
@@ -72,11 +73,19 @@ function verifyUser(token) {
     }
 }
 
-const redirectHome = (req, res, next) => {
+const redirectHome = async(req, res, next) => {
     if (req.cookies && req.cookies.session_token && verifyUser(req.cookies.session_token)) {
         // res.redirect('/home')
         // res.send({"msg" : "this is home"})
-        res.status(200).send({ redirect: 'home' })
+        try{
+            let def_user = await user.findOne({_id : verifyUser(req.cookies.session_token).id}).select('-password')
+            res.status(200).send({ redirect: 'home',user : def_user})
+        }
+        catch(e){
+            console.log(e)
+            res.sendStatus(403)
+        }
+        
     }
     else {
         next()

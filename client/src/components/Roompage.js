@@ -71,6 +71,7 @@ const Roompage = (props) => {
 	const [checkedAval, setCheckedAval] = useState(false)
 	const [maxAdult, setmaxAdult] = useState(0)
 	const [maxChild, setmaxChild] = useState(0)
+	const [totalPrice,settotalPrice] = useState(0)
 
 	const handleDateChange = (range) => {
 		const [startDate, endDate] = range;
@@ -80,6 +81,7 @@ const Roompage = (props) => {
 		setroomCount(roomCount => roomCount.map((rc) => {
 			return 0
 		}))
+		settotalPrice(0)
 		setmaxAdult(0)
 		setmaxChild(0)
 	};
@@ -90,6 +92,7 @@ const Roompage = (props) => {
 			if (roomCount[index] < maxVal) {
 				roomCount[index] += 1
 				setroomCount([...roomCount])
+				settotalPrice(totalPrice => totalPrice+roomType[index].price)
 				setmaxAdult(maxAdult => maxAdult + roomType[index].capacity.adult)
 				setmaxChild(maxChild => maxChild + roomType[index].capacity.child)
 			}
@@ -98,6 +101,7 @@ const Roompage = (props) => {
 			if (roomCount[index] > 0) {
 				roomCount[index] -= 1
 				setroomCount([...roomCount])
+				settotalPrice(totalPrice => totalPrice-roomType[index].price)
 				setmaxAdult(maxAdult => maxAdult - roomType[index].capacity.adult)
 				setmaxChild(maxChild => maxChild - roomType[index].capacity.child)
 			}
@@ -203,13 +207,14 @@ const Roompage = (props) => {
 					totalChild: childCount
 				});
 				if (res) {
-					if (window.confirm(`${res.data.reservedRoomIds.length} rooms were reserved fro your arrival 
+					if (window.confirm(`${res.data.reserved_rooms.length} rooms were reserved fro your arrival 
 				Procced for payment`)) {
 						console.log("taking to payments")
 					}
 					else {
 						console.log("pay later")
 					}
+					console.log(res.data)
 					getonloadData()
 					setStartDate(null)
 					setEndDate(null)
@@ -217,6 +222,7 @@ const Roompage = (props) => {
 					setroomCount(roomCount => roomCount.map((rc) => {
 						return 0
 					}))
+					settotalPrice(0)
 					setmaxAdult(0)
 					setmaxChild(0)
 				}
@@ -309,8 +315,14 @@ const Roompage = (props) => {
 			</div>
 
 			<div className='d-flex justify-content-end mb-3'>
-				<input type="text" value={maxAdult}></input>
-				<input type="text" value={maxChild}></input>
+				{/* <input type="text" value={maxAdult}></input>
+				<input type="text" value={maxChild}></input> */}
+				<div className='d-flex w-50'>
+					<label className="d-flex align-items-center m-4">
+						Total Price
+						</label>
+					<input type="text" className='text-center' value={totalPrice}></input>
+				</div>
 				<button className='btn btn-primary' onClick={reserveRooms}>Reserve Rooms</button>
 			</div>
 

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 
 
 const Navbar = (props) => {
-    // const navigate = useNavigate()
+    
 
 
     return (
