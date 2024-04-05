@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react'
-import { Link,useNavigate } from 'react-router-dom'
+import { Link,useLocation,useNavigate } from 'react-router-dom'
 import request from '../api/axios'
 
 
@@ -7,6 +7,9 @@ import request from '../api/axios'
 const Register = () => {
 
 	const navigate= useNavigate()
+	const location = useLocation()
+
+	console.log(location.state.navigateUrl)
 	
 	const [firstName, setFirst] = useState("")
 	const [lastName, setLast] = useState("")
@@ -17,10 +20,16 @@ const Register = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
+
 			const response = await request.post("/api/sign-up", {firstname : firstName,lastname : lastName,email : email,password : pass,remember : remeb});
 			console.log(response.data)
 			if(response.data === "OK"){
-				navigate('/home')
+				if(location.state && location.state.navigateUrl){
+					navigate(location.state.navigateUrl)
+				}
+				else{
+					navigate('/home')
+				}
 			}
 			if(response.data.redirect && response.data.redirect === "home"){
 				navigate('/home')
@@ -151,7 +160,7 @@ const Register = () => {
 									<span className='m-2'>
 										Already have an account ?
 									</span>
-									<Link to='/sign-in'>Sign In</Link>
+									<Link to='/sign-in' state={{navigateUrl : (location.state && location.state.navigateUrl) ?location.state.navigateUrl : "/home"  }}>Sign In</Link>
 								</div>
 							</div>
 

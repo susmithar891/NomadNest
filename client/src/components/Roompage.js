@@ -237,7 +237,7 @@ const Roompage = (props) => {
 
 	return (
 		<>
-			<Navbar profile={true} user={user} logout={logout} />
+			<Navbar profile={true} user={user} logout={logout} navigateTo={`/home/${params.id}`}/>
 
 			<div className="container my-1 mb-3">
 				<div className="card">

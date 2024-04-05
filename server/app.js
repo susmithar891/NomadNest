@@ -156,7 +156,7 @@ app.post("/api/sign-in", redirectHome, async (req, res) => {
 
     }
     else {
-        return res.sendStatus(400)
+        return res.status(400).send({"error" : "Invalid Credentials"})
     }
 
 })

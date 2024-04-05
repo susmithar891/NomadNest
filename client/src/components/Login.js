@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import request from '../api/axios'
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
@@ -7,6 +7,9 @@ import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 const Login = () => {
 
 	const navigate = useNavigate()
+	const location = useLocation()
+
+	console.log(location.state.navigateUrl)
 
 	const [email, setEmail] = useState("")
 	const [pass, setPass] = useState("")
@@ -19,7 +22,13 @@ const Login = () => {
 			const response = await request.post("/api/sign-in", { email: email, password: pass, remember: remember });
 
 			if (response.data === "OK") {
-				navigate('/home')
+				if(location.state && location.state.navigateUrl){
+					navigate(location.state.navigateUrl)
+				}
+				else{
+					navigate('/home')
+				}
+				
 			}
 
 			if (response.data.redirect && response.data.redirect === "home") {
@@ -136,7 +145,7 @@ const Login = () => {
 										<span className='m-2'>
 											Create new account
 										</span>
-										<Link to='/sign-up'>Sign up</Link>
+										<Link to='/sign-up' state={{navigateUrl : (location.state && location.state.navigateUrl) ?location.state.navigateUrl : "/home"  }}>Sign up</Link>
 									</div>
 								</div>
 
