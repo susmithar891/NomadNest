@@ -68,32 +68,43 @@ const Roompage = (props) => {
 	const [startDate, setStartDate] = useState();
 	const [endDate, setEndDate] = useState();
 	const [roomCount, setroomCount] = useState([]);
-	const [checkedAval , setCheckedAval] = useState(false)
+	const [checkedAval, setCheckedAval] = useState(false)
+	const [maxAdult, setmaxAdult] = useState(0)
+	const [maxChild, setmaxChild] = useState(0)
 
 	const handleDateChange = (range) => {
 		const [startDate, endDate] = range;
 		setStartDate(startDate);
 		setEndDate(endDate);
+		setCheckedAval(false)
+		setroomCount(roomCount => roomCount.map((rc) => {
+			return 0
+		}))
+		setmaxAdult(0)
+		setmaxChild(0)
 	};
 
-	const handleRoomcountChange = (e, index, inc,maxVal) => {
+	const handleRoomcountChange = (e, index, inc, maxVal) => {
 		e.preventDefault()
 		if (inc) {
-			if(roomCount[index] < maxVal){
+			if (roomCount[index] < maxVal) {
 				roomCount[index] += 1
 				setroomCount([...roomCount])
+				setmaxAdult(maxAdult => maxAdult + roomType[index].capacity.adult)
+				setmaxChild(maxChild => maxChild + roomType[index].capacity.child)
 			}
 		}
 		else {
 			if (roomCount[index] > 0) {
 				roomCount[index] -= 1
 				setroomCount([...roomCount])
+				setmaxAdult(maxAdult => maxAdult - roomType[index].capacity.adult)
+				setmaxChild(maxChild => maxChild - roomType[index].capacity.child)
 			}
 		}
 	}
 
-
-	useEffect(() => {
+	const getonloadData = () => {
 		request.post(`/api/hotel/${params.id}`, {
 			headers: { 'Content-Type': 'application/json' },
 		})
@@ -114,7 +125,7 @@ const Roompage = (props) => {
 				setmaxRating(maxRat + Math.ceil(maxRat * 30 / 100))
 				setUser(res.data.username)
 				let roomtypesData = res.data.roomtypes.map((ele) => {
-					return {...ele , "rooms" : []}
+					return { ...ele, "rooms": [] }
 				})
 				setroomType(roomtypesData)
 				let len = res.data.roomtypes.length;
@@ -127,33 +138,102 @@ const Roompage = (props) => {
 			.catch((err) => {
 				console.log(err);
 			})
+	}
+
+	useEffect(() => {
+		getonloadData()
 	}, []);
 
 
-	const getData = async() => {
-		request.post(`/api/data`,{hotelId : params.id , inDate : startDate , outDate : endDate})
-		.then((res) => {	
-			setroomType(roomType => roomType.map((rt) => {
-				if(res.data[rt.roomType]){
-					rt.rooms = res.data[rt.roomType]
-				}
-				console.log(rt)
-				return rt
-			}))
-		})
-		.catch((err) => {
-			console.log(err)
-		})
+	const getData = async () => {
+		request.post(`/api/data`, { hotelId: params.id, inDate: startDate, outDate: endDate })
+			.then((res) => {
+				setroomType(roomType => roomType.map((rt) => {
+					if (res.data[rt.roomType]) {
+						rt.rooms = res.data[rt.roomType]
+					}
+					console.log(rt)
+					return rt
+				}))
+				setCheckedAval(true)
+			})
+
+			.catch((err) => {
+				console.log(err)
+			})
 	}
 
-	const handleCheck = async(e) => {
+	const handleCheck = async (e) => {
 		e.preventDefault()
-		if(!startDate || !endDate){
+		if (!startDate || !endDate) {
 			alert('Pick in and out dates to check avaliablity of rooms')
-			return 
+			return
 		}
 		getData()
 	}
+
+	const reserveRooms = async (e) => {
+		e.preventDefault()
+		if (!user) {
+			alert("sign In / sing up to continue")
+			return
+		}
+		if (!checkedAval) {
+			alert("input in and out date")
+			return
+		}
+		if (adultsCount > maxAdult || childCount > maxChild) {
+			alert("Numberof People excedds max Capacity")
+			return
+		}
+
+		let reserve = {}
+		for (let i = 0; i < roomType.length; i++) {
+			if (roomCount[i] !== 0) {
+				reserve[roomType[i].roomType] = roomCount[i]
+			}
+		}
+		try {
+			if (reserve && Object.keys(reserve).length > 0) {
+				const res = await request.post(`/api/${params.id}/reserve`, {
+					reserve,
+					inDate: startDate,
+					outDate: endDate,
+					totalAdult: adultsCount,
+					totalChild: childCount
+				});
+				if (res) {
+					if (window.confirm(`${res.data.reservedRoomIds.length} rooms were reserved fro your arrival 
+				Procced for payment`)) {
+						console.log("taking to payments")
+					}
+					else {
+						console.log("pay later")
+					}
+					getonloadData()
+					setStartDate(null)
+					setEndDate(null)
+					setCheckedAval(false)
+					setroomCount(roomCount => roomCount.map((rc) => {
+						return 0
+					}))
+					setmaxAdult(0)
+					setmaxChild(0)
+				}
+			}
+			else{
+				alert("Add Rooms to reserve")
+			}
+
+
+		}
+		catch (e) {
+			console.log(e)
+		}
+
+
+	}
+
 
 	return (
 		<>
@@ -217,19 +297,11 @@ const Roompage = (props) => {
 										Rooms
 									</label>
 									<div className="input-group">
-									<button className='incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, false,-1)}>−</button>
+										<button className='incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, false, -1)}>−</button>
 										<input type="text" className="form-control text-center" value={roomCount[index]} />
-										<button className='incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, true,room.rooms.length)}>+</button>
+										<button className='incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, true, room.rooms.length)}>+</button>
 									</div>
 								</div>
-								{/* <div className="col my-auto">
-									<label className=''>Rooms</label>
-									<div className="input-group">
-										<button className='incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, false)}>−</button>
-										<input type="text text-center" className="form-control" value={roomCount[index]} />
-										<button className='incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, true)}>+</button>
-									</div>
-								</div> */}
 							</div>
 						</div>
 					</div>
@@ -237,7 +309,9 @@ const Roompage = (props) => {
 			</div>
 
 			<div className='d-flex justify-content-end mb-3'>
-				<button className='btn btn-primary'>Reserve Rooms</button>
+				<input type="text" value={maxAdult}></input>
+				<input type="text" value={maxChild}></input>
+				<button className='btn btn-primary' onClick={reserveRooms}>Reserve Rooms</button>
 			</div>
 
 			<div className="container">
