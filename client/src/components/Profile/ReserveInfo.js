@@ -1,42 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import request from '../../api/axios'
+import ReserveCard from './ReserveCard';
 
-const ReserveInfo = () => {
+const ReserveInfo = (props) => {
+
+    const [reservings, setReservings] = useState([]);
+
+
+    useEffect(() => {
+        request.post(`/api/user/${props.userState._id}/reservings`)
+            .then((res) => {
+                console.log(res.data)
+                setReservings(res.data)
+            })
+            .catch((e) => {
+                console.log(e)
+            })
+    }, [])
+
+
     return (
+
         <div className="tab-pane fade active show" id="account-info">
-            <div className="card">
-                <div className="card-img-top d-flex align-items-center bg-light">
-                    <div >
-                        <img className="img-fluid rounded" src={'https://bootdey.com/img/Content/avatar/avatar1.png'} alt="hotel preview" />
-                    </div>
-                    <div className="mx-3 card-body">
-                        <h5 className="card-title">bvbfdfdvb</h5>
-                        <p className="card-text">fedusbudffbbwdbfdjfbj</p>
-                    </div>
-                </div>
-            </div>
-            <div className="card">
-                <div className="card-img-top d-flex align-items-center bg-light">
-                    <div >
-                        <img className="img-fluid rounded" src={'https://bootdey.com/img/Content/avatar/avatar1.png'} alt="hotel preview" />
-                    </div>
-                    <div className="mx-3 card-body">
-                        <h5 className="card-title">bvbfdfdvb</h5>
-                        <p className="card-text">fedusbudffbbwdbfdjfbj</p>
-                    </div>
-                </div>
-            </div>
-            <div className="card">
-                <div className="card-img-top d-flex align-items-center bg-light">
-                    <div >
-                        <img className="img-fluid rounded" src={'https://bootdey.com/img/Content/avatar/avatar1.png'} alt="hotel preview" />
-                    </div>
-                    <div className="mx-3 card-body">
-                        <h5 className="card-title">bvbfdfdvb</h5>
-                        <p className="card-text">fedusbudffbbwdbfdjfbj</p>
-                    </div>
-                </div>
-            </div>
+            {reservings.map((reser) => {
+                return <ReserveCard reserve={reser} key={reser._id} />
+            })}
+
+
         </div>
+
     )
 }
 

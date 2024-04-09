@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import '../styling/profilePage.css'
 import GeneralAccount from './Profile/GeneralAccount'
@@ -8,10 +8,16 @@ import { Navbar } from './Navbar'
 import request from '../api/axios'
 
 
+
 const Profilepage = () => {
 
 	const location = useLocation();
 	const navigate = useNavigate()
+	const [user, setUser] = useState({});
+	
+
+
+
 	useEffect(() => {
 
 		const checkToken = async () => {
@@ -20,7 +26,7 @@ const Profilepage = () => {
 				const res = await request.post('/api/check')
 				console.log(res.data)
 				if (res.data.redirect === "home") {
-					// navigate('/home')
+					setUser(res.data.user)
 					return
 				}
 			}
@@ -32,6 +38,8 @@ const Profilepage = () => {
 
 		}
 		checkToken()
+
+
 
 
 	}, [])
@@ -72,9 +80,9 @@ const Profilepage = () => {
 						<div className="col-md-9">
 							<div className="tab-content overflow-auto mh-50">
 
-								{location.search === "" && <GeneralAccount />}
-								{location.search === "?account-change-password" && <ChangePass />}
-								{location.search === "?my-reservings" && <ReserveInfo />}								
+								{location.search === "" && <GeneralAccount userState={user} userFunc={setUser} />}
+								{location.search === "?account-change-password" && <ChangePass userState={user} userFunc={setUser} />}
+								{location.search === "?my-reservings" && <ReserveInfo userState={user} />}
 
 							</div>
 						</div>
