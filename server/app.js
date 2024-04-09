@@ -22,6 +22,7 @@ const comment = require('./models/comment.model')
 const booking = require('./models/bookings.model')
 const reserve = require('./models/reserve.model')
 const { accessSync } = require("fs")
+const sendMail = require('./controllers/emailService')
 // const { toNamespacedPath } = require("path/win32")
 
 
