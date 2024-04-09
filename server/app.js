@@ -392,6 +392,7 @@ app.post('/api/data', async (req, res) => {
 
 app.post('/api/:id/reserve', async (req, res) => {
     let reserved_rooms = []
+    let roomNums = []
     let def_user;
     if (req.cookies) {
         def_user = verifyUser(req.cookies.session_token)
@@ -401,6 +402,7 @@ app.post('/api/:id/reserve', async (req, res) => {
     }
     let total_price = 0
     const dates = { in_date: req.body.inDate, out_date: req.body.outDate }
+    const curr_hotel = await hotel.findOne({_id : req.params.id})
 
     await Promise.all(Object.entries(req.body.reserve).map(async ([key, value]) => {    
         const fetch_rooms = await room.find({ hotelId: req.params.id, roomType: key })
@@ -427,6 +429,7 @@ app.post('/api/:id/reserve', async (req, res) => {
                 }
                 total_price += element.price
                 const obj = {"roomID":element._id,"roomNo" : element.roomNo , "price" : element.price}
+                roomNums.push(element.roomNo)
                 return obj
                 
             } catch (error) {
@@ -436,12 +439,13 @@ app.post('/api/:id/reserve', async (req, res) => {
         reserved_rooms = [...reserved_rooms,...rooms]
 
     }))
-    const reser = await new reserve({hotelId : req.params.id,reservedRoomIds : reserved_rooms,userId : def_user.id,adults : req.body.totalAdult,children : req.body.totalChild,price : total_price})
+
+    const reser = await new reserve({hotelId : req.params.id,password : "password",reservedRoomIds : reserved_rooms,userId : def_user.id,adults : req.body.totalAdult,children : req.body.totalChild,price : total_price,inDate : req.body.inDate,outDate : req.body.outDate})
     reser.save()
+    // await sendMail(to_user,reser._id,roomNums,"password",total_price,curr_hotel.hotelName);
     res.send({reserved_rooms,total_price})
 
 })
-
 
 
 app.listen(port, () => {

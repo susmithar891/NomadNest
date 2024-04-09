@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer")
-require('.dotenv').config()
+require('dotenv').config()
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -10,14 +10,14 @@ var transporter = nodemailer.createTransport({
 });
 
 
-const sendMail = (to_user, text) => {
+const sendMail = (to_user,reserveId, roomNums, password,totalPrice,hotelName) => {
     var mailOptions = {
         from: process.env.EMAIL,
         to: to_user,
-        subject: 'Nomad Nest',
-        text: text
+        subject: `NomadNest : Reserved rooms in hotel ${hotelName}`,
+        text: `RoomNo(s) :  ${roomNums} are reserved for your arrival. Total price: ${totalPrice}. Reservation ID: ${reserveId}. Your password is ${password}.` // Plain text body
     };
-    transporter.sendMail(mailOptions(to_user, text), function (error, info) {
+    transporter.sendMail(mailOptions,function (error, info) {
         if (error) {
             console.log(error);
         } else {
