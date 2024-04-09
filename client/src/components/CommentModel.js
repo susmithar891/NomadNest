@@ -1,16 +1,29 @@
 import React, { useState, useRef } from 'react';
+import request from '../api/axios';
 
 function CommentModel() {
+
     const [bookingId, setBookingId] = useState('');
     const [password, setPassword] = useState('');
     const [rating, setRating] = useState(null);
     const [comment, setComment] = useState('');
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
+        if(!rating){
+            alert('please give us a rating')
+            return 
+        }
         console.log({ bookingId, password, rating, comment });
-        resetForm();
-        closeDialog();
+        try {
+            const res = await request.post(`/api/user/rate`, { bookingId, password, rating, comment })
+            resetForm();
+            closeDialog();
+        }
+        catch (e) {
+            console.log(e)
+        }
+
     };
 
     const resetForm = () => {
@@ -45,7 +58,7 @@ function CommentModel() {
 
     return (
         <>
-            <button className='btn btn-primary' onClick={toggleDialog}>Leave a Comment</button>
+            <button className='btn btn-primary container m-2' onClick={toggleDialog}>Leave a Comment</button>
             <dialog ref={dialogBox} className='border rounded'>
                 <div className="container">
                     <h2 className="p-2">Leave Your Ratings</h2>
@@ -77,7 +90,7 @@ function CommentModel() {
                         <div className="mb-3 d-flex">
                             <label htmlFor="rating" className="form-label  my-auto">Rating: </label>
                             <div id="rating" className="star-rating ">
-                                {[5,4,3,2,1].map(num => (
+                                {[5, 4, 3, 2, 1].map(num => (
                                     <React.Fragment key={num}>
                                         <input
                                             type="radio"

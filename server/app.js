@@ -462,6 +462,37 @@ app.post('/api/user/:id/reservings',async(req,res) => {
     
 })
 
+app.post('/api/user/rate',async(req,res) => {
+    let def_user;
+    if (req.cookies) {
+        def_user = verifyUser(req.cookies.session_token)
+    }
+    if(!def_user){
+        res.sendStatus(403)
+    }
+    const bookingId = req.body.bookingId;
+    const password = req.body.password;
+    const rating = req.body.rating;
+    const text = req.body.comment;
+    try{
+        const reservation = await reserve.findOne({_id : bookingId})
+        if(!reservation){
+            res.sendStatus(403)
+        }
+        if(reservation.password !== password){
+            res.sendStatus(401)
+        }
+        const new_comment = await new comment({hotelId : reservation.hotelId,userId : def_user._id,rating : rating,text : text})
+        new_comment.save()
+        res.sendStatus(200)
+    }
+    catch(e){
+        console.log(e)
+    }
+    
+    
+})
+
 
 app.listen(port, () => {
     console.log(`server started at port ${port}`)

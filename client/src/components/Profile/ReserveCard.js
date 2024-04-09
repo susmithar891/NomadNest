@@ -1,4 +1,5 @@
 import React from 'react'
+import CommentModel from '../CommentModel'
 
 const ReserveCard = (props) => {
     return (
@@ -27,6 +28,10 @@ const ReserveCard = (props) => {
                         <button type="button" className="btn btn-success container m-2 " disabled="">
                             Pay
                         </button>
+
+                        <CommentModel/>
+
+
                     {/* } */}
                 </div>
 
