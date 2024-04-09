@@ -12,6 +12,7 @@
     "mini-multi-slider": "^2.0.0",
     "multi-range-slider-react": "^2.0.7",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.10.2",
     "react-datepicker": "^6.6.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",

@@ -8,6 +8,7 @@ import '../styling/roompage.css'
 import RatingBar from './RatingBar'
 import request from '../api/axios'
 import InputBox from './InputBox'
+import CommentModel from './CommentModel';
 
 
 const Roompage = (props) => {
@@ -350,14 +351,13 @@ const Roompage = (props) => {
 								Comments
 							</div>
 							<ul className="list-group list-group-flush" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-
+								
 							</ul>
 						</div>
 						<div className='d-flex justify-content-end m-3'>
-							<button className='btn btn-success'>Leave a Comment</button>
+							<CommentModel/>
 						</div>
 					</div>
-
 
 				</div>
 			</div>
