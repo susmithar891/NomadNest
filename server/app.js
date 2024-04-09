@@ -11,6 +11,7 @@ const mongoose = require('mongoose')
 const _ = require("lodash")
 
 
+
 // exports-imports
 require('./conn')
 // const hotels = require('./hotels.json')
@@ -23,6 +24,7 @@ const booking = require('./models/bookings.model')
 const reserve = require('./models/reserve.model')
 const { accessSync } = require("fs")
 const sendMail = require('./controllers/emailService')
+const genRandPass = require('./controllers/generatePass')
 // const { toNamespacedPath } = require("path/win32")
 
 
@@ -440,11 +442,24 @@ app.post('/api/:id/reserve', async (req, res) => {
 
     }))
 
-    const reser = await new reserve({hotelId : req.params.id,password : "password",reservedRoomIds : reserved_rooms,userId : def_user.id,adults : req.body.totalAdult,children : req.body.totalChild,price : total_price,inDate : req.body.inDate,outDate : req.body.outDate})
+    const randomPass = genRandPass(8)
+    const reser = await new reserve({hotelId : req.params.id,password : randomPass,reservedRoomIds : reserved_rooms,userId : def_user.id,adults : req.body.totalAdult,children : req.body.totalChild,price : total_price,inDate : req.body.inDate,outDate : req.body.outDate})
     reser.save()
-    // await sendMail(to_user,reser._id,roomNums,"password",total_price,curr_hotel.hotelName);
+    await sendMail("akhildekarla45@gmail.com",reser._id,roomNums,randomPass,total_price,curr_hotel.hotelName);
     res.send({reserved_rooms,total_price})
 
+})
+
+
+app.post('/api/user/:id/reservings',async(req,res) => {
+    try{
+        const resers = await reserve.find({userId : req.params.id})
+        res.send(resers)
+    }
+    catch(e){
+        res.status(500).send(e)
+    }
+    
 })
 
 
