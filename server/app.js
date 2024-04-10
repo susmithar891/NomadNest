@@ -11,6 +11,7 @@ const mongoose = require('mongoose')
 const _ = require("lodash")
 
 
+
 // exports-imports
 require('./conn')
 // const hotels = require('./hotels.json')
@@ -21,6 +22,9 @@ const room = require('./models/room.model')
 const comment = require('./models/comment.model')
 const booking = require('./models/bookings.model')
 const reserve = require('./models/reserve.model')
+const { accessSync } = require("fs")
+const sendMail = require('./controllers/emailService')
+const genRandPass = require('./controllers/generatePass')
 // const { toNamespacedPath } = require("path/win32")
 
 
@@ -72,11 +76,19 @@ function verifyUser(token) {
     }
 }
 
-const redirectHome = (req, res, next) => {
+const redirectHome = async(req, res, next) => {
     if (req.cookies && req.cookies.session_token && verifyUser(req.cookies.session_token)) {
         // res.redirect('/home')
         // res.send({"msg" : "this is home"})
-        res.status(200).send({ redirect: 'home' })
+        try{
+            let def_user = await user.findOne({_id : verifyUser(req.cookies.session_token).id}).select('-password')
+            res.status(200).send({ redirect: 'home',user : def_user})
+        }
+        catch(e){
+            console.log(e)
+            res.sendStatus(403)
+        }
+        
     }
     else {
         next()
@@ -382,6 +394,7 @@ app.post('/api/data', async (req, res) => {
 
 app.post('/api/:id/reserve', async (req, res) => {
     let reserved_rooms = []
+    let roomNums = []
     let def_user;
     if (req.cookies) {
         def_user = verifyUser(req.cookies.session_token)
@@ -391,6 +404,7 @@ app.post('/api/:id/reserve', async (req, res) => {
     }
     let total_price = 0
     const dates = { in_date: req.body.inDate, out_date: req.body.outDate }
+    const curr_hotel = await hotel.findOne({_id : req.params.id})
 
     await Promise.all(Object.entries(req.body.reserve).map(async ([key, value]) => {    
         const fetch_rooms = await room.find({ hotelId: req.params.id, roomType: key })
@@ -417,6 +431,7 @@ app.post('/api/:id/reserve', async (req, res) => {
                 }
                 total_price += element.price
                 const obj = {"roomID":element._id,"roomNo" : element.roomNo , "price" : element.price}
+                roomNums.push(element.roomNo)
                 return obj
                 
             } catch (error) {
@@ -426,12 +441,57 @@ app.post('/api/:id/reserve', async (req, res) => {
         reserved_rooms = [...reserved_rooms,...rooms]
 
     }))
-    const reser = await new reserve({hotelId : req.params.id,reservedRoomIds : reserved_rooms,userId : def_user.id,adults : req.body.totalAdult,children : req.body.totalChild,price : total_price})
+
+    const randomPass = genRandPass(8)
+    const reser = await new reserve({hotelId : req.params.id,password : randomPass,reservedRoomIds : reserved_rooms,userId : def_user.id,adults : req.body.totalAdult,children : req.body.totalChild,price : total_price,inDate : req.body.inDate,outDate : req.body.outDate})
     reser.save()
+    await sendMail("akhildekarla45@gmail.com",reser._id,roomNums,randomPass,total_price,curr_hotel.hotelName);
     res.send({reserved_rooms,total_price})
 
 })
 
+
+app.post('/api/user/:id/reservings',async(req,res) => {
+    try{
+        const resers = await reserve.find({userId : req.params.id})
+        res.send(resers)
+    }
+    catch(e){
+        res.status(500).send(e)
+    }
+    
+})
+
+app.post('/api/user/rate',async(req,res) => {
+    let def_user;
+    if (req.cookies) {
+        def_user = verifyUser(req.cookies.session_token)
+    }
+    if(!def_user){
+        res.sendStatus(403)
+    }
+    const bookingId = req.body.bookingId;
+    const password = req.body.password;
+    const rating = req.body.rating;
+    const text = req.body.comment;
+    try{
+        const reservation = await reserve.findOne({_id : bookingId})
+        if(!reservation){
+            res.sendStatus(403)
+        }
+        if(reservation.password !== password){
+            res.sendStatus(401)
+        }
+        const new_comment = await new comment({hotelId : reservation.hotelId,userId : def_user._id,rating : rating,text : text})
+        new_comment.save()
+        res.sendStatus(200)
+    }
+    catch(e){
+        console.log(e)
+    }
+    
+    
+})
 
 
 app.listen(port, () => {
