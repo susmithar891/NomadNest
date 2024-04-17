@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
-import request from '../api/axios';
+import request from '../../api/axios';
 
-function CommentModel() {
+function CommentModel(props) {
 
     const [bookingId, setBookingId] = useState('');
     const [password, setPassword] = useState('');
@@ -64,11 +64,11 @@ function CommentModel() {
                     <h2 className="p-2">Leave Your Ratings</h2>
                     <form onSubmit={handleSubmit} style={{ width: "750px" }}>
                         <div className="form-group p-2 mb-2">
-                            <label htmlFor="bookingIdInput">BookingId</label>
+                            <label htmlFor={"bookingIdInput"+props.reserveId}>BookingId</label>
                             <input
                                 type="text"
                                 className="form-control"
-                                id="bookingIdInput"
+                                id={"bookingIdInput"+props.reserveId}
                                 placeholder="Enter bookingId"
                                 value={bookingId}
                                 required
@@ -76,11 +76,11 @@ function CommentModel() {
                             />
                         </div>
                         <div className="form-group p-2 mb-2">
-                            <label htmlFor="exampleInputPassword1">Password</label>
+                            <label htmlFor={"exampleInputPassword1"+props.reserveId}>Password</label>
                             <input
                                 type="password"
                                 className="form-control"
-                                id="exampleInputPassword1"
+                                id={"exampleInputPassword1"+props.reserveId}
                                 placeholder="Enter password sent to your mailId on booking a room"
                                 required
                                 value={password}
@@ -88,29 +88,29 @@ function CommentModel() {
                             />
                         </div>
                         <div className="mb-3 d-flex">
-                            <label htmlFor="rating" className="form-label  my-auto">Rating: </label>
-                            <div id="rating" className="star-rating ">
+                            <label htmlFor={"rating"+props.reserveId} className="form-label  my-auto">Rating: </label>
+                            <div id={"rating"+props.reserveId} className="star-rating ">
                                 {[5, 4, 3, 2, 1].map(num => (
                                     <React.Fragment key={num}>
                                         <input
                                             type="radio"
                                             name="rating"
                                             value={num}
-                                            id={`rating-${num}`}
+                                            id={`rating-${num}`+props.reserveId}
                                             style={{ display: "none" }}
                                             checked={rating === num}
                                             onChange={() => setRating(num)}
                                         />
-                                        <label htmlFor={`rating-${num}`} className="star">&#9733;</label>
+                                        <label htmlFor={`rating-${num}`+props.reserveId} className="star">&#9733;</label>
                                     </React.Fragment>
                                 ))}
                             </div>
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="comment" className="form-label">Comment:</label>
+                            <label htmlFor={"comment"+props.reserveId} className="form-label">Comment:</label>
                             <textarea
                                 className="form-control"
-                                id="comment"
+                                id={"comment"+props.reserveId}
                                 rows="3"
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}
@@ -124,7 +124,7 @@ function CommentModel() {
                 </div>
             </dialog>
 
-            <style jsx>{`
+            <style jsx="true">{`
                 .star-rating {
                     direction: rtl;
                     font-size: 2rem;

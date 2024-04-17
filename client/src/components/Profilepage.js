@@ -14,6 +14,7 @@ const Profilepage = () => {
 	const location = useLocation();
 	const navigate = useNavigate()
 	const [user, setUser] = useState({});
+	console.log(location)
 	
 
 
@@ -82,7 +83,7 @@ const Profilepage = () => {
 
 								{location.search === "" && <GeneralAccount userState={user} userFunc={setUser} />}
 								{location.search === "?account-change-password" && <ChangePass userState={user} userFunc={setUser} />}
-								{location.search === "?my-reservings" && <ReserveInfo userState={user} />}
+								{location.search === "?my-reservings" && <ReserveInfo userState={user} userFunc={setUser}/>}
 
 							</div>
 						</div>

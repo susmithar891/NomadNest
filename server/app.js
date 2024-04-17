@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken')
 const cookieparser = require('cookie-parser')
 const mongoose = require('mongoose')
 const _ = require("lodash")
+const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY)
 
 
 
@@ -364,7 +365,6 @@ app.post('/api/hotel/:id', async (req, res) => {
 
 })
 
-
 app.post('/api/data', async (req, res) => {
     try {
         const roomtypes = await roomType.find({ hotelId: req.body.hotelId })
@@ -462,6 +462,22 @@ app.post('/api/user/:id/reservings',async(req,res) => {
     
 })
 
+app.post('/api/user/:id/payment',async(req,res) => {
+    // try{
+    //     const session = await stripe.checkout.sessions.create({
+    //         payment_method_types : ['card'],
+    //         mode : 'payment',
+    //         line_items : req.body.hotels,
+    //         success_url : `${process.env.CLIENT_URL}/success`,
+    //         cancel_url : `${process.env.CLIENT_URL}/failed`
+    //     })
+        
+    // }catch(e){
+    //     res.status(500).send(e)
+    // }
+    res.json({msg : "hi"});
+})
+
 app.post('/api/user/rate',async(req,res) => {
     let def_user;
     if (req.cookies) {
@@ -492,6 +508,16 @@ app.post('/api/user/rate',async(req,res) => {
     
     
 })
+
+
+
+
+
+
+
+
+
+
 
 
 app.listen(port, () => {

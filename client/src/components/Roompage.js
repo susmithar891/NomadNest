@@ -8,7 +8,7 @@ import '../styling/roompage.css'
 import RatingBar from './RatingBar'
 import request from '../api/axios'
 import InputBox from './InputBox'
-import CommentModel from './CommentModel';
+// import CommentModel from './Profile/CommentModel';
 
 
 const Roompage = (props) => {
@@ -354,9 +354,9 @@ const Roompage = (props) => {
 								
 							</ul>
 						</div>
-						<div className='d-flex justify-content-end m-3'>
+						{/* <div className='d-flex justify-content-end m-3'>
 							<CommentModel/>
-						</div>
+						</div> */}
 					</div>
 
 				</div>

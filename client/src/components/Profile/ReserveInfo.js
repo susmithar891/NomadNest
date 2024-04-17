@@ -21,9 +21,9 @@ const ReserveInfo = (props) => {
 
     return (
 
-        <div className="tab-pane fade active show" id="account-info">
+        <div className="container" id="account-info">
             {reservings.map((reser) => {
-                return <ReserveCard reserve={reser} key={reser._id} />
+                return <ReserveCard reserve={reser} userState={props.userState} userFunc={props.userFunc} key={reser._id} />
             })}
 
 

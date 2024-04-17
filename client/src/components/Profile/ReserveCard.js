@@ -1,7 +1,23 @@
 import React from 'react'
-import CommentModel from '../CommentModel'
+import request from '../../api/axios'
+import CommentModel from './CommentModel'
 
 const ReserveCard = (props) => {
+    const handlePayment = async(e,reserveId) => {
+        e.preventDefault()
+        try{
+            const res = await request.post(`api/user/${props.userState._id}/payment`,{reserveId : reserveId})
+            console.log(res)
+        }
+        catch(e){
+            console.log(e)
+        }
+
+    }
+
+    const handleVerification = (e) => {
+        e.preventDefault()
+    }
     return (
         <div className="card m-2">
             <div className="card-body d-flex">
@@ -19,17 +35,17 @@ const ReserveCard = (props) => {
 
                     {!props.reserve.isVerified &&
 
-                        <button type="button" className="btn btn-warning container m-2 " disabled="">
+                        <button type="button" className="btn btn-warning container m-2 " onClick={handleVerification}>
                             Verify
                         </button>
                     }
                     {/* {props.reserve.isPaid && */}
 
-                        <button type="button" className="btn btn-success container m-2 " disabled="">
+                        <button type="button" className="btn btn-success container m-2 " onClick={(e) => handlePayment(e,props.reserve.id)}>
                             Pay
                         </button>
 
-                        <CommentModel/>
+                        <CommentModel reserveId={props.reserve._id}/>
 
 
                     {/* } */}
