@@ -1,13 +1,18 @@
 import React from 'react'
 import request from '../../api/axios'
 import CommentModel from './CommentModel'
+import { useNavigate } from 'react-router-dom'
 
 const ReserveCard = (props) => {
+    const navigate = useNavigate()
     const handlePayment = async(e,reserveId) => {
         e.preventDefault()
         try{
             const res = await request.post(`api/user/${props.userState._id}/payment`,{reserveId : reserveId})
             console.log(res)
+            if(res.statusText === "OK"){
+                window.location = res.data.sessionUrl
+            }
         }
         catch(e){
             console.log(e)
@@ -41,7 +46,7 @@ const ReserveCard = (props) => {
                     }
                     {/* {props.reserve.isPaid && */}
 
-                        <button type="button" className="btn btn-success container m-2 " onClick={(e) => handlePayment(e,props.reserve.id)}>
+                        <button type="button" className="btn btn-success container m-2 " onClick={(e) => handlePayment(e,props.reserve._id,props.reserve.reservedRoomIds,props.reserve.hotelId)}>
                             Pay
                         </button>
 
