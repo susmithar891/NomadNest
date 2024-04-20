@@ -108,7 +108,6 @@ const redirectLogin = (req, res, next) => {
 
 }
 
-
 //api-endpoints
 app.get('/', (req, res) => {
     res.status(200).sendFile(path.join(__dirname, 'models', 'hotels.json'))
@@ -173,6 +172,13 @@ app.post("/api/sign-in", redirectHome, async (req, res) => {
     }
 
 })
+
+app.post('/api/google/sign-in',redirectHome,async(req,res) => {
+    console.log(req.body)
+})
+
+
+
 app.post('/api/logout', redirectLogin, (req, res) => {
     res.clearCookie('session_token');
     res.end()

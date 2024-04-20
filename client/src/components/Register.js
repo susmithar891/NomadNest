@@ -1,37 +1,45 @@
-import React, { useState,useEffect } from 'react'
-import { Link,useLocation,useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import request from '../api/axios'
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
+
 
 
 
 const Register = () => {
 
-	const navigate= useNavigate()
+	const navigate = useNavigate()
 	const location = useLocation()
 
 	console.log(location.state.navigateUrl)
-	
+
 	const [firstName, setFirst] = useState("")
 	const [lastName, setLast] = useState("")
 	const [email, setEmail] = useState("")
 	const [pass, setPass] = useState("")
 	const [remeb, setRememb] = useState(false)
 
+
+	const login = useGoogleLogin({
+		onSuccess: tokenResponse => console.log(tokenResponse),
+	});
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
 
-			const response = await request.post("/api/sign-up", {firstname : firstName,lastname : lastName,email : email,password : pass,remember : remeb});
+			const response = await request.post("/api/sign-up", { firstname: firstName, lastname: lastName, email: email, password: pass, remember: remeb });
 			console.log(response.data)
-			if(response.data === "OK"){
-				if(location.state && location.state.navigateUrl){
+			if (response.data === "OK") {
+				if (location.state && location.state.navigateUrl) {
 					navigate(location.state.navigateUrl)
 				}
-				else{
+				else {
 					navigate('/home')
 				}
 			}
-			if(response.data.redirect && response.data.redirect === "home"){
+			if (response.data.redirect && response.data.redirect === "home") {
 				navigate('/home')
 			}
 		} catch (error) {
@@ -42,23 +50,23 @@ const Register = () => {
 
 	useEffect(() => {
 
-        const checkToken = async() => {
+		const checkToken = async () => {
 
-            try{
-                const res = await request.post('/api/check')
-                // if(res.data.redirect === "home"){
-                //     navigate('/home')
-                // }
+			try {
+				const res = await request.post('/api/check')
+				// if(res.data.redirect === "home"){
+				//     navigate('/home')
+				// }
 				console.log(res)
-            }
-            catch(e){
-                alert(e)
-            }
+			}
+			catch (e) {
+				alert(e)
+			}
 
-        }
+		}
 
-        checkToken()
-	},[])
+		checkToken()
+	}, [])
 
 
 	return (
@@ -137,52 +145,39 @@ const Register = () => {
 										Password
 									</label>
 								</div>
-								<div className="form-check d-flex justify-content-center mb-4">
-									<input
-										className="form-check-input me-2"
-										type="checkbox"
-										defaultValue=""
-										id="remember"
-										defaultChecked=""
-										onChange={() => { setRememb(prevCheck => !prevCheck) }}
-									/>
-									<label className="form-check-label" htmlFor="remember">
-										Remember me
-									</label>
+								<div className='mb-4'>
+									<button type="submit" className="btn btn-primary btn-block mb-4" >
+										Sign Up
+									</button>
+									<div className='d-flex justify-content-center'>
+										<GoogleOAuthProvider clientId="261497187757-vom1lr1cbsr68nn53b5318sdflkp028r.apps.googleusercontent.com">
+											<GoogleLogin className="btn btn-link btn-floating mx-1 p-2"
+												onSuccess={credentialResponse => {
+													request.post('api/google/sign-in',{credentialResponse})
+													.then((data) => {
+														console.log(data)
+													})
+													.catch((e)=>{
+														console.log(e)
+													})
+												}}
+												onError={() => {
+													console.log('Login Failed');
+												}}
+											/>
+										</GoogleOAuthProvider>
+									</div>
 								</div>
-								<button type="submit" className="btn btn-primary btn-block mb-4" >
-									Sign Up
-								</button>
+								<div className="form-check d-flex justify-content-center mb-4">
+									<div className=''>
+										<span className='m-2'>
+											Already have an account ?
+										</span>
+										<Link to='/sign-in' state={{ navigateUrl: (location.state && location.state.navigateUrl) ? location.state.navigateUrl : "/home" }}>Sign In</Link>
+									</div>
+								</div>
 							</form>
 
-							<div className="form-check d-flex justify-content-center mb-4">
-								<div className=''>
-									<span className='m-2'>
-										Already have an account ?
-									</span>
-									<Link to='/sign-in' state={{navigateUrl : (location.state && location.state.navigateUrl) ?location.state.navigateUrl : "/home"  }}>Sign In</Link>
-								</div>
-							</div>
-
-
-
-
-
-							<div className="text-center">
-								<p>or sign up with:</p>
-								<button type="button" className="btn btn-link btn-floating mx-1">
-									<i className="fab fa-facebook-f" />
-								</button>
-								<button type="button" className="btn btn-link btn-floating mx-1">
-									<i className="fab fa-google" />
-								</button>
-								<button type="button" className="btn btn-link btn-floating mx-1">
-									<i className="fab fa-twitter" />
-								</button>
-								<button type="button" className="btn btn-link btn-floating mx-1">
-									<i className="fab fa-github" />
-								</button>
-							</div>
 
 						</div>
 					</div>

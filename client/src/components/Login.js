@@ -126,11 +126,17 @@ const Login = () => {
 									<button type="submit" className="btn btn-primary btn-block mb-4">
 										Sign In
 									</button>
-									<div>
-										<GoogleOAuthProvider clientId="<your_client_id>">
+									<div className='d-flex justify-content-center'>
+										<GoogleOAuthProvider clientId="261497187757-vom1lr1cbsr68nn53b5318sdflkp028r.apps.googleusercontent.com">
 												<GoogleLogin className="btn btn-link btn-floating mx-1"
 													onSuccess={credentialResponse => {
-														console.log(credentialResponse);
+														request.post('api/google/sign-in',{credentialResponse})
+														.then((data) => {
+															console.log(data)
+														})
+														.catch((e)=>{
+															console.log(e)
+														})
 													}}
 													onError={() => {
 														console.log('Login Failed');
