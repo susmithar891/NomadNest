@@ -179,8 +179,7 @@ app.post("/api/sign-in", redirectHome, async (req, res) => {
 
 app.post('/api/google/sign-in', redirectHome, async (req, res) => {
     const credResponse = req.body.credentialResponse.credential;
-    const credResponseDecoded = jwtDecode(credResponse)
-    console.log(credResponseDecoded)
+    const credResponseDecoded = jwtDecode(credResponse)    
     if(process.env.GOOGLE_OAUTH_CLIENT_ID !== req.body.credentialResponse.clientId){
         res.status(403).send({"error" : "client Id's doesn't match"})
     }
@@ -199,8 +198,8 @@ app.post('/api/google/sign-in', redirectHome, async (req, res) => {
             const newUser = await new user({ firstName: credResponseDecoded.given_name, lastName: credResponseDecoded.family_name, email: credResponseDecoded.email,profilePic : credResponseDecoded.picture});
             const def_user = { firstname: newUser.firstname, id: newUser.id, lastName: newUser.lastname, email: newUser.email}
             const token = createToken(def_user);
-            res.cookie("session_token", token, { httpOnly: true });
             await newUser.save();
+            res.cookie("session_token", token, { httpOnly: true });
             res.sendStatus(200);
         }
         catch (err) {

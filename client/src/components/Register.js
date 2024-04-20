@@ -54,10 +54,9 @@ const Register = () => {
 
 			try {
 				const res = await request.post('/api/check')
-				// if(res.data.redirect === "home"){
-				//     navigate('/home')
-				// }
-				console.log(res)
+				if(res.data.redirect === "home"){
+				    navigate('/home')
+				}
 			}
 			catch (e) {
 				alert(e)
@@ -152,14 +151,25 @@ const Register = () => {
 									<div className='d-flex justify-content-center'>
 										<GoogleOAuthProvider clientId="261497187757-vom1lr1cbsr68nn53b5318sdflkp028r.apps.googleusercontent.com">
 											<GoogleLogin className="btn btn-link btn-floating mx-1 p-2"
-												onSuccess={credentialResponse => {
-													request.post('api/google/sign-in',{credentialResponse})
-													.then((data) => {
-														console.log(data)
-													})
-													.catch((e)=>{
+												onSuccess={async(credentialResponse) => {
+													try{
+														const response = await request.post('api/google/sign-in', { credentialResponse })
+														if (response.data === "OK") {
+															if (location.state && location.state.navigateUrl) {
+																navigate(location.state.navigateUrl)
+															}
+															else {
+																navigate('/home')
+															}
+														}
+														if (response.data.redirect && response.data.redirect === "home") {
+															navigate('/home')
+														}
+													}
+													catch(e){
 														console.log(e)
-													})
+													}
+														
 												}}
 												onError={() => {
 													console.log('Login Failed');
