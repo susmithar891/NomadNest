@@ -26,5 +26,17 @@ const sendMail = (to_user,reserveId, roomNums, password,totalPrice,hotelName) =>
     });
 }
 
-module.exports = sendMail
+const sendOTP = (to_user,otp) => {
+    var mailOptions = {
+        from: process.env.EMAIL,
+        to: to_user,
+        subject: `NOMADNEST : email verification`,
+        text: `your otp is : ${otp}` // Plain text body
+    };
+}
+
+module.exports = {
+    sendMail,
+    sendOTP
+}
 
