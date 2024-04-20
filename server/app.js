@@ -26,8 +26,9 @@ const room = require('./models/room.model')
 const comment = require('./models/comment.model')
 const booking = require('./models/bookings.model')
 const reserve = require('./models/reserve.model')
+const otp = require('./models/otp.model')
 const { accessSync } = require("fs")
-const sendMail = require('./controllers/emailService')
+const {sendMail , sendOTP} = require('./controllers/emailService')
 const genRandPass = require('./controllers/generatePass')
 // const { toNamespacedPath } = require("path/win32")
 
@@ -79,6 +80,10 @@ function verifyUser(token) {
         return null;
     }
 }
+
+function generateOTP() {  
+    return Math.random() * (899999) + 100000; 
+} 
 
 const redirectHome = async (req, res, next) => {
     if (req.cookies && req.cookies.session_token && verifyUser(req.cookies.session_token)) {
@@ -209,9 +214,6 @@ app.post('/api/google/sign-in', redirectHome, async (req, res) => {
     }
 
 })
-
-
-
 app.post('/api/logout', redirectLogin, (req, res) => {
     res.clearCookie('session_token');
     res.end()
