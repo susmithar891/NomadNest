@@ -82,7 +82,7 @@ function verifyUser(token) {
 }
 
 function generateOTP() {  
-    return Math.random() * (899999) + 100000; 
+    return Math.floor(Math.random() * (899999) + 100000); 
 } 
 
 const redirectHome = async (req, res, next) => {
@@ -180,6 +180,45 @@ app.post("/api/sign-in", redirectHome, async (req, res) => {
         return res.status(400).send({ "error": "Invalid Credentials" })
     }
 
+})
+
+
+app.post('/api/genOTP',async(req,res) => {
+    const new_otp = generateOTP();
+    const user_email = req.body.email;
+    try{
+        const findEntry = await otp.findOne({email : user_email});
+        if(findEntry){
+            const del_entry = await otp.deleteMany({email : user_email});
+        }
+        await sendOTP(user_email,new_otp)
+        const new_entry = await new otp({email : user_email,otp:new_otp});
+        await new_entry.save()
+        res.sendStatus(200)
+    }
+    catch(e){
+        // console.log(e)
+        res.status(500).send(e)
+    }
+
+})
+
+app.post('/api/verifyOTP',async(req,res) => {
+    const user_otp = req.body.otp;
+    const user_email = req.body.email;
+    try{
+        const findEntry = await otp.findOne({otp : user_otp,email : user_email})
+        if(findEntry){
+            const delEntry = await otp.deleteMany({email : user_email})
+            res.sendStatus(200)
+        }
+        else{
+            res.sendStatus(403)
+        }
+    }
+    catch(e){
+        res.status(500).send(e)
+    }
 })
 
 app.post('/api/google/sign-in', redirectHome, async (req, res) => {
