@@ -28,7 +28,7 @@ const booking = require('./models/bookings.model')
 const reserve = require('./models/reserve.model')
 const otp = require('./models/otp.model')
 const { accessSync } = require("fs")
-const { sendMail, sendOTP } = require('./controllers/emailService')
+const { sendMail, sendOTP ,sendPass} = require('./controllers/emailService')
 const genRandPass = require('./controllers/generatePass')
 // const { toNamespacedPath } = require("path/win32")
 
@@ -191,17 +191,17 @@ app.post('/api/genOTP', async (req, res) => {
         checkaval_email = await user.findOne({ email: user_email })
     }
     catch (e) {
-        res.status(500).send(e)
+        return res.status(500).send(e)
     }
     if (checkaval_email) {
-        res.status(401).send({ "error": "Email is already registered" })
+        return res.status(401).send({ "error": "Email is already registered" })
     }
     let findEntry
     try {
         findEntry = await otp.findOne({ email: user_email });
     }
     catch (e) {
-        res.status(500).send(e)
+        return res.status(500).send(e)
     }
     if (findEntry) {
         const del_entry = await otp.deleteMany({ email: user_email });
@@ -209,38 +209,38 @@ app.post('/api/genOTP', async (req, res) => {
     await sendOTP(user_email, new_otp)
     const new_entry = await new otp({ email: user_email, otp: new_otp });
     await new_entry.save()
-    res.sendStatus(200)
+    return res.sendStatus(200)
 
 })
 
 app.post('/api/verifyOTP', async (req, res) => {
     const user_otp = req.body.otp;
     const user_email = req.body.email;
-    if(!user_otp || !user_email){
-        res.status(403).send({"error" : "required email and otp"})
+    if (!user_otp || !user_email) {
+        return res.status(403).send({ "error": "required email and otp" })
     }
     let checkaval_email;
     try {
         checkaval_email = await user.findOne({ email: user_email })
     }
     catch (e) {
-        res.status(500).send(e)
+        return res.status(500).send(e)
     }
     if (checkaval_email) {
-        res.status(401).send({ "error": "Email is already registered" })
+        return res.status(401).send({ "error": "Email is already registered" })
     }
     try {
         const findEntry = await otp.findOne({ otp: user_otp, email: user_email })
         if (findEntry) {
             const delEntry = await otp.deleteMany({ email: user_email })
-            res.sendStatus(200)
+            return res.sendStatus(200)
         }
         else {
-            res.sendStatus(403)
+            return res.sendStatus(403)
         }
     }
     catch (e) {
-        res.status(500).send(e)
+        return res.status(500).send(e)
     }
 })
 
@@ -252,20 +252,20 @@ app.post('/api/email-change', async (req, res) => {
         checkaval_email = await user.findOne({ email: user_email })
     }
     catch (e) {
-        res.status(500).send(e)
+        return res.status(500).send(e)
     }
     if (checkaval_email) {
-        res.status(401).send({ "error": "Email is already registered" })
-    } 
-    let findEntry   
+        return res.status(401).send({ "error": "Email is already registered" })
+    }
+    let findEntry
     try {
         findEntry = await otp.findOne({ otp: user_otp, email: user_email })
     }
-    catch(e){
-        res.status(500).send(e)
+    catch (e) {
+        return res.status(500).send(e)
     }
-    if(!findEntry){
-        res.sendStatus(403)
+    if (!findEntry) {
+        return res.sendStatus(403)
     }
     let def_user;
     if (req.cookies) {
@@ -277,14 +277,14 @@ app.post('/api/email-change', async (req, res) => {
         user_det.email = user_email;
         await user_det.save()
         const delEntry = await otp.deleteMany({ email: user_email })
-        res.sendStatus(200)
+        return res.sendStatus(200)
     }
     else {
-        res.sendStatus(403)
+        return res.sendStatus(403)
     }
 })
 
-app.post('/api/change-fname',async(req,res) => {
+app.post('/api/change-fname', async (req, res) => {
     let def_user;
     if (req.cookies) {
         def_user = verifyUser(req.cookies.session_token)
@@ -301,7 +301,7 @@ app.post('/api/change-fname',async(req,res) => {
     }
 })
 
-app.post('/api/change-lname',async(req,res) => {
+app.post('/api/change-lname', async (req, res) => {
     let def_user;
     if (req.cookies) {
         def_user = verifyUser(req.cookies.session_token)
@@ -317,6 +317,59 @@ app.post('/api/change-lname',async(req,res) => {
         res.sendStatus(403)
     }
 })
+
+app.post('/api/change-pass', async (req, res) => {
+    if (req.body.newPass !== req.body.newPass2) {
+        return res.status(400).send({ "error": "passwords doesn't match" })
+    }
+    let def_user;
+    if (req.cookies) {
+        def_user = verifyUser(req.cookies.session_token)
+    }
+    let user_det = null
+    if (def_user) {
+        try{
+            user_det = await user.findOne({ _id: def_user.id })
+        }
+        catch(e){
+            return res.status(500).send(e)
+        }
+        if(!user_det.password){
+            return res.status(400).send({"error" : "incorrect password"})
+        }
+        await bcrypt.compare(req.body.prevPass, user_det.password, async (err, resp) => {
+            if (err) {
+                return res.sendStatus(500)
+            }
+            if (resp) {
+
+                try {
+
+                    const salt = await bcrypt.genSalt();
+                    const hashedPass = await bcrypt.hash(req.body.newPass, salt);
+
+                    user_det.password = hashedPass
+                    
+                    await user_det.save()
+                    return res.sendStatus(200)
+
+                } catch (e) {
+                    console.log(e)
+                    return res.status(500).send(e)
+                }
+
+            }
+            else {
+                return res.status(400).send({"error" : "incorrect password"})
+            }
+        })
+    }
+    else {
+        return res.sendStatus(403)
+    }
+})
+
+
 
 app.post('/api/google/sign-in', redirectHome, async (req, res) => {
     const credResponse = req.body.credentialResponse.credential;

@@ -120,7 +120,7 @@ const GeneralAccount = (props) => {
                     <input
                         type="text"
                         className="form-control m-2 col"
-                        placeholder={lname}
+                        placeholder={props.userState.lastName}
                         value={lname}
                         disabled={!lastnamechange}
                         onChange={(e) => setlastname(e.target.value)}

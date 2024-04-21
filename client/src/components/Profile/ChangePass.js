@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import request from '../../api/axios'
 
 const ChangePass = () => {
 
@@ -14,7 +15,7 @@ const ChangePass = () => {
             alert("passwords doesn't match")
         }
         try{
-            const res = await Request.post('/api/change-pass',{prevPass,newPass,newPass2})
+            const res = await request.post('/api/change-pass',{prevPass,newPass,newPass2})
             console.log(res)
         }
         catch(e){
@@ -40,12 +41,12 @@ const ChangePass = () => {
                     <input type="password" className="form-control" required value={newPass2} onChange={(e) => {setnewPass2(e.target.value)}}/>
                 </div>
                 <div className='m-1'>
-                    <Link>Forgot password</Link>
+                    <Link to='?forgot-password'>Forgot password</Link>
                 </div>
             </div>
 
             <div className="d-flex justify-content-end m-1 p-2">
-                <button type="submit" className="btn btn-primary m-1">
+                <button type="submit" className="btn btn-primary m-1" onClick={changePass}>
                     Save changes
                 </button>
             </div>
