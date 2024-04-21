@@ -369,7 +369,40 @@ app.post('/api/change-pass', async (req, res) => {
     }
 })
 
+app.post('/api/forgot-pass',async(req,res) => {
+    let def_user;
+    if (req.cookies) {
+        def_user = verifyUser(req.cookies.session_token)
+    }
+    let user_det = null
+    if (def_user) {
+        try{
+            user_det = await user.findOne({ _id: def_user.id })
+        }
+        catch(e){
+            return res.status(500).send(e)
+        }
+        if(user_det.email !== req.body.email){
+            return res.status(403).send({"error" : "wrong email"})
+        }
+        const randomPass = genRandPass(8)
 
+        try{
+            const salt = await bcrypt.genSalt();
+            const hashedPass = await bcrypt.hash(randomPass, salt);
+            user_det.password = hashedPass;
+            await user_det.save()
+            await sendPass(req.body.email,randomPass)
+            return res.sendStatus(200)
+        }
+        catch(e){
+            console.log(e)
+            res.status(500).send(e)
+        }
+
+
+    }
+})
 
 app.post('/api/google/sign-in', redirectHome, async (req, res) => {
     const credResponse = req.body.credentialResponse.credential;
