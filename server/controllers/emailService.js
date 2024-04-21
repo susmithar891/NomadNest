@@ -31,7 +31,7 @@ const sendOTP = (to_user,otp) => {
         from: process.env.EMAIL,
         to: to_user,
         subject: `NOMADNEST : email verification`,
-        text: `your otp is : ${otp}` // Plain text body
+        text: `your otp is : ${otp} \n otp will be valid only for 2 hours` // Plain text body
     };
     transporter.sendMail(mailOptions,function (error, info) {
         if (error) {

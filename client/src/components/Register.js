@@ -18,7 +18,33 @@ const Register = () => {
 	const [lastName, setLast] = useState("")
 	const [email, setEmail] = useState("")
 	const [pass, setPass] = useState("")
-	const [remeb, setRememb] = useState(false)
+	const [otp, setOTP] = useState("")
+	const [sendotp, setsendotp] = useState(false)
+	const [isVerified, setVerified] = useState(false)
+
+	const requestOTP = async (e) => {
+		e.preventDefault()
+		
+		try{
+			const res = await request.post('/api/genOTP',{email})
+			setsendotp(true)
+		}
+		catch(e){
+			console.log(e)
+		}
+
+	}
+	const verifyOTP = async (e) => {
+		e.preventDefault()
+		try{
+			const res = await request.post('/api/verifyOTP',{email,otp})
+			setVerified(true)
+		}
+		catch(e){
+			console.log(e)
+		}
+	}
+
 
 
 	const login = useGoogleLogin({
@@ -29,7 +55,7 @@ const Register = () => {
 		e.preventDefault();
 		try {
 
-			const response = await request.post("/api/sign-up", { firstname: firstName, lastname: lastName, email: email, password: pass, remember: remeb });
+			const response = await request.post("/api/sign-up", { firstname: firstName, lastname: lastName, email: email, password: pass });
 			console.log(response.data)
 			if (response.data === "OK") {
 				if (location.state && location.state.navigateUrl) {
@@ -54,8 +80,8 @@ const Register = () => {
 
 			try {
 				const res = await request.post('/api/check')
-				if(res.data.redirect === "home"){
-				    navigate('/home')
+				if (res.data.redirect === "home") {
+					navigate('/home')
 				}
 			}
 			catch (e) {
@@ -102,7 +128,7 @@ const Register = () => {
 											<input
 												type="text"
 												id="firstname"
-												className="form-control"
+												className="form-control mx-2 p-3"
 												required
 												onChange={(e) => { setFirst(e.target.value) }}
 											/>
@@ -116,7 +142,7 @@ const Register = () => {
 											<input
 												type="text"
 												id="lastname"
-												className="form-control"
+												className="form-control mx-2 p-3"
 												onChange={(e) => { setLast(e.target.value) }}
 												required
 											/>
@@ -126,17 +152,33 @@ const Register = () => {
 										</div>
 									</div>
 								</div>
+								{isVerified ? 
+								<div className='text-success'>Your email is verified</div> : <div className='text-danger'>verify your email to finish signing in</div>
+								}
+								
 								<div className="form-outline mb-4">
-									<input type="email" id="email" className="form-control" required onChange={(e) => { setEmail(e.target.value) }} />
-									<label className="form-label" htmlFor="email">
-										Email address
-									</label>
+									<div className='d-flex mb-1'>
+										<input type="email" id="email" className="form-control w-75 mx-2" required onChange={(e) => { setEmail(e.target.value) }} />
+										<button className='btn btn-primary w-25 mx-2' onClick={requestOTP}>{!sendotp ? "Verify Email" : "Resend OTP"}</button>
+									</div>
+									<div className='w-75 mx-2'>
+										<label className="form-label mb-4" htmlFor="email">
+											Email address
+										</label>
+									</div>
+
+									{sendotp &&
+											<div className='d-flex'>
+												<input type="text" id="otp" className="form-control w-75 mx-2" required onChange={(e) => { setOTP(e.target.value) }} placeholder="enter otp" />
+												<button className='btn btn-primary w-25 mx-2' onClick={verifyOTP}>Verify OTP</button>
+											</div>
+									}
 								</div>
 								<div className="form-outline mb-4">
 									<input
 										type="password"
 										id="password"
-										className="form-control"
+										className="form-control mx-2 p-3"
 										onChange={(e) => { setPass(e.target.value) }}
 										required
 									/>
@@ -151,8 +193,8 @@ const Register = () => {
 									<div className='d-flex justify-content-center'>
 										<GoogleOAuthProvider clientId="261497187757-vom1lr1cbsr68nn53b5318sdflkp028r.apps.googleusercontent.com">
 											<GoogleLogin className="btn btn-link btn-floating mx-1 p-2"
-												onSuccess={async(credentialResponse) => {
-													try{
+												onSuccess={async (credentialResponse) => {
+													try {
 														const response = await request.post('api/google/sign-in', { credentialResponse })
 														if (response.data === "OK") {
 															if (location.state && location.state.navigateUrl) {
@@ -166,10 +208,10 @@ const Register = () => {
 															navigate('/home')
 														}
 													}
-													catch(e){
+													catch (e) {
 														console.log(e)
 													}
-														
+
 												}}
 												onError={() => {
 													console.log('Login Failed');
