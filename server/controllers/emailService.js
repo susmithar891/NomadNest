@@ -42,8 +42,25 @@ const sendOTP = (to_user,otp) => {
     });
 }
 
+const sendPass = (to_user,pass) => {
+    var mailOptions = {
+        from: process.env.EMAIL,
+        to: to_user,
+        subject: `NOMADNEST : forgot password`,
+        text: `your password is : ${pass}` // Plain text body
+    };
+    transporter.sendMail(mailOptions,function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+}
+
 module.exports = {
     sendMail,
-    sendOTP
+    sendOTP,
+    sendPass
 }
 
