@@ -28,7 +28,7 @@ const booking = require('./models/bookings.model')
 const reserve = require('./models/reserve.model')
 const otp = require('./models/otp.model')
 const { accessSync } = require("fs")
-const {sendMail , sendOTP} = require('./controllers/emailService')
+const { sendMail, sendOTP } = require('./controllers/emailService')
 const genRandPass = require('./controllers/generatePass')
 // const { toNamespacedPath } = require("path/win32")
 
@@ -81,9 +81,9 @@ function verifyUser(token) {
     }
 }
 
-function generateOTP() {  
-    return Math.floor(Math.random() * (899999) + 100000); 
-} 
+function generateOTP() {
+    return Math.floor(Math.random() * (899999) + 100000);
+}
 
 const redirectHome = async (req, res, next) => {
     if (req.cookies && req.cookies.session_token && verifyUser(req.cookies.session_token)) {
@@ -183,52 +183,149 @@ app.post("/api/sign-in", redirectHome, async (req, res) => {
 })
 
 
-app.post('/api/genOTP',async(req,res) => {
-    const new_otp = generateOTP();
+app.post('/api/genOTP', async (req, res) => {
     const user_email = req.body.email;
-    try{
-        const findEntry = await otp.findOne({email : user_email});
-        if(findEntry){
-            const del_entry = await otp.deleteMany({email : user_email});
-        }
-        await sendOTP(user_email,new_otp)
-        const new_entry = await new otp({email : user_email,otp:new_otp});
-        await new_entry.save()
-        res.sendStatus(200)
+    const new_otp = generateOTP();
+    let checkaval_email;
+    try {
+        checkaval_email = await user.findOne({ email: user_email })
     }
-    catch(e){
-        // console.log(e)
+    catch (e) {
         res.status(500).send(e)
     }
+    if (checkaval_email) {
+        res.status(401).send({ "error": "Email is already registered" })
+    }
+    let findEntry
+    try {
+        findEntry = await otp.findOne({ email: user_email });
+    }
+    catch (e) {
+        res.status(500).send(e)
+    }
+    if (findEntry) {
+        const del_entry = await otp.deleteMany({ email: user_email });
+    }
+    await sendOTP(user_email, new_otp)
+    const new_entry = await new otp({ email: user_email, otp: new_otp });
+    await new_entry.save()
+    res.sendStatus(200)
 
 })
 
-app.post('/api/verifyOTP',async(req,res) => {
+app.post('/api/verifyOTP', async (req, res) => {
     const user_otp = req.body.otp;
     const user_email = req.body.email;
-    try{
-        const findEntry = await otp.findOne({otp : user_otp,email : user_email})
-        if(findEntry){
-            const delEntry = await otp.deleteMany({email : user_email})
+    if(!user_otp || !user_email){
+        res.status(403).send({"error" : "required email and otp"})
+    }
+    let checkaval_email;
+    try {
+        checkaval_email = await user.findOne({ email: user_email })
+    }
+    catch (e) {
+        res.status(500).send(e)
+    }
+    if (checkaval_email) {
+        res.status(401).send({ "error": "Email is already registered" })
+    }
+    try {
+        const findEntry = await otp.findOne({ otp: user_otp, email: user_email })
+        if (findEntry) {
+            const delEntry = await otp.deleteMany({ email: user_email })
             res.sendStatus(200)
         }
-        else{
+        else {
             res.sendStatus(403)
         }
     }
+    catch (e) {
+        res.status(500).send(e)
+    }
+})
+
+app.post('/api/email-change', async (req, res) => {
+    const user_otp = req.body.otp;
+    const user_email = req.body.email;
+    let checkaval_email;
+    try {
+        checkaval_email = await user.findOne({ email: user_email })
+    }
+    catch (e) {
+        res.status(500).send(e)
+    }
+    if (checkaval_email) {
+        res.status(401).send({ "error": "Email is already registered" })
+    } 
+    let findEntry   
+    try {
+        findEntry = await otp.findOne({ otp: user_otp, email: user_email })
+    }
     catch(e){
         res.status(500).send(e)
+    }
+    if(!findEntry){
+        res.sendStatus(403)
+    }
+    let def_user;
+    if (req.cookies) {
+        def_user = verifyUser(req.cookies.session_token)
+    }
+    let user_det = null
+    if (def_user) {
+        user_det = await user.findOne({ _id: def_user.id })
+        user_det.email = user_email;
+        await user_det.save()
+        const delEntry = await otp.deleteMany({ email: user_email })
+        res.sendStatus(200)
+    }
+    else {
+        res.sendStatus(403)
+    }
+})
+
+app.post('/api/change-fname',async(req,res) => {
+    let def_user;
+    if (req.cookies) {
+        def_user = verifyUser(req.cookies.session_token)
+    }
+    let user_det = null
+    if (def_user) {
+        user_det = await user.findOne({ _id: def_user.id })
+        user_det.firstName = req.body.fname;
+        await user_det.save()
+        res.sendStatus(200)
+    }
+    else {
+        res.sendStatus(403)
+    }
+})
+
+app.post('/api/change-lname',async(req,res) => {
+    let def_user;
+    if (req.cookies) {
+        def_user = verifyUser(req.cookies.session_token)
+    }
+    let user_det = null
+    if (def_user) {
+        user_det = await user.findOne({ _id: def_user.id })
+        user_det.lastName = req.body.lname;
+        await user_det.save()
+        res.sendStatus(200)
+    }
+    else {
+        res.sendStatus(403)
     }
 })
 
 app.post('/api/google/sign-in', redirectHome, async (req, res) => {
     const credResponse = req.body.credentialResponse.credential;
-    const credResponseDecoded = jwtDecode(credResponse)    
-    if(process.env.GOOGLE_OAUTH_CLIENT_ID !== req.body.credentialResponse.clientId){
-        res.status(403).send({"error" : "client Id's doesn't match"})
+    const credResponseDecoded = jwtDecode(credResponse)
+    if (process.env.GOOGLE_OAUTH_CLIENT_ID !== req.body.credentialResponse.clientId) {
+        res.status(403).send({ "error": "client Id's doesn't match" })
     }
-    if(!credResponseDecoded.email_verified){
-        res.status(401).send({'error' : "email Id is not verified"})
+    if (!credResponseDecoded.email_verified) {
+        res.status(401).send({ 'error': "email Id is not verified" })
     }
     const checkaval_email = await user.findOne({ email: credResponseDecoded.email });
     if (checkaval_email) {
@@ -239,8 +336,8 @@ app.post('/api/google/sign-in', redirectHome, async (req, res) => {
     }
     else {
         try {
-            const newUser = await new user({ firstName: credResponseDecoded.given_name, lastName: credResponseDecoded.family_name, email: credResponseDecoded.email,profilePic : credResponseDecoded.picture});
-            const def_user = { firstname: newUser.firstname, id: newUser.id, lastName: newUser.lastname, email: newUser.email}
+            const newUser = await new user({ firstName: credResponseDecoded.given_name, lastName: credResponseDecoded.family_name, email: credResponseDecoded.email, profilePic: credResponseDecoded.picture });
+            const def_user = { firstname: newUser.firstname, id: newUser.id, lastName: newUser.lastname, email: newUser.email }
             const token = createToken(def_user);
             await newUser.save();
             res.cookie("session_token", token, { httpOnly: true });
