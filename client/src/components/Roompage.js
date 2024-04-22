@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
+import ReactPannellum, { getConfig } from "react-pannellum";
 import { useLocation, useParams } from 'react-router-dom'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -72,7 +73,8 @@ const Roompage = (props) => {
 	const [checkedAval, setCheckedAval] = useState(false)
 	const [maxAdult, setmaxAdult] = useState(0)
 	const [maxChild, setmaxChild] = useState(0)
-	const [totalPrice,settotalPrice] = useState(0)
+	const [totalPrice, settotalPrice] = useState(0)
+	const [roomPrev,setroomPrev] = useState("/room_prev.jpg")
 
 	const handleDateChange = (range) => {
 		const [startDate, endDate] = range;
@@ -93,7 +95,7 @@ const Roompage = (props) => {
 			if (roomCount[index] < maxVal) {
 				roomCount[index] += 1
 				setroomCount([...roomCount])
-				settotalPrice(totalPrice => totalPrice+roomType[index].price)
+				settotalPrice(totalPrice => totalPrice + roomType[index].price)
 				setmaxAdult(maxAdult => maxAdult + roomType[index].capacity.adult)
 				setmaxChild(maxChild => maxChild + roomType[index].capacity.child)
 			}
@@ -102,7 +104,7 @@ const Roompage = (props) => {
 			if (roomCount[index] > 0) {
 				roomCount[index] -= 1
 				setroomCount([...roomCount])
-				settotalPrice(totalPrice => totalPrice-roomType[index].price)
+				settotalPrice(totalPrice => totalPrice - roomType[index].price)
 				setmaxAdult(maxAdult => maxAdult - roomType[index].capacity.adult)
 				setmaxChild(maxChild => maxChild - roomType[index].capacity.child)
 			}
@@ -228,7 +230,7 @@ const Roompage = (props) => {
 					setmaxChild(0)
 				}
 			}
-			else{
+			else {
 				alert("Add Rooms to reserve")
 			}
 
@@ -241,10 +243,42 @@ const Roompage = (props) => {
 
 	}
 
+	const previewBox = useRef(null)
+
+	const toggleDialog = (e) => {
+		e.preventDefault()
+		if (!previewBox.current) {
+			return;
+		}
+		if (previewBox.current.open) {
+			closeDialog();
+		} else {
+			// console.log(props.room)
+			previewBox.current.showModal();
+		}
+	};
+
+	const closeDialog = (e) => {
+		e.preventDefault()
+		if (!previewBox.current) {
+			return;
+		}
+		if (previewBox.current.open) {
+			previewBox.current.close();
+		}
+	}
+
+	const config = {
+		autoRotate: -2,
+		strings: {
+			loadingImg: "" // Empty string to remove the "Click to load panorama" overlay
+		}
+	};
+
 
 	return (
 		<>
-			<Navbar profile={true} user={user} logout={logout} navigateTo={`/home/${params.id}`}/>
+			<Navbar profile={true} user={user} logout={logout} navigateTo={`/home/${params.id}`} />
 
 			<div className="container my-1 mb-3">
 				<div className="card">
@@ -308,6 +342,9 @@ const Roompage = (props) => {
 										<input type="text" className="form-control text-center" value={roomCount[index]} />
 										<button className='incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, true, room.rooms.length)}>+</button>
 									</div>
+									<div className='container m-3 input-group'>
+										<button className='btn btn-primary' onClick={toggleDialog}>Room preview</button>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -315,13 +352,27 @@ const Roompage = (props) => {
 				))}
 			</div>
 
+			<dialog ref={previewBox} className='border  rounded'>
+				<div>
+					<ReactPannellum
+						id="1"
+						sceneId="firstScene"
+						imageSource={roomPrev}
+						config={config}
+						autoLoad = {true}
+					/>
+				</div>
+
+				<button type="button" className="btn btn-danger m-1" onClick={closeDialog}>Close</button>
+			</dialog>
+
 			<div className='d-flex justify-content-end mb-3'>
 				{/* <input type="text" value={maxAdult}></input>
 				<input type="text" value={maxChild}></input> */}
 				<div className='d-flex w-50'>
 					<label className="d-flex align-items-center m-4">
 						Total Price
-						</label>
+					</label>
 					<input type="text" className='text-center' value={totalPrice}></input>
 				</div>
 				<button className='btn btn-primary' onClick={reserveRooms}>Reserve Rooms</button>
@@ -351,7 +402,7 @@ const Roompage = (props) => {
 								Comments
 							</div>
 							<ul className="list-group list-group-flush" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-								
+
 							</ul>
 						</div>
 						{/* <div className='d-flex justify-content-end m-3'>

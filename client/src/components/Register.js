@@ -1,37 +1,71 @@
-import React, { useState,useEffect } from 'react'
-import { Link,useLocation,useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import request from '../api/axios'
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
+
 
 
 
 const Register = () => {
 
-	const navigate= useNavigate()
+	const navigate = useNavigate()
 	const location = useLocation()
 
 	console.log(location.state.navigateUrl)
-	
+
 	const [firstName, setFirst] = useState("")
 	const [lastName, setLast] = useState("")
 	const [email, setEmail] = useState("")
 	const [pass, setPass] = useState("")
-	const [remeb, setRememb] = useState(false)
+	const [otp, setOTP] = useState("")
+	const [sendotp, setsendotp] = useState(false)
+	const [isVerified, setVerified] = useState(false)
+
+	const requestOTP = async (e) => {
+		e.preventDefault()
+		
+		try{
+			const res = await request.post('/api/genOTP',{email})
+			setsendotp(true)
+		}
+		catch(e){
+			console.log(e)
+		}
+
+	}
+	const verifyOTP = async (e) => {
+		e.preventDefault()
+		try{
+			const res = await request.post('/api/verifyOTP',{email,otp})
+			setVerified(true)
+		}
+		catch(e){
+			console.log(e)
+		}
+	}
+
+
+
+	const login = useGoogleLogin({
+		onSuccess: tokenResponse => console.log(tokenResponse),
+	});
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
 
-			const response = await request.post("/api/sign-up", {firstname : firstName,lastname : lastName,email : email,password : pass,remember : remeb});
+			const response = await request.post("/api/sign-up", { firstname: firstName, lastname: lastName, email: email, password: pass });
 			console.log(response.data)
-			if(response.data === "OK"){
-				if(location.state && location.state.navigateUrl){
+			if (response.data === "OK") {
+				if (location.state && location.state.navigateUrl) {
 					navigate(location.state.navigateUrl)
 				}
-				else{
+				else {
 					navigate('/home')
 				}
 			}
-			if(response.data.redirect && response.data.redirect === "home"){
+			if (response.data.redirect && response.data.redirect === "home") {
 				navigate('/home')
 			}
 		} catch (error) {
@@ -42,23 +76,22 @@ const Register = () => {
 
 	useEffect(() => {
 
-        const checkToken = async() => {
+		const checkToken = async () => {
 
-            try{
-                const res = await request.post('/api/check')
-                // if(res.data.redirect === "home"){
-                //     navigate('/home')
-                // }
-				console.log(res)
-            }
-            catch(e){
-                alert(e)
-            }
+			try {
+				const res = await request.post('/api/check')
+				if (res.data.redirect === "home") {
+					navigate('/home')
+				}
+			}
+			catch (e) {
+				alert(e)
+			}
 
-        }
+		}
 
-        checkToken()
-	},[])
+		checkToken()
+	}, [])
 
 
 	return (
@@ -95,7 +128,7 @@ const Register = () => {
 											<input
 												type="text"
 												id="firstname"
-												className="form-control"
+												className="form-control mx-2 p-3"
 												required
 												onChange={(e) => { setFirst(e.target.value) }}
 											/>
@@ -109,7 +142,7 @@ const Register = () => {
 											<input
 												type="text"
 												id="lastname"
-												className="form-control"
+												className="form-control mx-2 p-3"
 												onChange={(e) => { setLast(e.target.value) }}
 												required
 											/>
@@ -119,17 +152,33 @@ const Register = () => {
 										</div>
 									</div>
 								</div>
+								{isVerified ? 
+								<div className='text-success'>Your email is verified</div> : <div className='text-danger'>verify your email to finish signing in</div>
+								}
+								
 								<div className="form-outline mb-4">
-									<input type="email" id="email" className="form-control" required onChange={(e) => { setEmail(e.target.value) }} />
-									<label className="form-label" htmlFor="email">
-										Email address
-									</label>
+									<div className='d-flex mb-1'>
+										<input type="email" id="email" className="form-control w-75 mx-2" required onChange={(e) => { setEmail(e.target.value) }} />
+										<button className='btn btn-primary w-25 mx-2' onClick={requestOTP}>{!sendotp ? "Verify Email" : "Resend OTP"}</button>
+									</div>
+									<div className='w-75 mx-2'>
+										<label className="form-label mb-4" htmlFor="email">
+											Email address
+										</label>
+									</div>
+
+									{sendotp &&
+											<div className='d-flex'>
+												<input type="text" id="otp" className="form-control w-75 mx-2" required onChange={(e) => { setOTP(e.target.value) }} placeholder="enter otp" />
+												<button className='btn btn-primary w-25 mx-2' onClick={verifyOTP}>Verify OTP</button>
+											</div>
+									}
 								</div>
 								<div className="form-outline mb-4">
 									<input
 										type="password"
 										id="password"
-										className="form-control"
+										className="form-control mx-2 p-3"
 										onChange={(e) => { setPass(e.target.value) }}
 										required
 									/>
@@ -137,52 +186,50 @@ const Register = () => {
 										Password
 									</label>
 								</div>
-								<div className="form-check d-flex justify-content-center mb-4">
-									<input
-										className="form-check-input me-2"
-										type="checkbox"
-										defaultValue=""
-										id="remember"
-										defaultChecked=""
-										onChange={() => { setRememb(prevCheck => !prevCheck) }}
-									/>
-									<label className="form-check-label" htmlFor="remember">
-										Remember me
-									</label>
+								<div className='mb-4'>
+									<button type="submit" className="btn btn-primary btn-block mb-4" >
+										Sign Up
+									</button>
+									<div className='d-flex justify-content-center'>
+										<GoogleOAuthProvider clientId="261497187757-vom1lr1cbsr68nn53b5318sdflkp028r.apps.googleusercontent.com">
+											<GoogleLogin className="btn btn-link btn-floating mx-1 p-2"
+												onSuccess={async (credentialResponse) => {
+													try {
+														const response = await request.post('api/google/sign-in', { credentialResponse })
+														if (response.data === "OK") {
+															if (location.state && location.state.navigateUrl) {
+																navigate(location.state.navigateUrl)
+															}
+															else {
+																navigate('/home')
+															}
+														}
+														if (response.data.redirect && response.data.redirect === "home") {
+															navigate('/home')
+														}
+													}
+													catch (e) {
+														console.log(e)
+													}
+
+												}}
+												onError={() => {
+													console.log('Login Failed');
+												}}
+											/>
+										</GoogleOAuthProvider>
+									</div>
 								</div>
-								<button type="submit" className="btn btn-primary btn-block mb-4" >
-									Sign Up
-								</button>
+								<div className="form-check d-flex justify-content-center mb-4">
+									<div className=''>
+										<span className='m-2'>
+											Already have an account ?
+										</span>
+										<Link to='/sign-in' state={{ navigateUrl: (location.state && location.state.navigateUrl) ? location.state.navigateUrl : "/home" }}>Sign In</Link>
+									</div>
+								</div>
 							</form>
 
-							<div className="form-check d-flex justify-content-center mb-4">
-								<div className=''>
-									<span className='m-2'>
-										Already have an account ?
-									</span>
-									<Link to='/sign-in' state={{navigateUrl : (location.state && location.state.navigateUrl) ?location.state.navigateUrl : "/home"  }}>Sign In</Link>
-								</div>
-							</div>
-
-
-
-
-
-							<div className="text-center">
-								<p>or sign up with:</p>
-								<button type="button" className="btn btn-link btn-floating mx-1">
-									<i className="fab fa-facebook-f" />
-								</button>
-								<button type="button" className="btn btn-link btn-floating mx-1">
-									<i className="fab fa-google" />
-								</button>
-								<button type="button" className="btn btn-link btn-floating mx-1">
-									<i className="fab fa-twitter" />
-								</button>
-								<button type="button" className="btn btn-link btn-floating mx-1">
-									<i className="fab fa-github" />
-								</button>
-							</div>
 
 						</div>
 					</div>

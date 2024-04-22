@@ -6,6 +6,7 @@ import ReserveInfo from './Profile/ReserveInfo'
 import ChangePass from './Profile/ChangePass'
 import { Navbar } from './Navbar'
 import request from '../api/axios'
+import ForgotPass from './Profile/ForgotPass'
 
 
 
@@ -84,6 +85,7 @@ const Profilepage = () => {
 								{location.search === "" && <GeneralAccount userState={user} userFunc={setUser} />}
 								{location.search === "?account-change-password" && <ChangePass userState={user} userFunc={setUser} />}
 								{location.search === "?my-reservings" && <ReserveInfo userState={user} userFunc={setUser}/>}
+								{location.search === "?forgot-password" && <ForgotPass userState={user} userFunc={setUser}/>}
 
 							</div>
 						</div>

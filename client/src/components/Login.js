@@ -9,7 +9,7 @@ const Login = () => {
 	const navigate = useNavigate()
 	const location = useLocation()
 
-	console.log(location.state.navigateUrl)
+	
 
 	const [email, setEmail] = useState("")
 	const [pass, setPass] = useState("")
@@ -109,28 +109,31 @@ const Login = () => {
 										Password
 									</label>
 								</div>
-								{/* <div className="form-check d-flex justify-content-center mb-4">
-									<input
-										className="form-check-input me-2"
-										type="checkbox"
-										defaultValue=""
-										id="remember"
-										defaultChecked=""
-										onChange={() => Setremember(preVal => !preVal)}
-									/>
-									<label className="form-check-label" htmlFor="remember">
-										Remember me
-									</label>
-								</div> */}
 								<div>
 									<button type="submit" className="btn btn-primary btn-block mb-4">
 										Sign In
 									</button>
-									<div>
-										<GoogleOAuthProvider clientId="<your_client_id>">
+									<div className='d-flex justify-content-center'>
+										<GoogleOAuthProvider clientId="261497187757-vom1lr1cbsr68nn53b5318sdflkp028r.apps.googleusercontent.com">
 												<GoogleLogin className="btn btn-link btn-floating mx-1"
 													onSuccess={credentialResponse => {
-														console.log(credentialResponse);
+														request.post('api/google/sign-in',{credentialResponse})
+														.then((response) => {
+															if (response.data === "OK") {
+																if (location.state && location.state.navigateUrl) {
+																	navigate(location.state.navigateUrl)
+																}
+																else {
+																	navigate('/home')
+																}
+															}
+															if (response.data.redirect && response.data.redirect === "home") {
+																navigate('/home')
+															}
+														})
+														.catch((e)=>{
+															console.log(e)
+														})
 													}}
 													onError={() => {
 														console.log('Login Failed');

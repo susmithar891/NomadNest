@@ -26,5 +26,41 @@ const sendMail = (to_user,reserveId, roomNums, password,totalPrice,hotelName) =>
     });
 }
 
-module.exports = sendMail
+const sendOTP = (to_user,otp) => {
+    var mailOptions = {
+        from: process.env.EMAIL,
+        to: to_user,
+        subject: `NOMADNEST : email verification`,
+        text: `your otp is : ${otp} \n otp will be valid only for 2 hours` // Plain text body
+    };
+    transporter.sendMail(mailOptions,function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+}
+
+const sendPass = (to_user,pass) => {
+    var mailOptions = {
+        from: process.env.EMAIL,
+        to: to_user,
+        subject: `NOMADNEST : forgot password`,
+        text: `your password is : ${pass}` // Plain text body
+    };
+    transporter.sendMail(mailOptions,function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+}
+
+module.exports = {
+    sendMail,
+    sendOTP,
+    sendPass
+}
 
