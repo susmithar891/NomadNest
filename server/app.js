@@ -11,7 +11,7 @@ const mongoose = require('mongoose')
 const _ = require("lodash")
 const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY)
 const { jwtDecode } = require("jwt-decode");
-const {multer,bucket} = require('./controllers/gcpconnect')
+const { multer, bucket } = require('./controllers/gcpconnect')
 const crypto = require('crypto')
 
 
@@ -30,7 +30,7 @@ const booking = require('./models/bookings.model')
 const reserve = require('./models/reserve.model')
 const otp = require('./models/otp.model')
 const { accessSync } = require("fs")
-const { sendMail, sendOTP ,sendPass} = require('./controllers/emailService')
+const { sendMail, sendOTP, sendPass } = require('./controllers/emailService')
 const genRandPass = require('./controllers/generatePass')
 const { profile } = require("console")
 // const { toNamespacedPath } = require("path/win32")
@@ -344,14 +344,14 @@ app.post('/api/change-pass', async (req, res) => {
     }
     let user_det = null
     if (def_user) {
-        try{
+        try {
             user_det = await user.findOne({ _id: def_user.id })
         }
-        catch(e){
+        catch (e) {
             return res.status(500).send(e)
         }
-        if(!user_det.password){
-            return res.status(400).send({"error" : "incorrect password"})
+        if (!user_det.password) {
+            return res.status(400).send({ "error": "incorrect password" })
         }
         await bcrypt.compare(req.body.prevPass, user_det.password, async (err, resp) => {
             if (err) {
@@ -365,7 +365,7 @@ app.post('/api/change-pass', async (req, res) => {
                     const hashedPass = await bcrypt.hash(req.body.newPass, salt);
 
                     user_det.password = hashedPass
-                    
+
                     await user_det.save()
                     return res.sendStatus(200)
 
@@ -376,7 +376,7 @@ app.post('/api/change-pass', async (req, res) => {
 
             }
             else {
-                return res.status(400).send({"error" : "incorrect password"})
+                return res.status(400).send({ "error": "incorrect password" })
             }
         })
     }
@@ -385,39 +385,39 @@ app.post('/api/change-pass', async (req, res) => {
     }
 })
 
-app.post('/api/forgot-pass',async(req,res) => {
+app.post('/api/forgot-pass', async (req, res) => {
     let def_user;
     if (req.cookies) {
         def_user = verifyUser(req.cookies.session_token)
     }
     let user_det = null
     if (def_user) {
-        try{
+        try {
             user_det = await user.findOne({ _id: def_user.id })
         }
-        catch(e){
+        catch (e) {
             return res.status(500).send(e)
         }
-        if(user_det.email !== req.body.email){
-            return res.status(403).send({"error" : "wrong email"})
+        if (user_det.email !== req.body.email) {
+            return res.status(403).send({ "error": "wrong email" })
         }
         const randomPass = genRandPass(8)
 
-        try{
+        try {
             const salt = await bcrypt.genSalt();
             const hashedPass = await bcrypt.hash(randomPass, salt);
             user_det.password = hashedPass;
             await user_det.save()
-            await sendPass(req.body.email,randomPass)
+            await sendPass(req.body.email, randomPass)
             return res.sendStatus(200)
         }
-        catch(e){
+        catch (e) {
             console.log(e)
             res.status(500).send(e)
-        }
+        }
 
 
-    }
+    }
 })
 
 app.post('/api/google/sign-in', redirectHome, async (req, res) => {
@@ -787,16 +787,17 @@ app.post('/api/user/rate', async (req, res) => {
 
 })
 
-app.get('/api/images',async(req,res) => {
+app.get('/api/images', async (req, res) => {
     const [files] = await bucket.getFiles();
     const imageUrls = [files][0].map((ele) => {
-        filename = ele.parent.parent.apiEndpoint+'/'+ele.metadata.bucket+'/'+ele.metadata.name
+        filename = ele.parent.parent.apiEndpoint + '/' + ele.metadata.bucket + '/' + ele.metadata.name
         return filename
     })
     res.send(imageUrls)
 })
 
-app.post('/api/User/uploadPic',multer.single('profile'),async(req,res) => {
+app.post('/api/User/uploadPic', multer.single('profile'), async (req, res) => {
+
     let def_user;
     if (req.cookies) {
         def_user = verifyUser(req.cookies.session_token)
@@ -805,35 +806,46 @@ app.post('/api/User/uploadPic',multer.single('profile'),async(req,res) => {
         res.sendStatus(403)
     }
     let user_det
-    try{
-        user_det = await user.findOne({_id : def_user.id})
-    }catch(e){
+    try {
+        user_det = await user.findOne({ _id: def_user.id })
+    } catch (e) {
         res.status(500).send(e)
     }
-    try{
-        if(req.file){
+    if (req.file) {
+        const array_of_allowed_files = ['png', 'jpeg', 'jpg', 'gif'];
+        const array_of_allowed_file_types = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
+        const file_extension = req.file.originalname.slice(
+            ((req.file.originalname.lastIndexOf('.') - 1) >>> 0) + 2
+        );
+        if (!array_of_allowed_files.includes(file_extension) || !array_of_allowed_file_types.includes(req.file.mimetype)) {
+            return res.status(400).send({ error: 'Invalid file' });
+        }
+    }
+    try {
+        if (req.file) {
+
             const randString = generateRandomString(32)
-            const profilepicname = user_det.firstName+"_"+randString
+            const profilepicname = user_det.firstName + "_" + randString
             const blob = bucket.file(`users/${profilepicname}`)
             const blobstream = blob.createWriteStream();
-            blobstream.on('finish',async() => {
+            blobstream.on('finish', async () => {
                 user_det.profilePic = `https://storage.googleapis.com/nomadnest/users/${profilepicname}`
-                try{
+                try {
                     await user_det.save()
-                    res.status(200).send({profilePic : `https://storage.googleapis.com/nomadnest/users/${profilepicname}`})
+                    res.status(200).send({ profilePic: `https://storage.googleapis.com/nomadnest/users/${profilepicname}` })
                 }
-                catch(e){
+                catch (e) {
                     res.status(500).send(e)
                 }
-                
+
             })
             blobstream.end(req.file.buffer)
         }
-        else{
-            res.staus(204).send({msg : "provide a image file"})
+        else {
+            res.staus(204).send({ msg: "provide a image file" })
         }
     }
-    catch(e){
+    catch (e) {
         res.status(500).send(e)
     }
 })

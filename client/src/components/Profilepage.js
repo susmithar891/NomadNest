@@ -16,6 +16,20 @@ const Profilepage = () => {
 	const navigate = useNavigate()
 	const [user, setUser] = useState({});
 	console.log(location)
+
+	const logout = async () => {
+        request.post('/api/logout')
+            .then(() => {
+                setUser(null)
+                console.log(user)
+				navigate("/")
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+
+
+    }
 	
 
 
@@ -76,6 +90,13 @@ const Profilepage = () => {
 									to="?my-reservings"
 								>
 									My Reservings
+								</Link>
+								<Link
+								className="list-group-item list-group-item-action"
+								data-toggle="list"
+								onClick={logout}
+								>
+									Log out
 								</Link>
 							</div>
 						</div>
