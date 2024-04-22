@@ -6,6 +6,10 @@ const roomTypeSchema = mongoose.Schema({
         ref : 'hotel',
         required : true
     },
+    // hotelName:{
+    //     type:String,
+    //     required : true 
+    // },
     capacity : {
         adult : {
             type : Number,

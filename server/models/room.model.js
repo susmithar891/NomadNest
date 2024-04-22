@@ -15,6 +15,10 @@ const roomSchema = mongoose.Schema({
         ref : 'hotel',
         required : true
     },
+    hotelName:{
+        type:String,
+        required : true 
+    },
     preview:{
         type : String,
         required : true

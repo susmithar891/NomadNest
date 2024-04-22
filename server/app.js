@@ -12,6 +12,7 @@ const _ = require("lodash")
 const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY)
 const { jwtDecode } = require("jwt-decode");
 const {multer,bucket} = require('./controllers/gcpconnect')
+const crypto = require('crypto')
 
 
 
@@ -31,6 +32,7 @@ const otp = require('./models/otp.model')
 const { accessSync } = require("fs")
 const { sendMail, sendOTP ,sendPass} = require('./controllers/emailService')
 const genRandPass = require('./controllers/generatePass')
+const { profile } = require("console")
 // const { toNamespacedPath } = require("path/win32")
 
 
@@ -86,6 +88,19 @@ function generateOTP() {
     return Math.floor(Math.random() * (899999) + 100000);
 }
 
+function generateRandomString(length) {
+    const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    var st = '';
+    for (let i = 0; i < length; i++) {
+        // Generate a random index to select a character from the charset
+        const randomIndex = crypto.randomInt(0, charset.length);
+        // Append the randomly selected character to the string
+        st += charset[randomIndex];
+    }
+
+    return st;
+}
+
 const redirectHome = async (req, res, next) => {
     if (req.cookies && req.cookies.session_token && verifyUser(req.cookies.session_token)) {
         // res.redirect('/home')
@@ -119,7 +134,7 @@ const redirectLogin = (req, res, next) => {
 
 //api-endpoints
 app.get('/', (req, res) => {
-    res.status(200).sendFile(path.join(__dirname, 'models', 'hotels.json'))
+    res.status(200).send("hoi")
 })
 
 app.post('/api/check', redirectHome, (req, res) => {
@@ -437,6 +452,7 @@ app.post('/api/google/sign-in', redirectHome, async (req, res) => {
     }
 
 })
+
 app.post('/api/logout', redirectLogin, (req, res) => {
     res.clearCookie('session_token');
     res.end()
@@ -655,7 +671,6 @@ app.post('/api/data', async (req, res) => {
     }
 })
 
-
 app.post('/api/:id/reserve', async (req, res) => {
     let reserved_rooms = []
     let roomNums = []
@@ -714,7 +729,6 @@ app.post('/api/:id/reserve', async (req, res) => {
 
 })
 
-
 app.post('/api/user/:id/reservings', async (req, res) => {
     try {
         const resers = await reserve.find({ userId: req.params.id })
@@ -762,7 +776,7 @@ app.post('/api/user/rate', async (req, res) => {
         if (reservation.password !== password) {
             res.sendStatus(401)
         }
-        const new_comment = await new comment({ hotelId: reservation.hotelId, userId: def_user._id, rating: rating, text: text })
+        const new_comment = await new comment({ hotelId: reservation.hotelId, userId: def_user.id, rating: rating, text: text })
         new_comment.save()
         res.sendStatus(200)
     }
@@ -773,7 +787,6 @@ app.post('/api/user/rate', async (req, res) => {
 
 })
 
-
 app.get('/api/images',async(req,res) => {
     const [files] = await bucket.getFiles();
     const imageUrls = [files][0].map((ele) => {
@@ -781,6 +794,48 @@ app.get('/api/images',async(req,res) => {
         return filename
     })
     res.send(imageUrls)
+})
+
+app.post('/api/User/uploadPic',multer.single('profile'),async(req,res) => {
+    let def_user;
+    if (req.cookies) {
+        def_user = verifyUser(req.cookies.session_token)
+    }
+    if (!def_user) {
+        res.sendStatus(403)
+    }
+    let user_det
+    try{
+        user_det = await user.findOne({_id : def_user.id})
+    }catch(e){
+        res.status(500).send(e)
+    }
+    try{
+        if(req.file){
+            const randString = generateRandomString(32)
+            const profilepicname = user_det.firstName+"_"+randString
+            const blob = bucket.file(`users/${profilepicname}`)
+            const blobstream = blob.createWriteStream();
+            blobstream.on('finish',async() => {
+                user_det.profilePic = `https://storage.googleapis.com/nomadnest/users/${profilepicname}`
+                try{
+                    await user_det.save()
+                    res.status(200).send({profilePic : `https://storage.googleapis.com/nomadnest/users/${profilepicname}`})
+                }
+                catch(e){
+                    res.status(500).send(e)
+                }
+                
+            })
+            blobstream.end(req.file.buffer)
+        }
+        else{
+            res.staus(204).send({msg : "provide a image file"})
+        }
+    }
+    catch(e){
+        res.status(500).send(e)
+    }
 })
 
 

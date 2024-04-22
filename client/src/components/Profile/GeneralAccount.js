@@ -3,24 +3,27 @@ import request from '../../api/axios'
 
 const GeneralAccount = (props) => {
     console.log(props.userState)
+    const [profile,setprofile] = useState('')
     const [firstnamechange, setfirstnamechange] = useState(false)
     const [lastnamechange, setlastnamechange] = useState(false)
     const [emailchange, setemailchange] = useState(false)
     const [fname, setfirstname] = useState(props.userState.firstName)
     const [lname, setlastname] = useState(props.userState.lastName)
     const [userMail, setemail] = useState(props.userState.email)
-    const [otp, setOTP] = useState("")
+    const [otp, setOTP] = useState()
     const [sendotp, setsendotp] = useState(false)
-    const [isVerified,setisVerified] = useState(false)
+    const [isVerified, setisVerified] = useState(false)
+
+
 
     const requestOTP = async (e) => {
         e.preventDefault()
-        if(!userMail){
-            return ;
+        if (!userMail) {
+            return;
         }
 
         try {
-            const res = await request.post('/api/genOTP', { email : userMail})
+            const res = await request.post('/api/genOTP', { email: userMail })
             setsendotp(true)
         }
         catch (e) {
@@ -32,8 +35,8 @@ const GeneralAccount = (props) => {
     const verifyOTP = async (e) => {
         e.preventDefault()
         try {
-            const res = await request.post('/api/email-change', { email : userMail, otp : otp})
-            props.userFunc({...props.userState , email : userMail})
+            const res = await request.post('/api/email-change', { email: userMail, otp: otp })
+            props.userFunc({ ...props.userState, email: userMail })
             setsendotp(false)
             setisVerified(true)
             setemailchange(false)
@@ -43,34 +46,53 @@ const GeneralAccount = (props) => {
         }
     }
 
-    const changeFname = async(e) => {
+    const changeFname = async (e) => {
         e.preventDefault()
-        if(!fname){
-            return ;
+        if (!fname) {
+            return;
         }
-        try{
-            const res = await request.post('/api/change-fname',{fname})
+        try {
+            const res = await request.post('/api/change-fname', { fname })
             console.log(res)
-            props.userFunc({...props.userState , firstName : fname})
+            props.userFunc({ ...props.userState, firstName: fname })
             setfirstnamechange(false)
         }
-        catch(e){
+        catch (e) {
             console.log(e)
         }
     }
 
-    const changeLname = async(e) => {
+    const changeLname = async (e) => {
         e.preventDefault()
-        if(!lname){
-            return ;
+        if (!lname) {
+            return;
         }
-        try{
-            const res = await request.post('/api/change-lname',{lname})
+        try {
+            const res = await request.post('/api/change-lname', { lname })
             console.log(res)
-            props.userFunc({...props.userState , lastName : lname})
+            props.userFunc({ ...props.userState, lastName: lname })
             setlastnamechange(false)
         }
-        catch(e){
+        catch (e) {
+            console.log(e)
+        }
+    }
+
+    const changeprofilePic = async (e) => {
+        e.preventDefault()
+        if(!profile){
+            alert("upload an image to proceed")
+            return ;
+        }
+        const formData = new FormData()
+        formData.append('profile',profile)
+        try{
+            const res = await request.post('/api/User/uploadPic',formData);
+            if(res.status === 200){
+                props.userFunc({...props.userState,profilePic : res.data.profilePic})
+            }
+            console.log(res)
+        }catch(e){
             console.log(e)
         }
     }
@@ -79,24 +101,35 @@ const GeneralAccount = (props) => {
 
 
     return (
+
         <div className="container tab-pane fade active show" id="account-general">
             <div className="d-flex m-2">
                 <div className='m-1'>
                     <img
-                        src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                        alt=""
+                        src={props.userState.profilePic ? props.userState.profilePic : "profilepicture.webp"}
+                        alt="profile picture"
+                        style={{
+                            maxHeight: 90 + "px",
+                            maxWidth: 90 + "px"
+                        }}
                         className="d-block ui-w-80 rounded"
                     />
                 </div>
 
                 <div className='m-1'>
-                    <label className="btn btn-outline-primary m-1">
-                        Upload new photo
-                        <input type="file" className="account-settings-fileinput" />
-                    </label>
-                    <div className="text-light small mt-1">
-                        Allowed JPG, GIF or PNG. Max size of 800K
-                    </div>
+                    <form>
+                        <label className="btn btn-outline-primary m-1">
+                            Upload new photo
+                            <input type="file" className="account-settings-fileinput" onChange={(e) => {setprofile(e.target.files[0])}} accept="image/*" required/>
+                        </label>
+                        <button type='submit' onClick={changeprofilePic} className='btn btn-outline-warning m-1'>
+                            Upload Image
+                        </button>
+                        <div className="text-light small mt-1">
+                            Allowed JPG, GIF or PNG. Max size of 800K
+                        </div>
+                        
+                    </form>
                 </div>
 
             </div>
@@ -126,7 +159,7 @@ const GeneralAccount = (props) => {
                         onChange={(e) => setlastname(e.target.value)}
                     />
                     <button className='btn btn-primary m-2 col' onClick={() => { setlastnamechange(true) }}>edit</button>
-                    <button className='btn btn-primary m-2 col'onClick={changeLname}>Save</button>
+                    <button className='btn btn-primary m-2 col' onClick={changeLname}>Save</button>
                 </div>
                 <div className="form-group row">
                     <label className="form-label my-auto m-2 col">Registered Email</label>
