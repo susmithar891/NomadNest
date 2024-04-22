@@ -11,6 +11,7 @@ const mongoose = require('mongoose')
 const _ = require("lodash")
 const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY)
 const { jwtDecode } = require("jwt-decode");
+const {multer,bucket} = require('./controllers/gcpconnect')
 
 
 
@@ -773,14 +774,14 @@ app.post('/api/user/rate', async (req, res) => {
 })
 
 
-
-
-
-
-
-
-
-
+app.get('/api/images',async(req,res) => {
+    const [files] = await bucket.getFiles();
+    const imageUrls = [files][0].map((ele) => {
+        filename = ele.parent.parent.apiEndpoint+'/'+ele.metadata.bucket+'/'+ele.metadata.name
+        return filename
+    })
+    res.send(imageUrls)
+})
 
 
 app.listen(port, () => {
