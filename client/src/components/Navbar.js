@@ -6,7 +6,8 @@ import PropTypes from 'prop-types'
 
 
 const Navbar = (props) => {
-    
+    // console.log(`props.user.profilePic : `,props.user.profilePic)
+    // console.log(props.user.profilePic)
 
 
     return (
@@ -48,7 +49,7 @@ const Navbar = (props) => {
                                     >
                                         <div className="profile-pic">
                                             <img
-                                                src={props.user.profilePic ? props.user.profilePic : "profilepicture.webp"}
+                                                src={props.user.profilePic}
                                                 className='rounded-circle'
                                                 style={{
                                                     height : 60+"px",

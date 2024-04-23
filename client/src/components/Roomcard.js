@@ -9,7 +9,7 @@ const Roomcard = (props) => {
         <div className="card">
             <div className="card-img-top d-flex align-items-center bg-light">
                 <div >
-                    <img className="img-fluid rounded" src={require(`../media/${props.hotelimg}`)} alt="hotel preview" />
+                    <img className="img-fluid rounded" src={props.hotelimg} alt="hotel preview" />
                 </div>
                 <div className="mx-3 card-body">
                     <h5 className="card-title">{props.hotelname}</h5>

@@ -109,7 +109,7 @@ const GeneralAccount = (props) => {
 			<div className="d-flex m-2">
 				<div className='m-1'>
 					<img
-						src={props.userState.profilePic ? props.userState.profilePic : "profilepicture.webp"}
+						src={props.userState.profilePic}
 						alt="profile picture"
 						style={{
 							maxHeight: 90 + "px",

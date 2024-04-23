@@ -35,7 +35,7 @@ export const Homepage = () => {
     const [pageCount, setpageCount] = useState(0);
     const [page, setPage] = useState(1);
     const [minPrice, setminPrice] = useState(0);
-    const [maxPrice, setmaxPrice] = useState(1000);
+    const [maxPrice, setmaxPrice] = useState(60000);
     const sliderRef = useRef(null)
 
     
@@ -122,7 +122,7 @@ export const Homepage = () => {
                             key={element._id}
                             style={{ textDecoration: 'none' }}
                         >
-                            <Roomcard hotelId={element._id} hotelname={element.hotelName} hotelimg={'hotel1.jpeg'} location = {element.location} amenities
+                            <Roomcard hotelId={element._id} hotelname={element.hotelName} hotelimg={element.images[0]} location = {element.location} amenities
  = {element.amenities} />
                         </Link>
 

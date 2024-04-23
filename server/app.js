@@ -106,8 +106,15 @@ const redirectHome = async (req, res, next) => {
         // res.redirect('/home')
         // res.send({"msg" : "this is home"})
         try {
-            let def_user = await user.findOne({ _id: verifyUser(req.cookies.session_token).id }).select('-password')
-            res.status(200).send({ redirect: 'home', user: def_user })
+            let def_user = await user.findOne({ _id: verifyUser(req.cookies.session_token).id}).select('-password')
+            if(def_user){
+                res.status(200).send({ redirect: 'home', user: def_user })
+            }
+            else{
+                res.clearCookie('session_token')
+                res.sendStatus(403)
+            }
+            
         }
         catch (e) {
             console.log(e)
