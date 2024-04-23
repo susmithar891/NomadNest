@@ -3,12 +3,12 @@ import ReactPannellum, { getConfig } from "react-pannellum";
 import { useLocation, useParams } from 'react-router-dom'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import hotels from '../media/input.json'
 import { Navbar } from './Navbar'
-import '../styling/roompage.css'
+// import '../styling/roompage.module.css'
 import RatingBar from './RatingBar'
 import request from '../api/axios'
 import InputBox from './InputBox'
+import Slider from './Slider';
 // import CommentModel from './Profile/CommentModel';
 
 
@@ -24,8 +24,9 @@ const Roompage = (props) => {
 				console.log(err)
 			})
 	}
-
+	const location = useLocation()
 	const params = useParams()
+	console.log(params)
 	const hotelModel = {
 		"_id": "", // String
 		"hotelName": "", // String
@@ -74,7 +75,8 @@ const Roompage = (props) => {
 	const [maxAdult, setmaxAdult] = useState(0)
 	const [maxChild, setmaxChild] = useState(0)
 	const [totalPrice, settotalPrice] = useState(0)
-	const [roomPrev,setroomPrev] = useState("/room_prev.jpg")
+	const [roomPrev, setroomPrev] = useState("/room_prev.jpg")
+	const [prevImg, setprevImg] = useState()
 
 	const handleDateChange = (range) => {
 		const [startDate, endDate] = range;
@@ -245,8 +247,14 @@ const Roompage = (props) => {
 
 	const previewBox = useRef(null)
 
-	const toggleDialog = (e) => {
+	const toggleDialog = (e, roomPrev) => {
 		e.preventDefault()
+		console.log(roomPrev)
+		let imageToFetch = new Image();
+		console.log(previewBox.current)
+		// imageToFetch.src = roomPrev;
+		// setprevImg(imageToFetch)
+		// setroomPrev(roomPrev)
 		if (!previewBox.current) {
 			return;
 		}
@@ -277,23 +285,29 @@ const Roompage = (props) => {
 
 
 	return (
-		<>
+		<div className='bg-white'>
 			<Navbar profile={true} user={user} logout={logout} navigateTo={`/home/${params.id}`} />
 
-			<div className="container my-1 mb-3">
-				<div className="card">
-					<div className="row no-gutters">
-						<div className="col-lg-6">
-							<img src={require('../media/hotel2.jpeg')} className="card-img" alt="Oceanview Resort" />
+			{/* <div>Hotel {hotel.hotelName}</div> */}
+
+
+
+			{/* <div className="container mt-3 mb-3">
+				<div className="card" style={{ border: "none" }}>
+					<div className="d-flex justify-content-evenly">
+						<div className='card m-5' style={{ border: "none" }}>
+							<Slider images={hotel.images} />
 						</div>
-						<div className="col-lg-6">
+						<div className="w-50 mx-auto">
 							<div className="card-body">
-								<h3 className="card-title my-3">{hotel.hotelname}</h3>
+								<h3 className="card-title my-3">Hotel {hotel.hotelName}</h3>
 								<div className="card">
 									<div className="card-body">
-										<h5 className="card-title">Reserve Your Stay</h5>
+										<h5 className="d-flex justify-content-center">
+											<div className='pb-2'>Reserve Your Stay</div>
+										</h5>
 										<form>
-											<div className="row align-items-center">
+											<div className="align-items-center">
 												<InputBox label="Adults" state={adultsCount} stateFunc={setadultsCount} />
 												<InputBox label="Childs" state={childCount} stateFunc={setchildCount} />
 											</div>
@@ -308,6 +322,10 @@ const Roompage = (props) => {
 														startDate={startDate}
 														endDate={endDate}
 														selectsRange
+														// calendarPosition="right"
+														style={{
+															zIndex: 10
+														}}
 													/>
 												</div>
 												<button type="submit" className="btn btn-primary mt-3" onClick={handleCheck}>Check avaliablity</button>
@@ -319,7 +337,98 @@ const Roompage = (props) => {
 						</div>
 					</div>
 				</div>
+			</div> */}
+			{/* <div className='d-flex'>
+
+
+				<div className='card m-5 col-lg-6 border' style={{ border: "none" }}>
+					<Slider images={hotel.images} />
+				</div>
+				<div className="card m-2">
+					<div className="card-body">
+						<h5 className="d-flex justify-content-center">
+							<div className='pb-2'>Reserve Your Stay</div>
+						</h5>
+						<form>
+							<div className="align-items-center">
+								<InputBox label="Adults" state={adultsCount} stateFunc={setadultsCount} />
+								<InputBox label="Childs" state={childCount} stateFunc={setchildCount} />
+							</div>
+
+							<div className="row mt-3">
+								<div className='mx-auto w-75'>
+									<label className='m-3'>Pick In and Out Dates</label>
+									<DatePicker
+										className='form-control'
+										selected={startDate}
+										onChange={handleDateChange}
+										startDate={startDate}
+										endDate={endDate}
+										selectsRange
+										// calendarPosition="right"
+										style={{
+											zIndex: 10
+										}}
+									/>
+								</div>
+								<button type="submit" className="btn btn-primary mt-3" onClick={handleCheck}>Check availability</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div> */}
+			<div className="container mt-3 mb-3">
+					<div className="row">
+						<div className="col-lg-6 mt-4">
+							<div className='card mt-5' style={{border : "none"}}>
+								<Slider images={hotel.images} />
+							</div>
+						</div>
+						<div className="col-lg-6">
+							<div className="card-body">
+								<div className='d-flex justify-content-center'>
+									<h3 className="card-title my-3">Hotel {hotel.hotelName}</h3>
+								</div>
+								<div className="card">
+									<div className="card-body">
+										<h5 className="d-flex justify-content-center">
+											<div className='pb-2'>Reserve Your Stay</div>
+										</h5>
+										<form>
+											<div className="align-items-center">
+												<InputBox label="Adults" state={adultsCount} stateFunc={setadultsCount} />
+												<InputBox label="Childs" state={childCount} stateFunc={setchildCount} />
+											</div>
+
+											<div className="row mt-3">
+												<div className='mx-auto w-75'>
+													<label className='m-3'>Pick In and Out Dates</label>
+													<DatePicker
+														className='form-control'
+														selected={startDate}
+														onChange={handleDateChange}
+														startDate={startDate}
+														endDate={endDate}
+														selectsRange
+														// calendarPosition="right"
+														style={{
+															zIndex: 10
+														}}
+													/>
+												</div>
+												<button type="submit" className="btn btn-primary mt-3" onClick={handleCheck}>Check availability</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+				</div>
 			</div>
+
+
+
+
 
 			<div className="row m-auto">
 				{roomType.map((room, index) => (
@@ -338,12 +447,12 @@ const Roompage = (props) => {
 										Rooms
 									</label>
 									<div className="input-group">
-										<button className='incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, false, -1)}>−</button>
-										<input type="text" className="form-control text-center" value={roomCount[index]} />
-										<button className='incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, true, room.rooms.length)}>+</button>
+										<button className='btn btn-info incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, false, -1)}>−</button>
+										<input type="text" className="form-control text-center" value={roomCount[index]} readOnly={true} />
+										<button className='btn btn-info incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, true, room.rooms.length)}>+</button>
 									</div>
 									<div className='container m-3 input-group'>
-										<button className='btn btn-primary' onClick={toggleDialog}>Room preview</button>
+										<button className='btn btn-primary' onClick={(e) => { toggleDialog(e, room.roomPrev) }}>Room preview</button>
 									</div>
 								</div>
 							</div>
@@ -359,7 +468,7 @@ const Roompage = (props) => {
 						sceneId="firstScene"
 						imageSource={roomPrev}
 						config={config}
-						autoLoad = {true}
+						autoLoad={true}
 					/>
 				</div>
 
@@ -373,7 +482,7 @@ const Roompage = (props) => {
 					<label className="d-flex align-items-center m-4">
 						Total Price
 					</label>
-					<input type="text" className='text-center' value={totalPrice}></input>
+					<input type="text" className='text-center' value={totalPrice} readOnly={true}></input>
 				</div>
 				<button className='btn btn-primary' onClick={reserveRooms}>Reserve Rooms</button>
 			</div>
@@ -415,7 +524,7 @@ const Roompage = (props) => {
 
 
 
-		</>
+		</div>
 	)
 }
 
