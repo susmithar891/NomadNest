@@ -3,6 +3,8 @@ import request from '../../api/axios'
 import CommentModel from './CommentModel'
 
 const ReserveCard = (props) => {
+    let inDate = new Date(props.reserve.inDate)
+    inDate.setDate(inDate.getDate()-1)
     const handlePayment = async(e,reserveId) => {
         e.preventDefault()
         try{
@@ -37,10 +39,11 @@ const ReserveCard = (props) => {
 
                     {!props.reserve.isVerified &&
 
-                        <button type="button" className="btn btn-warning container m-2 " onClick={handleVerification}>
+                        <button type="button" className="btn btn-info container m-2 " onClick={handleVerification}>
                             Verify
                         </button>
                     }
+                    {new Date(Date.now()) < inDate && <button className='btn btn-warning container m-2 '>Cancel</button>}
                     {/* {props.reserve.isPaid && */}
 
                         <button type="button" className="btn btn-success container m-2 " onClick={(e) => handlePayment(e,props.reserve.id)}>
