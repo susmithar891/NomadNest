@@ -29,6 +29,7 @@ const comment = require('./models/comment.model')
 const booking = require('./models/bookings.model')
 const reserve = require('./models/reserve.model')
 const otp = require('./models/otp.model')
+const forgotPass = require('./models/passotp.model')
 const { accessSync } = require("fs")
 const { sendMail, sendOTP, sendPass } = require('./controllers/emailService')
 const genRandPass = require('./controllers/generatePass')
@@ -926,6 +927,85 @@ app.post('/api/reserving/cancel',async(req,res) => {
     res.sendStatus(200)
 
 })
+
+app.post('/api/forgotpass/sendotp',async(req,res) => {
+    const user_email = req.body.email;
+    const new_otp = generateOTP();
+    let checkaval_email;
+    try {
+        checkaval_email = await user.findOne({ email: user_email })
+    }
+    catch (e) {
+        return res.status(500).send(e)
+    }
+    if (!checkaval_email) {
+        return res.status(401).send({ "error": "Email is not registered" })
+    }
+    let findEntry
+    try {
+        findEntry = await forgotPass.findOne({ email: user_email });
+    }
+    catch (e) {
+        return res.status(500).send(e)
+    }
+    if (findEntry) {
+        const del_entry = await forgotPass.deleteMany({ email: user_email });
+    }
+    await sendOTP(user_email, new_otp)
+    const new_entry = await new forgotPass({ email: user_email, otp: new_otp });
+    await new_entry.save()
+    return res.sendStatus(200)
+})
+
+app.post('/api/forgotpass/verifyotp',async(req,res) => {
+    const user_otp = req.body.otp;
+    const user_email = req.body.email;
+    const new_pass = req.body.password
+    if (!user_otp || !user_email) {
+        return res.status(403).send({ "error": "required email and otp" })
+    }
+    let checkaval_email;
+    try {
+        checkaval_email = await user.findOne({ email: user_email })
+    }
+    catch (e) {
+        return res.status(500).send(e)
+    }
+    if (!checkaval_email) {
+        return res.status(401).send({ "error": "Email is not registered" })
+    }
+    try {
+        const findEntry = await forgotPass.findOne({ otp: user_otp, email: user_email })
+        if (findEntry) {
+            if(checkaval_email.password === new_pass){
+                return res.status(400).send({error : "new password can't be the same as your old password"})
+            }
+            await bcrypt.compare(new_pass, checkaval_email.password, async(err, resp) => {
+                if (err) {
+                    return res.sendStatus(400)
+                }
+                if (resp) {
+                    return res.status(400).send({error : "new password can't be the same as your old password"})
+                }
+                else {
+                    const salt = await bcrypt.genSalt();
+                    const hashedPass = await bcrypt.hash(new_pass, salt);
+                    checkaval_email.password = hashedPass
+                    await checkaval_email.save()
+                    const delEntry = await forgotPass.deleteMany({ email: user_email })
+                    return res.sendStatus(200)
+                }
+            })
+        }
+        else {
+            return res.sendStatus(403)
+        }
+    }
+    catch (e) {
+        return res.status(500).send(e)
+    }
+})
+
 
 
 app.listen(port, () => {

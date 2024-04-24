@@ -19,7 +19,6 @@ const Login = () => {
 	const [otp,setotp] = useState("")
 	const [isVerified,setisVerified] = useState(false)
 	const [password,setpassword] = useState("")
-	const [passChanged,setpassChanged] = useState(false)
 
 
 	const handleSubmit = async (e) => {
@@ -49,19 +48,32 @@ const Login = () => {
 
 	const sendOTP = async (e) => {
 		e.preventDefault()
-		setsendotp(true)
-	}
-
-	const verifyOTP = async (e) => {
-		e.preventDefault()
-		setisVerified(true)
-	}
-
-	const chanagePassword = async(e) => {
-		e.preventDefault()
-		setpassChanged(true)
+		setotp("")
+		setpassword("")
 		setisVerified(false)
-		setsendotp(false)
+		try{
+			const res = await request.post('/api/forgotpass/sendotp',{email : regEmail})
+			setsendotp(true)
+
+		}catch(e){
+			console.log(e)
+		}
+		
+	}
+
+	const changePassword = async(e) => {
+		e.preventDefault()
+		try{
+			const res = await request.post('/api/forgotpass/verifyotp',{email : regEmail,otp,password})
+			setisVerified(true)
+			setsendotp(false)
+			setregEmail("")
+			setotp("")
+			setpassword("")
+		}catch(e){
+			console.log(e)
+		}
+		
 	}
 
 	useEffect(() => {
@@ -113,7 +125,7 @@ const Login = () => {
 
 							<div className="col-lg-8">
 								<h2 className="fw-bold mb-3">Forgot Password</h2>
-								{passChanged && <div className="container mt-2 mb-3" style={{color : "green"}}>Your password has been changed</div>}
+								{isVerified && <div className="container mt-2 mb-3" style={{color : "green"}}>Your password has been changed</div>}
 								<form>
 									<div className="row">
 										<label className="col my-auto w-25" htmlFor="regemail">Email address</label>
@@ -129,21 +141,18 @@ const Login = () => {
 												Enter OTP
 											</label>
 											<input type="text"  className="form-control m-2 col" required value={otp} onChange={(e) => { setotp(e.target.value) }}  />
-											<button type='submit' className='btn btn-primary text-nowrap col' onClick={verifyOTP}>verify OTP</button>
+											{/* <button type='submit' className='btn btn-primary text-nowrap col' onClick={verifyOTP}>verify OTP</button> */}
 										</div>
+										<div className='row'>
+											<label className="col my-auto w-25" htmlFor="email">
+												Enter new password
+											</label>
+											<input type="password"  className="form-control m-2 col" value={password} required onChange={(e) => { setpassword(e.target.value) }}  />
+										
+									</div>
+									<button type='submit' className='btn btn-primary col text-nowrap' onClick={changePassword}>verify OTP</button>
 									</form>
 								}
-								{isVerified &&
-								<form className='mt-2'>
-									<div className='row'>
-										<label className="col my-auto w-25" htmlFor="email">
-											Enter new password
-										</label>
-										<input type="password"  className="form-control m-2 col" value={password} required onChange={(e) => { setpassword(e.target.value) }}  />
-										<button type='submit' className='btn btn-primary col text-nowrap' onClick={chanagePassword}>submit</button>
-									</div>
-								</form>}
-
 							</div>
 						</div>
 					</div>
