@@ -102,8 +102,8 @@ export const Homepage = () => {
             <div className=' my-3 w-75 mx-auto'>
                     <div className="">
                         <div className='mx-1 p-1'>Location</div>
-                        <select className="form-select p-3 max-height-30 overflow-auto" required onChange={(e) => select_val_change(e, 1)}>
-                            <option className="m-2" value ="" disabled selected>Select</option>
+                        <select className="form-select p-3 max-height-30 overflow-auto" required value={locFilter} onChange={(e) => select_val_change(e, 1)}>
+                            <option className="m-2" value ="" >show all</option>
                             {locations.map((loc, index) => {
                                 return <option className="m-2" value={loc} key={index}>{loc}</option>
                             })}
