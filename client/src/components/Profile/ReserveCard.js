@@ -23,9 +23,11 @@ const ReserveCard = (props) => {
             <div className="card-body d-flex">
                 <div className='container'>
                     <h5 className="card-title">Hotel Booking Details</h5>
-                    <p className="card-text">Hotel ID: {props.reserve.hotelId}</p>
+                    <p className="card-text">Hotel Name: {props.reserve.hotelName}</p>
                     <p className="card-text">Check-in Date: {props.reserve.inDate}</p>
                     <p className="card-text">Check-out Date: {props.reserve.outDate}</p>
+                    {/* <p className="card-text">Check-in Date: {Date(props.reserve.inDate).toLocaleString('en-US',{timeZone : 'UTC'}).split("GMT")[0].trim()}</p>
+                    <p className="card-text">Check-out Date: {Date(props.reserve.outDate).toLocaleString('en-US',{timeZone : 'UTC'}).split("GMT")[0].trim()}</p> */}
                     <p className="card-text">Adults: {props.reserve.adults}</p>
                     <p className="card-text">Children: {props.reserve.children}</p>
                     <p className="card-text">Price: ${props.reserve.price}</p>

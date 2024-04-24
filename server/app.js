@@ -654,6 +654,9 @@ app.post('/api/data', async (req, res) => {
             const fetch_rooms = await room.find({ hotelId: req.body.hotelId, roomType: rt.roomType })
             const aval_rooms = await fetch_rooms.filter((room) => {
                 const aval = room.reservedDates.reduce((acc, reservation) => {
+                    // if(acc && (dates.in_date <= reservation.in_date || dates.out_date >= reservation.out_date)){
+                    //     console.log(reservation.in_date," ",reservation.out_date)
+                    // }
                     return acc && (new Date(req.body.outDate) <= reservation.in_date || new Date(req.body.inDate) >= reservation.out_date);
                 }, true);
                 return aval;
@@ -681,15 +684,22 @@ app.post('/api/:id/reserve', async (req, res) => {
     if (!def_user) {
         res.status(401).send("Unauthoriazed")
     }
+    let user_det
+    try {
+        user_det = await user.findOne({ _id: def_user.id })
+    } catch (e) {
+        return res.status(500).send(e)
+    }
     let total_price = 0
-    const dates = { in_date: req.body.inDate, out_date: req.body.outDate }
-    const curr_hotel = await hotel.findOne({ _id: req.params.id })
+    const dates = { in_date: new Date(req.body.inDate), out_date: new Date(req.body.outDate) }
 
+
+    const curr_hotel = await hotel.findOne({ _id: req.params.id })
     await Promise.all(Object.entries(req.body.reserve).map(async ([key, value]) => {
         const fetch_rooms = await room.find({ hotelId: req.params.id, roomType: key })
         let aval_rooms = await fetch_rooms.filter((room) => {
             const aval = room.reservedDates.reduce((acc, reservation) => {
-                return acc && (new Date(req.body.outDate) <= reservation.in_date || new Date(req.body.inDate) >= reservation.out_date);
+                return acc && (dates.in_date <= reservation.in_date || dates.out_date >= reservation.out_date);
             }, true);
             return aval;
         });
@@ -722,9 +732,9 @@ app.post('/api/:id/reserve', async (req, res) => {
     }))
 
     const randomPass = genRandPass(8)
-    const reser = await new reserve({ hotelId: req.params.id, password: randomPass, reservedRoomIds: reserved_rooms, userId: def_user.id, adults: req.body.totalAdult, children: req.body.totalChild, price: total_price, inDate: req.body.inDate, outDate: req.body.outDate })
+    const reser = await new reserve({ hotelId: req.params.id,hotelName : curr_hotel.hotelName, password: randomPass, reservedRoomIds: reserved_rooms, userId: def_user.id, adults: req.body.totalAdult, children: req.body.totalChild, price: total_price, inDate: dates.in_date.toISOString(), outDate: dates.out_date.toISOString() })
     reser.save()
-    await sendMail("akhildekarla45@gmail.com", reser._id, roomNums, randomPass, total_price, curr_hotel.hotelName);
+    await sendMail(user_det.email, reser._id, roomNums, randomPass, total_price, curr_hotel.hotelName);
     res.send({ reserved_rooms, total_price })
 
 })
@@ -773,16 +783,17 @@ app.post('/api/user/rate', async (req, res) => {
         reservation = await reserve.findOne({ _id: new mongoose.Types.ObjectId(bookingId) , password : password,userId : def_user.id})
     }
     catch (e) {
-        console.log(e)
+        // console.log(e)
+        res.status(500).send(e)
     }
     if (!reservation) {
-        res.sendStatus(403)
+        return res.sendStatus(403)
     }
     console.log(reservation)
     const thatHotel = await hotel.findOne({_id : reservation.hotelId})
     console.log(thatHotel)
     if(!thatHotel){
-        res.status(400).send({"error" : "Invalid hotel Id"})
+        return res.status(400).send({"error" : "Invalid hotel Id"})
     }
     const new_comment = await new comment({ hotelId: reservation.hotelId, userId: def_user.id, rating: rating, text: text })
     await new_comment.save()

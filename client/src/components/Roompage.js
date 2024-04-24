@@ -155,7 +155,13 @@ const Roompage = (props) => {
 
 
 	const getData = async () => {
-		request.post(`/api/data`, { hotelId: params.id, inDate: startDate, outDate: endDate })
+		let sDate = new Date(startDate.toISOString())
+		let eDate = new Date(endDate.toISOString())
+		sDate = new Date(sDate.setDate(sDate.getDate()+1)).toISOString()
+		eDate = new Date(eDate.setDate(eDate.getDate()+1)).toISOString()
+		console.log(sDate," ",eDate)
+		request.post(`/api/data`, { hotelId: params.id, inDate: sDate, outDate: eDate })
+		
 			.then((res) => {
 				setroomType(roomType => roomType.map((rt) => {
 					if (res.data[rt.roomType]) {
@@ -204,10 +210,15 @@ const Roompage = (props) => {
 		}
 		try {
 			if (reserve && Object.keys(reserve).length > 0) {
+				let sDate = new Date(startDate.toISOString())
+				let eDate = new Date(endDate.toISOString())
+				sDate = new Date(sDate.setDate(sDate.getDate()+1)).toISOString()
+				eDate = new Date(eDate.setDate(eDate.getDate()+1)).toISOString()
+				console.log(sDate," ",eDate)
 				const res = await request.post(`/api/${params.id}/reserve`, {
 					reserve,
-					inDate: startDate,
-					outDate: endDate,
+					inDate: sDate,
+					outDate: eDate,
 					totalAdult: adultsCount,
 					totalChild: childCount
 				});
@@ -355,12 +366,12 @@ const Roompage = (props) => {
 										Rooms
 									</label>
 									<div className="input-group">
-										<button className='btn btn-outline-dark' type="button" onClick={(e) => handleRoomcountChange(e, index, false, -1)}>−</button>
+										<button className='btn btn-outline-dark' type="button" style={{zIndex : 0}} onClick={(e) => handleRoomcountChange(e, index, false, -1)}>−</button>
 										<input type="text" className="form-control text-center" value={roomCount[index]} readOnly={true} />
-										<button className='btn btn-outline-dark' type="button" onClick={(e) => handleRoomcountChange(e, index, true, room.rooms.length)}>+</button>
+										<button className='btn btn-outline-dark' type="button" style={{zIndex : 0}} onClick={(e) => handleRoomcountChange(e, index, true, room.rooms.length)}>+</button>
 									</div>
 									<div className='container m-3 input-group'>
-										<button className='btn btn-primary' onClick={(e) => { toggleDialog(e, room.roomPrev) }}>Room preview</button>
+										<button className='btn btn-primary' style={{zIndex : 0}} onClick={(e) => { toggleDialog(e, room.roomPrev) }}>Room preview</button>
 									</div>
 								</div>
 							</div>
@@ -418,7 +429,7 @@ const Roompage = (props) => {
 							<div className="card-header">
 								Comments
 							</div>
-							<ul className="list-group list-group-flush" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+							<ul className="list-group list-group-flush" style={{ maxHeight: '300px', overflowY: 'auto' }}>
 								{comments.map((comment, index) => (
 									<li className="list-group-item d-flex" key={index}>
 										<img src={comment.user.profilePic} alt="User" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }} />
