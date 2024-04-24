@@ -6,8 +6,6 @@ import PropTypes from 'prop-types'
 
 
 const Navbar = (props) => {
-    // console.log(`props.user.profilePic : `,props.user.profilePic)
-    // console.log(props.user.profilePic)
 
 
     return (
