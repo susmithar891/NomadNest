@@ -11,19 +11,12 @@ const commentSchema = mongoose.Schema({
         ref : 'user',
         requried : true
     },
-    firstName : {
-        type : String
-    },
-    lastName : {
-        type : String
-    },
     rating : {
         type : Number,
         required : true
     },
     text : {
         type : String,
-        // maxLength : 
         requried : true
     }
 

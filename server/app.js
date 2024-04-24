@@ -7,7 +7,7 @@ const cors = require('cors')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookieparser = require('cookie-parser')
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const _ = require("lodash")
 const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY)
 const { jwtDecode } = require("jwt-decode");
@@ -533,7 +533,7 @@ app.post('/api/home/data', async (req, res) => {
     let pageData = []
     if (loc === "") {
         try {
-            const hotelsCount = await hotel.countDocuments({ minPrice: { $lt: maxP }, MaxPrice: { $gt: minP } })
+            const hotelsCount = await hotel.countDocuments({ minPrice: { $lt: maxP }, maxPrice: { $gt: minP } })
             pageCount = Math.ceil(hotelsCount / maxLimit);
         }
         catch (e) {
@@ -541,7 +541,7 @@ app.post('/api/home/data', async (req, res) => {
         }
 
         try {
-            pageData = await hotel.find({ minPrice: { $lt: maxP }, MaxPrice: { $gt: minP } }).skip(pageStart).limit(maxLimit)
+            pageData = await hotel.find({ minPrice: { $lt: maxP }, maxPrice: { $gt: minP } }).skip(pageStart).limit(maxLimit)
         } catch (e) {
             console.log(e)
             res.status(500).send(err)
@@ -549,7 +549,7 @@ app.post('/api/home/data', async (req, res) => {
     }
     else {
         try {
-            const hotelsCount = await hotel.countDocuments({ location: loc, minPrice: { $lt: maxP }, MaxPrice: { $gt: minP } })
+            const hotelsCount = await hotel.countDocuments({ location: loc, minPrice: { $lt: maxP }, maxPrice: { $gt: minP } })
             pageCount = Math.ceil(hotelsCount / maxLimit);
         }
         catch (e) {
@@ -558,7 +558,7 @@ app.post('/api/home/data', async (req, res) => {
         }
 
         try {
-            pageData = await hotel.find({ location: loc, minPrice: { $lt: maxP }, MaxPrice: { $gt: minP } }).skip(pageStart).limit(maxLimit)
+            pageData = await hotel.find({ location: loc, minPrice: { $lt: maxP }, maxPrice: { $gt: minP } }).skip(pageStart).limit(maxLimit)
         } catch (e) {
             console.log(e)
             res.status(500).send(e)
@@ -593,23 +593,26 @@ app.post('/api/hotel/:id', async (req, res) => {
 
     let comments = []
 
-    // try{
-    //     comments = await comment.find({hotelId : req.params.id})
-    // }
-    // catch(e){
-    //     console.log(e)
-    //     res.status(500).send(e)
-    // }
-    // comments.forEach(async (element) => {
-    //     try{
-    //         let eachUser = await user.findOne({_id: element.userId }).select('-password -updatedAt -email -createdAt -__v -_id')
-    //         element["user"] = eachUser
-    //     }
-    //     catch(e){
-    //         console.log(e)
-    //     }
+    try{
+        comments = await comment.find({hotelId : req.params.id})
+    }
+    catch(e){
+        console.log(e)
+        res.status(500).send(e)
+    }
+    const comms = await Promise.all(comments.map(async (element) => {
+        try{
+            let eachUser = await user.findOne({_id: element.userId }).select('-password -updatedAt -email -createdAt -__v -_id')
+            // element["user"] = eachUser
+            // console.log(element)
+            const com = {...element._doc,user:eachUser}
+            return com
+        }
+        catch(e){
+            console.log(e)
+        }
 
-    // });
+    }));
 
     let roomtypes = []
     try {
@@ -620,16 +623,6 @@ app.post('/api/hotel/:id', async (req, res) => {
         res.status(500).send(e)
     }
 
-    // const rooms = await Promise.all(roomtypes.map(async (ele) => {
-    //     try {
-    //         const rooms = await room.find({ hotelId: req.params.id, roomType: ele.roomType });
-    //         return { ...ele, rooms };
-    //     } catch (e) {
-    //         console.log(e);
-    //         return ele; // Return the original element if an error occurs
-    //     }
-    // }));
-
     try {
         let user_det = null
         if (def_user) {
@@ -638,7 +631,7 @@ app.post('/api/hotel/:id', async (req, res) => {
         const qunt = {
             username: user_det,
             data: hotelData,
-            comments: comments,
+            comments: comms,
             roomtypes: roomtypes
         }
 
@@ -775,21 +768,28 @@ app.post('/api/user/rate', async (req, res) => {
     const password = req.body.password;
     const rating = req.body.rating;
     const text = req.body.comment;
+    let reservation
     try {
-        const reservation = await reserve.findOne({ _id: bookingId })
-        if (!reservation) {
-            res.sendStatus(403)
-        }
-        if (reservation.password !== password) {
-            res.sendStatus(401)
-        }
-        const new_comment = await new comment({ hotelId: reservation.hotelId, userId: def_user.id, rating: rating, text: text })
-        new_comment.save()
-        res.sendStatus(200)
+        reservation = await reserve.findOne({ _id: new mongoose.Types.ObjectId(bookingId) , password : password,userId : def_user.id})
     }
     catch (e) {
         console.log(e)
     }
+    if (!reservation) {
+        res.sendStatus(403)
+    }
+    console.log(reservation)
+    const thatHotel = await hotel.findOne({_id : reservation.hotelId})
+    console.log(thatHotel)
+    if(!thatHotel){
+        res.status(400).send({"error" : "Invalid hotel Id"})
+    }
+    const new_comment = await new comment({ hotelId: reservation.hotelId, userId: def_user.id, rating: rating, text: text })
+    await new_comment.save()
+    thatHotel.ratings[rating] += 1
+    thatHotel.save()
+    res.sendStatus(200)
+    
 
 
 })

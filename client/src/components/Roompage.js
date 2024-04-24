@@ -13,7 +13,6 @@ import Slider from './Slider';
 
 
 const Roompage = (props) => {
-	// const location = useLocation()
 	const logout = async () => {
 		request.post('/api/logout')
 			.then(() => {
@@ -132,6 +131,7 @@ const Roompage = (props) => {
 				hotelModel.MaxPrice = res.data.data.MaxPrice;
 				const maxRat = Math.max(...Object.values(hotel.ratings).map(Number));
 				setmaxRating(maxRat + Math.ceil(maxRat * 30 / 100))
+				setComments([...res.data.comments])
 				setUser(res.data.username)
 				let roomtypesData = res.data.roomtypes.map((ele) => {
 					return { ...ele, "rooms": [] }
@@ -285,98 +285,10 @@ const Roompage = (props) => {
 
 
 	return (
+
 		<div className='bg-white'>
 			<Navbar profile={true} user={user} logout={logout} navigateTo={`/home/${params.id}`} />
 
-			{/* <div>Hotel {hotel.hotelName}</div> */}
-
-
-
-			{/* <div className="container mt-3 mb-3">
-				<div className="card" style={{ border: "none" }}>
-					<div className="d-flex justify-content-evenly">
-						<div className='card m-5' style={{ border: "none" }}>
-							<Slider images={hotel.images} />
-						</div>
-						<div className="w-50 mx-auto">
-							<div className="card-body">
-								<h3 className="card-title my-3">Hotel {hotel.hotelName}</h3>
-								<div className="card">
-									<div className="card-body">
-										<h5 className="d-flex justify-content-center">
-											<div className='pb-2'>Reserve Your Stay</div>
-										</h5>
-										<form>
-											<div className="align-items-center">
-												<InputBox label="Adults" state={adultsCount} stateFunc={setadultsCount} />
-												<InputBox label="Childs" state={childCount} stateFunc={setchildCount} />
-											</div>
-
-											<div className="row mt-3">
-												<div className='mx-auto w-75'>
-													<label className='m-3'>Pick In and Out Dates</label>
-													<DatePicker
-														className='form-control'
-														selected={startDate}
-														onChange={handleDateChange}
-														startDate={startDate}
-														endDate={endDate}
-														selectsRange
-														// calendarPosition="right"
-														style={{
-															zIndex: 10
-														}}
-													/>
-												</div>
-												<button type="submit" className="btn btn-primary mt-3" onClick={handleCheck}>Check avaliablity</button>
-											</div>
-										</form>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div> */}
-			{/* <div className='d-flex'>
-
-
-				<div className='card m-5 col-lg-6 border' style={{ border: "none" }}>
-					<Slider images={hotel.images} />
-				</div>
-				<div className="card m-2">
-					<div className="card-body">
-						<h5 className="d-flex justify-content-center">
-							<div className='pb-2'>Reserve Your Stay</div>
-						</h5>
-						<form>
-							<div className="align-items-center">
-								<InputBox label="Adults" state={adultsCount} stateFunc={setadultsCount} />
-								<InputBox label="Childs" state={childCount} stateFunc={setchildCount} />
-							</div>
-
-							<div className="row mt-3">
-								<div className='mx-auto w-75'>
-									<label className='m-3'>Pick In and Out Dates</label>
-									<DatePicker
-										className='form-control'
-										selected={startDate}
-										onChange={handleDateChange}
-										startDate={startDate}
-										endDate={endDate}
-										selectsRange
-										// calendarPosition="right"
-										style={{
-											zIndex: 10
-										}}
-									/>
-								</div>
-								<button type="submit" className="btn btn-primary mt-3" onClick={handleCheck}>Check availability</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div> */}
 			<div className="container mt-3 mb-3">
 					<div className="row">
 						<div className="col-lg-6 mt-4">
@@ -387,7 +299,7 @@ const Roompage = (props) => {
 						<div className="col-lg-6">
 							<div className="card-body">
 								<div className='d-flex justify-content-center'>
-									<h3 className="card-title my-3">Hotel {hotel.hotelName}</h3>
+									<h3 className="card-title my-3">{hotel.hotelName}</h3>
 								</div>
 								<div className="card">
 									<div className="card-body">
@@ -426,10 +338,6 @@ const Roompage = (props) => {
 				</div>
 			</div>
 
-
-
-
-
 			<div className="row m-auto">
 				{roomType.map((room, index) => (
 					<div className="col-lg-4 mb-4" key={index}>
@@ -447,9 +355,9 @@ const Roompage = (props) => {
 										Rooms
 									</label>
 									<div className="input-group">
-										<button className='btn btn-info incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, false, -1)}>−</button>
+										<button className='btn btn-outline-dark' type="button" onClick={(e) => handleRoomcountChange(e, index, false, -1)}>−</button>
 										<input type="text" className="form-control text-center" value={roomCount[index]} readOnly={true} />
-										<button className='btn btn-info incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, true, room.rooms.length)}>+</button>
+										<button className='btn btn-outline-dark' type="button" onClick={(e) => handleRoomcountChange(e, index, true, room.rooms.length)}>+</button>
 									</div>
 									<div className='container m-3 input-group'>
 										<button className='btn btn-primary' onClick={(e) => { toggleDialog(e, room.roomPrev) }}>Room preview</button>
@@ -511,20 +419,29 @@ const Roompage = (props) => {
 								Comments
 							</div>
 							<ul className="list-group list-group-flush" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-
+								{comments.map((comment, index) => (
+									<li className="list-group-item d-flex" key={index}>
+										<img src={comment.user.profilePic} alt="User" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }} />
+										<div className='container'>
+											<div>
+												<strong>{comment.user.firstName}</strong>
+											</div>
+											<div className='container'>
+												<p>{comment.text}</p>
+											</div>
+										</div>
+									</li>
+								))}
 							</ul>
 						</div>
-						{/* <div className='d-flex justify-content-end m-3'>
-							<CommentModel/>
-						</div> */}
+						
 					</div>
 
 				</div>
 			</div>
 
-
-
 		</div>
+
 	)
 }
 

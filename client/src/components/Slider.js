@@ -32,9 +32,9 @@ const Slider = (props) => {
                 modules={[EffectCoverflow, Pagination, Navigation]}
                 className="swiper_container m-1 row"
             >
-                {props.images.map((img) => {
+                {props.images.map((img,index) => {
                     return(
-                    <SwiperSlide className='col'>
+                    <SwiperSlide key={index} className='col'>
                         <img src={img} className='rounded' alt="slide_image" style={{
                             height : 350+'px',
                         }}/>

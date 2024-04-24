@@ -60,6 +60,10 @@ const reserveSchema = mongoose.Schema({
     bookingId : {
         type: String,
         ref : 'booking',
+    },
+    hotelName : {
+        type : String,
+        required : true
     }
 
 },{timestamps : true})
