@@ -868,6 +868,65 @@ app.post('/api/User/uploadPic', multer.single('profile'), async (req, res) => {
     }
 })
 
+app.post('/api/reserving/cancel',async(req,res) => {
+    const reserveId = req.body.reserveId
+    let def_user;
+    if (req.cookies) {
+        def_user = verifyUser(req.cookies.session_token)
+    }
+    if (!def_user) {
+        res.sendStatus(403)
+    }
+    let user_det
+    try {
+        user_det = await user.findOne({ _id: def_user.id })
+    } catch (e) {
+        res.status(500).send(e)
+    }
+    if(!user_det){
+        res.sendStatus(403)
+    }
+
+    let reservation
+    try{
+        reservation = await reserve.findOne({_id : reserveId,userId : user_det._id})
+        // console.log(reservation)
+    }catch(e){
+        res.status(500).send(e)
+    }
+
+    if(!reservation){
+        res.status(400).send({error : "no such reservation"})
+    }
+
+    if(reservation.inDate <= new Date(Date.now())){
+        res.status(400).send({error : "you can't cancel this reservation"})
+    }
+
+    reservation.reservedRoomIds.forEach(async(reser) => {
+        let findRoom
+        try{            
+            findRoom = await room.findOne({_id : reser.roomID})
+            const newresDates = findRoom.reservedDates.filter((dates) => {
+                console.log((dates.in_date).toISOString() !== (reservation.inDate).toISOString() || dates.out_date.toISOString() !== reservation.outDate.toISOString())
+                return (dates.in_date.toISOString() !== reservation.inDate.toISOString() || dates.out_date.toISOString() !== reservation.outDate.toISOString())
+            })
+            console.log(newresDates)
+            findRoom.reservedDates = newresDates
+            console.log(findRoom)
+            await findRoom.save()
+        }
+        catch(e){
+            console.log(e)
+            res.status(500).send(e)
+        }
+    })
+    reservation.isCancelled = true;
+    await reservation.save();
+    res.sendStatus(200)
+
+})
+
 
 app.listen(port, () => {
     console.log(`server started at port ${port}`)
