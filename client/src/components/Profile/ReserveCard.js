@@ -49,7 +49,6 @@ const ReserveCard = (props) => {
                 </div>
                 {!props.reserve.isCancelled ?
                     <div className='container w-50 my-auto'>
-
                         {/* {!props.reserve.isVerified &&
 
                             <button type="button" className="btn btn-info container m-2 " onClick={handleVerification}>
@@ -57,16 +56,10 @@ const ReserveCard = (props) => {
                             </button>
                         } */}
                         {new Date(Date.now()) < inDate && <button className='btn btn-warning container m-2' onClick={handleCancel}>Cancel</button>}
-                        {/* {props.reserve.isPaid && */}
-
                         <button type="button" className="btn btn-success container m-2 " onClick={(e) => handlePayment(e, props.reserve.id)}>
                             Pay
                         </button>
-                        {new Date(Date.now()) > inDate && <CommentModel reserveId={props.reserve._id} />}
-                        
-
-
-                        {/* } */}
+                        {new Date(Date.now()) > inDate && <CommentModel reserveId={props.reserve._id} />}                    
                     </div> : 
                     <div className='container w-50 my-auto'>
                         <button disabled className='btn btn-outline container m-2' style={{color : "red"}}>Cancelled</button>
