@@ -142,7 +142,6 @@ const redirectLogin = (req, res, next) => {
 
 //api-endpoints
 app.get('/', async(req, res) => {
-    await sendOTP("akhildekarla45@gmail.com",123)
     res.status(200).send("hoi")
 })
 
