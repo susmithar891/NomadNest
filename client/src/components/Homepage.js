@@ -143,15 +143,15 @@ export const Homepage = () => {
                 ) : (
                     <nav aria-label="Page navigation example">
                         <ul className="pagination justify-content-center">
-                            <li className={`page-item ${page <= 1 ? 'disabled' : 'cursor-pointer'}`}>
+                            <li className={`page-item ${page <= 1 ? 'disabled' : 'cursor-pointer'}`} style={{"cursor" : "pointer"}}>
                                 <a className="page-link" onClick={() => getData(locFilter, page - 1, minPrice, maxPrice)} tabIndex="-1">Previous</a>
                             </li>
                             {[...Array(pageCount)].map((_, index) => (
-                                <li className={`pointer page-item ${index + 1 === page ? 'active' : ''}`} key={index}>
+                                <li className={`pointer page-item ${index + 1 === page ? 'active' : ''}`} key={index} style={{"cursor" : "pointer"}}>
                                     <a className="page-link" onClick={() => getData(locFilter, index + 1, minPrice, maxPrice)}>{index + 1}</a>
                                 </li>
                             ))}
-                            <li className={`page-item ${page >= pageCount ? 'disabled' : 'cursor-pointer'}`}>
+                            <li className={`page-item ${page >= pageCount ? 'disabled' : 'cursor-pointer'}`} style={{"cursor" : "pointer"}}>
                                 <a className="page-link" onClick={() => getData(locFilter, page + 1, minPrice, maxPrice)}>Next</a>
                             </li>
                         </ul>

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import request from '../../api/axios'
 
 const GeneralAccount = (props) => {
-	console.log(props.userState)
+	// console.log(props.userState)
 	const [profile, setprofile] = useState('')
 	const [firstnamechange, setfirstnamechange] = useState(false)
 	const [lastnamechange, setlastnamechange] = useState(false)
@@ -91,12 +91,14 @@ const GeneralAccount = (props) => {
 			setprofileLoading(true)
 			const res = await request.post('/api/User/uploadPic', formData);
 			if (res.status === 200) {
+				console.log(res)
 				props.userFunc({ ...props.userState, profilePic: res.data.profilePic })
 				setprofileLoading(false)
 			}
 			console.log(res)
 		} catch (e) {
 			console.log(e)
+			setprofileLoading(false)
 		}
 	}
 

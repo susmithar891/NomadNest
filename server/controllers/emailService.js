@@ -1,13 +1,27 @@
 const nodemailer = require("nodemailer")
 require('dotenv').config()
 
-var transporter = nodemailer.createTransport({
-    service: 'gmail',
+// var transporter = nodemailer.createTransport({
+//     service: 'gmail',
+//     auth: {
+//         user: process.env.EMAIL,
+//         pass: process.env.PASS
+//     }
+// });
+
+const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
-        user: process.env.EMAIL,
-        pass: process.env.PASS
+     type: 'OAuth2',
+     user: 'nomadnestservice@centered-oasis-418917.iam.gserviceaccount.com',  // Your email address
+     serviceClient: process.env.GOOGLE_OAUTH_CLIENT_ID,
+     privateKey: process.env.GOOGLE_OAUTH_private_key,
+     accessUrl: "https://www.googleapis.com/oauth2/v4/token"
     }
-});
+ })
+
 
 
 const sendMail = (to_user,reserveId, roomNums, password,totalPrice,hotelName) => {
