@@ -11,6 +11,10 @@ const reserveSchema = mongoose.Schema({
         ref : 'hotel',
         required : true
     },
+    isCancelled : {
+        type : Boolean,
+        default : false
+    },
     userId : {
         type : String,
         ref : 'user',
@@ -60,6 +64,10 @@ const reserveSchema = mongoose.Schema({
     bookingId : {
         type: String,
         ref : 'booking',
+    },
+    hotelName : {
+        type : String,
+        required : true
     }
 
 },{timestamps : true})

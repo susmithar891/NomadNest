@@ -11,6 +11,7 @@ const userSchema = mongoose.Schema({
     },
     profilePic :{
         type : String,
+        default : "/profilepicture.webp"
     },
     email :{
         type : String,

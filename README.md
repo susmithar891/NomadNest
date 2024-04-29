@@ -1,8 +1,7 @@
-# Nomad Nest
-
-NomadNest supports digital nomads by providing affordable and flexible housing options tailored to their needs.
 
 ## Run Locally
+
+Create a database in mongodb compass or mongodb atlas and add the data in server/dataPopulating folder 
 
 Clone the project
 
@@ -51,3 +50,4 @@ Start the react server
 ```bash
   npm start
 ```
+

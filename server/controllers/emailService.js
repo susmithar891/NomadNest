@@ -9,6 +9,20 @@ var transporter = nodemailer.createTransport({
     }
 });
 
+// const transporter = nodemailer.createTransport({
+//     host: 'smtp.gmail.com',
+//     port: 465,
+//     secure: true,
+//     auth: {
+//      type: 'OAuth2',
+//      user: 'nomadnestservice@centered-oasis-418917.iam.gserviceaccount.com',  // Your email address
+//      serviceClient: process.env.GOOGLE_OAUTH_CLIENT_ID,
+//      privateKey: process.env.GOOGLE_OAUTH_private_key,
+//      accessUrl: "https://www.googleapis.com/oauth2/v4/token"
+//     }
+//  })
+
+
 
 const sendMail = (to_user,reserveId, roomNums, password,totalPrice,hotelName) => {
     var mailOptions = {

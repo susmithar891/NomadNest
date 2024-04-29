@@ -1,2 +1,4 @@
 string.js
 google_oauth_secret.json
+gcp_key.json
+bucket_cors.json
