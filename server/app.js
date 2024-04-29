@@ -7,12 +7,10 @@ const cors = require('cors')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookieparser = require('cookie-parser')
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 const _ = require("lodash")
 const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY)
 const { jwtDecode } = require("jwt-decode");
-const { multer, bucket } = require('./controllers/gcpconnect')
-const crypto = require('crypto')
 
 
 
@@ -29,11 +27,9 @@ const comment = require('./models/comment.model')
 const booking = require('./models/bookings.model')
 const reserve = require('./models/reserve.model')
 const otp = require('./models/otp.model')
-const forgotPass = require('./models/passotp.model')
 const { accessSync } = require("fs")
-const { sendMail, sendOTP, sendPass } = require('./controllers/emailService')
+const { sendMail, sendOTP ,sendPass} = require('./controllers/emailService')
 const genRandPass = require('./controllers/generatePass')
-const { profile } = require("console")
 // const { toNamespacedPath } = require("path/win32")
 
 
@@ -89,33 +85,13 @@ function generateOTP() {
     return Math.floor(Math.random() * (899999) + 100000);
 }
 
-function generateRandomString(length) {
-    const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    var st = '';
-    for (let i = 0; i < length; i++) {
-        // Generate a random index to select a character from the charset
-        const randomIndex = crypto.randomInt(0, charset.length);
-        // Append the randomly selected character to the string
-        st += charset[randomIndex];
-    }
-
-    return st;
-}
-
 const redirectHome = async (req, res, next) => {
     if (req.cookies && req.cookies.session_token && verifyUser(req.cookies.session_token)) {
         // res.redirect('/home')
         // res.send({"msg" : "this is home"})
         try {
             let def_user = await user.findOne({ _id: verifyUser(req.cookies.session_token).id }).select('-password')
-            if (def_user) {
-                res.status(200).send({ redirect: 'home', user: def_user })
-            }
-            else {
-                res.clearCookie('session_token')
-                res.sendStatus(403)
-            }
-
+            res.status(200).send({ redirect: 'home', user: def_user })
         }
         catch (e) {
             console.log(e)
@@ -141,8 +117,8 @@ const redirectLogin = (req, res, next) => {
 }
 
 //api-endpoints
-app.get('/', async(req, res) => {
-    res.status(200).send("hoi")
+app.get('/', (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, 'models', 'hotels.json'))
 })
 
 app.post('/api/check', redirectHome, (req, res) => {
@@ -352,14 +328,14 @@ app.post('/api/change-pass', async (req, res) => {
     }
     let user_det = null
     if (def_user) {
-        try {
+        try{
             user_det = await user.findOne({ _id: def_user.id })
         }
-        catch (e) {
+        catch(e){
             return res.status(500).send(e)
         }
-        if (!user_det.password) {
-            return res.status(400).send({ "error": "incorrect password" })
+        if(!user_det.password){
+            return res.status(400).send({"error" : "incorrect password"})
         }
         await bcrypt.compare(req.body.prevPass, user_det.password, async (err, resp) => {
             if (err) {
@@ -373,7 +349,7 @@ app.post('/api/change-pass', async (req, res) => {
                     const hashedPass = await bcrypt.hash(req.body.newPass, salt);
 
                     user_det.password = hashedPass
-
+                    
                     await user_det.save()
                     return res.sendStatus(200)
 
@@ -384,7 +360,7 @@ app.post('/api/change-pass', async (req, res) => {
 
             }
             else {
-                return res.status(400).send({ "error": "incorrect password" })
+                return res.status(400).send({"error" : "incorrect password"})
             }
         })
     }
@@ -393,39 +369,39 @@ app.post('/api/change-pass', async (req, res) => {
     }
 })
 
-app.post('/api/forgot-pass', async (req, res) => {
+app.post('/api/forgot-pass',async(req,res) => {
     let def_user;
     if (req.cookies) {
         def_user = verifyUser(req.cookies.session_token)
     }
     let user_det = null
     if (def_user) {
-        try {
+        try{
             user_det = await user.findOne({ _id: def_user.id })
         }
-        catch (e) {
+        catch(e){
             return res.status(500).send(e)
         }
-        if (user_det.email !== req.body.email) {
-            return res.status(403).send({ "error": "wrong email" })
+        if(user_det.email !== req.body.email){
+            return res.status(403).send({"error" : "wrong email"})
         }
         const randomPass = genRandPass(8)
 
-        try {
+        try{
             const salt = await bcrypt.genSalt();
             const hashedPass = await bcrypt.hash(randomPass, salt);
             user_det.password = hashedPass;
             await user_det.save()
-            await sendPass(req.body.email, randomPass)
+            await sendPass(req.body.email,randomPass)
             return res.sendStatus(200)
         }
-        catch (e) {
+        catch(e){
             console.log(e)
             res.status(500).send(e)
-        }
+        }
 
 
-    }
+    }
 })
 
 app.post('/api/google/sign-in', redirectHome, async (req, res) => {
@@ -460,7 +436,6 @@ app.post('/api/google/sign-in', redirectHome, async (req, res) => {
     }
 
 })
-
 app.post('/api/logout', redirectLogin, (req, res) => {
     res.clearCookie('session_token');
     res.end()
@@ -534,7 +509,7 @@ app.post('/api/home/data', async (req, res) => {
     let pageData = []
     if (loc === "") {
         try {
-            const hotelsCount = await hotel.countDocuments({ minPrice: { $lt: maxP }, maxPrice: { $gt: minP } })
+            const hotelsCount = await hotel.countDocuments({ minPrice: { $lt: maxP }, MaxPrice: { $gt: minP } })
             pageCount = Math.ceil(hotelsCount / maxLimit);
         }
         catch (e) {
@@ -542,7 +517,7 @@ app.post('/api/home/data', async (req, res) => {
         }
 
         try {
-            pageData = await hotel.find({ minPrice: { $lt: maxP }, maxPrice: { $gt: minP } }).skip(pageStart).limit(maxLimit)
+            pageData = await hotel.find({ minPrice: { $lt: maxP }, MaxPrice: { $gt: minP } }).skip(pageStart).limit(maxLimit)
         } catch (e) {
             console.log(e)
             res.status(500).send(err)
@@ -550,7 +525,7 @@ app.post('/api/home/data', async (req, res) => {
     }
     else {
         try {
-            const hotelsCount = await hotel.countDocuments({ location: loc, minPrice: { $lt: maxP }, maxPrice: { $gt: minP } })
+            const hotelsCount = await hotel.countDocuments({ location: loc, minPrice: { $lt: maxP }, MaxPrice: { $gt: minP } })
             pageCount = Math.ceil(hotelsCount / maxLimit);
         }
         catch (e) {
@@ -559,7 +534,7 @@ app.post('/api/home/data', async (req, res) => {
         }
 
         try {
-            pageData = await hotel.find({ location: loc, minPrice: { $lt: maxP }, maxPrice: { $gt: minP } }).skip(pageStart).limit(maxLimit)
+            pageData = await hotel.find({ location: loc, minPrice: { $lt: maxP }, MaxPrice: { $gt: minP } }).skip(pageStart).limit(maxLimit)
         } catch (e) {
             console.log(e)
             res.status(500).send(e)
@@ -594,26 +569,23 @@ app.post('/api/hotel/:id', async (req, res) => {
 
     let comments = []
 
-    try {
-        comments = await comment.find({ hotelId: req.params.id })
-    }
-    catch (e) {
-        console.log(e)
-        res.status(500).send(e)
-    }
-    const comms = await Promise.all(comments.map(async (element) => {
-        try {
-            let eachUser = await user.findOne({ _id: element.userId }).select('-password -updatedAt -email -createdAt -__v -_id')
-            // element["user"] = eachUser
-            // console.log(element)
-            const com = { ...element._doc, user: eachUser }
-            return com
-        }
-        catch (e) {
-            console.log(e)
-        }
+    // try{
+    //     comments = await comment.find({hotelId : req.params.id})
+    // }
+    // catch(e){
+    //     console.log(e)
+    //     res.status(500).send(e)
+    // }
+    // comments.forEach(async (element) => {
+    //     try{
+    //         let eachUser = await user.findOne({_id: element.userId }).select('-password -updatedAt -email -createdAt -__v -_id')
+    //         element["user"] = eachUser
+    //     }
+    //     catch(e){
+    //         console.log(e)
+    //     }
 
-    }));
+    // });
 
     let roomtypes = []
     try {
@@ -624,6 +596,16 @@ app.post('/api/hotel/:id', async (req, res) => {
         res.status(500).send(e)
     }
 
+    // const rooms = await Promise.all(roomtypes.map(async (ele) => {
+    //     try {
+    //         const rooms = await room.find({ hotelId: req.params.id, roomType: ele.roomType });
+    //         return { ...ele, rooms };
+    //     } catch (e) {
+    //         console.log(e);
+    //         return ele; // Return the original element if an error occurs
+    //     }
+    // }));
+
     try {
         let user_det = null
         if (def_user) {
@@ -632,7 +614,7 @@ app.post('/api/hotel/:id', async (req, res) => {
         const qunt = {
             username: user_det,
             data: hotelData,
-            comments: comms,
+            comments: comments,
             roomtypes: roomtypes
         }
 
@@ -655,9 +637,6 @@ app.post('/api/data', async (req, res) => {
             const fetch_rooms = await room.find({ hotelId: req.body.hotelId, roomType: rt.roomType })
             const aval_rooms = await fetch_rooms.filter((room) => {
                 const aval = room.reservedDates.reduce((acc, reservation) => {
-                    // if(acc && (dates.in_date <= reservation.in_date || dates.out_date >= reservation.out_date)){
-                    //     console.log(reservation.in_date," ",reservation.out_date)
-                    // }
                     return acc && (new Date(req.body.outDate) <= reservation.in_date || new Date(req.body.inDate) >= reservation.out_date);
                 }, true);
                 return aval;
@@ -675,6 +654,7 @@ app.post('/api/data', async (req, res) => {
     }
 })
 
+
 app.post('/api/:id/reserve', async (req, res) => {
     let reserved_rooms = []
     let roomNums = []
@@ -685,22 +665,15 @@ app.post('/api/:id/reserve', async (req, res) => {
     if (!def_user) {
         res.status(401).send("Unauthoriazed")
     }
-    let user_det
-    try {
-        user_det = await user.findOne({ _id: def_user.id })
-    } catch (e) {
-        return res.status(500).send(e)
-    }
     let total_price = 0
-    const dates = { in_date: new Date(req.body.inDate), out_date: new Date(req.body.outDate) }
-
-
+    const dates = { in_date: req.body.inDate, out_date: req.body.outDate }
     const curr_hotel = await hotel.findOne({ _id: req.params.id })
+
     await Promise.all(Object.entries(req.body.reserve).map(async ([key, value]) => {
         const fetch_rooms = await room.find({ hotelId: req.params.id, roomType: key })
         let aval_rooms = await fetch_rooms.filter((room) => {
             const aval = room.reservedDates.reduce((acc, reservation) => {
-                return acc && (dates.in_date <= reservation.in_date || dates.out_date >= reservation.out_date);
+                return acc && (new Date(req.body.outDate) <= reservation.in_date || new Date(req.body.inDate) >= reservation.out_date);
             }, true);
             return aval;
         });
@@ -733,12 +706,13 @@ app.post('/api/:id/reserve', async (req, res) => {
     }))
 
     const randomPass = genRandPass(8)
-    const reser = await new reserve({ hotelId: req.params.id, hotelName: curr_hotel.hotelName, password: randomPass, reservedRoomIds: reserved_rooms, userId: def_user.id, adults: req.body.totalAdult, children: req.body.totalChild, price: total_price, inDate: dates.in_date.toISOString(), outDate: dates.out_date.toISOString() })
+    const reser = await new reserve({ hotelId: req.params.id, password: randomPass, reservedRoomIds: reserved_rooms, userId: def_user.id, adults: req.body.totalAdult, children: req.body.totalChild, price: total_price, inDate: req.body.inDate, outDate: req.body.outDate })
     reser.save()
-    await sendMail(user_det.email, reser._id, roomNums, randomPass, total_price, curr_hotel.hotelName);
+    await sendMail("akhildekarla45@gmail.com", reser._id, roomNums, randomPass, total_price, curr_hotel.hotelName);
     res.send({ reserved_rooms, total_price })
 
 })
+
 
 app.post('/api/user/:id/reservings', async (req, res) => {
     try {
@@ -779,264 +753,33 @@ app.post('/api/user/rate', async (req, res) => {
     const password = req.body.password;
     const rating = req.body.rating;
     const text = req.body.comment;
-    let reservation
     try {
-        reservation = await reserve.findOne({ _id: new mongoose.Types.ObjectId(bookingId), password: password, userId: def_user.id })
-    }
-    catch (e) {
-        // console.log(e)
-        res.status(500).send(e)
-    }
-    if (!reservation) {
-        return res.sendStatus(403)
-    }
-    console.log(reservation)
-    const thatHotel = await hotel.findOne({ _id: reservation.hotelId })
-    console.log(thatHotel)
-    if (!thatHotel) {
-        return res.status(400).send({ "error": "Invalid hotel Id" })
-    }
-    const new_comment = await new comment({ hotelId: reservation.hotelId, userId: def_user.id, rating: rating, text: text })
-    await new_comment.save()
-    thatHotel.ratings[rating] += 1
-    thatHotel.save()
-    res.sendStatus(200)
-
-
-
-})
-
-app.get('/api/images', async (req, res) => {
-    const [files] = await bucket.getFiles();
-    const imageUrls = [files][0].map((ele) => {
-        filename = ele.parent.parent.apiEndpoint + '/' + ele.metadata.bucket + '/' + ele.metadata.name
-        return filename
-    })
-    res.send(imageUrls)
-})
-
-app.post('/api/User/uploadPic', multer.single('profile'), async (req, res) => {
-
-
-
-    let def_user;
-    if (req.cookies) {
-        def_user = verifyUser(req.cookies.session_token)
-    }
-    if (!def_user) {
-        res.sendStatus(403)
-    }
-    let user_det
-    try {
-        user_det = await user.findOne({ _id: def_user.id })
-    } catch (e) {
-        res.status(500).send(e)
-    }
-    if (req.file) {
-        const array_of_allowed_files = ['png', 'jpeg', 'jpg', 'gif'];
-        const array_of_allowed_file_types = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
-        const file_extension = req.file.originalname.slice(
-            ((req.file.originalname.lastIndexOf('.') - 1) >>> 0) + 2
-        );
-        if (!array_of_allowed_files.includes(file_extension) || !array_of_allowed_file_types.includes(req.file.mimetype)) {
-            return res.status(400).send({ error: 'Invalid file' });
+        const reservation = await reserve.findOne({ _id: bookingId })
+        if (!reservation) {
+            res.sendStatus(403)
         }
-    }
-    else {
-        return res.status(400).send({ error: "provide a image file to proceed" })
-    }
-    const randString = generateRandomString(32)
-    const profilepicname = user_det.firstName + "_" + randString
-    let blobstream
-    try {
-        const blob = bucket.file(`users/${profilepicname}`)
-        blobstream = await blob.createWriteStream();
+        if (reservation.password !== password) {
+            res.sendStatus(401)
+        }
+        const new_comment = await new comment({ hotelId: reservation.hotelId, userId: def_user._id, rating: rating, text: text })
+        new_comment.save()
+        res.sendStatus(200)
     }
     catch (e) {
         console.log(e)
-        res.status(500).send(e);
-    }
-    try {
-        blobstream.on('finish', async () => {            
-            user_det.profilePic = `https://storage.googleapis.com/nomadnest/users/${profilepicname}`
-            try {
-                await user_det.save()
-                res.status(200).send({ profilePic: `https://storage.googleapis.com/nomadnest/users/${profilepicname}` })
-            }
-            catch (e) {
-                res.status(500).send(e)
-            }
-
-        })
-        blobstream.end(req.file.buffer)
-    }catch(e){
-        res.status(500).send(e)
     }
 
-
-    // try {
-    //     if (req.file) {
-
-    //         
-    //         
-    //         blobstream.on('finish', async () => {
-    //             user_det.profilePic = `https://storage.googleapis.com/nomadnest/users/${profilepicname}`
-    //             try {
-    //                 await user_det.save()
-    //                 res.status(200).send({ profilePic: `https://storage.googleapis.com/nomadnest/users/${profilepicname}` })
-    //             }
-    //             catch (e) {
-    //                 res.status(500).send(e)
-    //             }
-
-    //         })
-    //         blobstream.end(req.file.buffer)
-    //     }
-    //     else {
-    //         res.staus(204).send({ msg: "provide a image file" })
-    //     }
-    // }
-    // catch (e) {
-    //     res.status(500).send(e)
-    // }
-})
-
-app.post('/api/reserving/cancel', async (req, res) => {
-    const reserveId = req.body.reserveId
-    let def_user;
-    if (req.cookies) {
-        def_user = verifyUser(req.cookies.session_token)
-    }
-    if (!def_user) {
-        res.sendStatus(403)
-    }
-    let user_det
-    try {
-        user_det = await user.findOne({ _id: def_user.id })
-    } catch (e) {
-        res.status(500).send(e)
-    }
-    if (!user_det) {
-        res.sendStatus(403)
-    }
-
-    let reservation
-    try {
-        reservation = await reserve.findOne({ _id: reserveId, userId: user_det._id })
-        // console.log(reservation)
-    } catch (e) {
-        res.status(500).send(e)
-    }
-
-    if (!reservation) {
-        res.status(400).send({ error: "no such reservation" })
-    }
-
-    if (reservation.inDate <= new Date(Date.now())) {
-        res.status(400).send({ error: "you can't cancel this reservation" })
-    }
-
-    reservation.reservedRoomIds.forEach(async (reser) => {
-        let findRoom
-        try {
-            findRoom = await room.findOne({ _id: reser.roomID })
-            const newresDates = findRoom.reservedDates.filter((dates) => {
-                console.log((dates.in_date).toISOString() !== (reservation.inDate).toISOString() || dates.out_date.toISOString() !== reservation.outDate.toISOString())
-                return (dates.in_date.toISOString() !== reservation.inDate.toISOString() || dates.out_date.toISOString() !== reservation.outDate.toISOString())
-            })
-            console.log(newresDates)
-            findRoom.reservedDates = newresDates
-            console.log(findRoom)
-            await findRoom.save()
-        }
-        catch (e) {
-            console.log(e)
-            res.status(500).send(e)
-        }
-    })
-    reservation.isCancelled = true;
-    await reservation.save();
-    res.sendStatus(200)
 
 })
 
-app.post('/api/forgotpass/sendotp', async (req, res) => {
-    const user_email = req.body.email;
-    const new_otp = generateOTP();
-    let checkaval_email;
-    try {
-        checkaval_email = await user.findOne({ email: user_email })
-    }
-    catch (e) {
-        return res.status(500).send(e)
-    }
-    if (!checkaval_email) {
-        return res.status(401).send({ "error": "Email is not registered" })
-    }
-    let findEntry
-    try {
-        findEntry = await forgotPass.findOne({ email: user_email });
-    }
-    catch (e) {
-        return res.status(500).send(e)
-    }
-    if (findEntry) {
-        const del_entry = await forgotPass.deleteMany({ email: user_email });
-    }
-    await sendOTP(user_email, new_otp)
-    const new_entry = await new forgotPass({ email: user_email, otp: new_otp });
-    await new_entry.save()
-    return res.sendStatus(200)
-})
 
-app.post('/api/forgotpass/verifyotp', async (req, res) => {
-    const user_otp = req.body.otp;
-    const user_email = req.body.email;
-    const new_pass = req.body.password
-    if (!user_otp || !user_email) {
-        return res.status(403).send({ "error": "required email and otp" })
-    }
-    let checkaval_email;
-    try {
-        checkaval_email = await user.findOne({ email: user_email })
-    }
-    catch (e) {
-        return res.status(500).send(e)
-    }
-    if (!checkaval_email) {
-        return res.status(401).send({ "error": "Email is not registered" })
-    }
-    try {
-        const findEntry = await forgotPass.findOne({ otp: user_otp, email: user_email })
-        if (findEntry) {
-            if (checkaval_email.password === new_pass) {
-                return res.status(400).send({ error: "new password can't be the same as your old password" })
-            }
-            await bcrypt.compare(new_pass, checkaval_email.password, async (err, resp) => {
-                if (err) {
-                    return res.sendStatus(400)
-                }
-                if (resp) {
-                    return res.status(400).send({ error: "new password can't be the same as your old password" })
-                }
-                else {
-                    const salt = await bcrypt.genSalt();
-                    const hashedPass = await bcrypt.hash(new_pass, salt);
-                    checkaval_email.password = hashedPass
-                    await checkaval_email.save()
-                    const delEntry = await forgotPass.deleteMany({ email: user_email })
-                    return res.sendStatus(200)
-                }
-            })
-        }
-        else {
-            return res.sendStatus(403)
-        }
-    }
-    catch (e) {
-        return res.status(500).send(e)
-    }
-})
+
+
+
+
+
+
+
 
 
 

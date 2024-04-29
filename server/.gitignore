@@ -1,11 +1,2 @@
 node_modules
 .env
-dataPopulating/scrape
-dataPopulating/data_hotels.js
-dataPopulating/data_rooms.js
-dataPopulating/data_roomtypes.js
-dataPopulating/find_min.js
-dataPopulating/roomType_fin.json
-dataPopulating/roomType_in.json
-dataPopulating/rooms_fin.json
-dataPopulating/hotels_fin.json

@@ -8,15 +8,8 @@
     "longitude": -74.006
   },
   "images": [
-    "https://storage.googleapis.com/nomadnest/hotels/Grand%20Hotel/SDQasQe7MQwOLYban6nlHiuhpPLVdhOa.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Grand%20Hotel/gMLkvDSmAtt9374kGoaXUdLXXhpIi87R.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Grand%20Hotel/7z1Yeb3VTSxwAkvNwsc5n8NaUDeYXh3p.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Grand%20Hotel/8mBfECJEdQlmtiKUt1BcIXGA2Pl9hnM2.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Grand%20Hotel/K4kttaMZ77twjoCnClgZLolzpRM2Iaeb.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Grand%20Hotel/i4ebPGNcF1Ealr6NPWcxTXL1KScOIjdm.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Grand%20Hotel/f7Z4JuT1gFH1wecugu4vYOBzdH1Wpxzu.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Grand%20Hotel/kiKOnZtpJqTZl6iC08DwBX7STyhGhFMC.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Grand%20Hotel/GT9PGyt8NEulWpv7kTLzg1BIla1RYLrd.jpg"
+    "https://example.com/image1.jpg",
+    "https://example.com/image2.jpg"
   ],
   "ratings": {
     "1": 20,
@@ -47,10 +40,7 @@
       }
     ],
     "email": "hotel1@example.com"
-  },
-  "hotelName": "Grand Hotel",
-  "minPrice": 25000,
-  "maxPrice": 55000
+  }
 },
 {
   "_id": {
@@ -62,15 +52,8 @@
     "longitude": -118.2437
   },
   "images": [
-    "https://storage.googleapis.com/nomadnest/hotels/Royal%20Palace/xnA2SFKn4EzrR53ZmR03kJSWzxTBdeVa.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Royal%20Palace/ISBKjIy7gOzc5NlSocfURfjAo9G8ul2Y.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Royal%20Palace/77UAH656slJujDVk9FlaOI12e30zcAhI.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Royal%20Palace/geTVsaDMFTVtgkulxz6dNlBXCDFyhKkp.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Royal%20Palace/BkLwCKF9tO8kOTzRD3w7EOhyOOOwDpNu.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Royal%20Palace/RkYpwLIDZIAaDafewjTmQap2wTmoFK4x.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Royal%20Palace/nBRY9NPwjXlPQa3tcNSZfN9vwpc7nkRr.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Royal%20Palace/JUK0Rf4W5O4qkspFHxCF9ItRLMO7DJ9Q.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Royal%20Palace/wChGwUu21Slb4n0rDw9FnTR8TEJuiLgE.jpg"
+    "https://example.com/image3.jpg",
+    "https://example.com/image4.jpg"
   ],
   "ratings": {
     "1": 30,
@@ -101,10 +84,7 @@
       }
     ],
     "email": "hotel2@example.com"
-  },
-  "hotelName": "Royal Palace",
-  "minPrice": 15000,
-  "maxPrice": 50000
+  }
 },
 {
   "_id": {
@@ -116,15 +96,8 @@
     "longitude": -0.1278
   },
   "images": [
-    "https://storage.googleapis.com/nomadnest/hotels/Sunset%20Resort/dIe8Xeg3UuuqrxpTVVPzEuImzspCnruf.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Sunset%20Resort/1GKLKGFVmZz6MtHI2BK8rtMNXQMiVeHs.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Sunset%20Resort/OAq3wLtd8R6fW69Oj5dJfY1psJUu4VUW.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Sunset%20Resort/X559cAI07SAy7aUXfUxcym7V3TBgIFaf.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Sunset%20Resort/orZxmE4kgSMycCjVTgxVcxG4hp1k4MuW.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Sunset%20Resort/xKFWyqVphcwKgNMLTVp3tmsQMbIxbv1i.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Sunset%20Resort/ck9yGynqPb2f9j8gRY2UycwFvnO6mpBu.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Sunset%20Resort/slNCpih0r9zACh7ggKEmt3DBfusTwz88.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Sunset%20Resort/NRHn0jmJxJ5f7MmctxxANgMkxDsXodtx.jpg"
+    "https://example.com/image5.jpg",
+    "https://example.com/image6.jpg"
   ],
   "ratings": {
     "1": 25,
@@ -155,10 +128,7 @@
       }
     ],
     "email": "hotel3@example.com"
-  },
-  "hotelName": "Sunset Resort",
-  "minPrice": 20000,
-  "maxPrice": 55000
+  }
 },
 {
   "_id": {
@@ -170,15 +140,8 @@
     "longitude": 2.3522
   },
   "images": [
-    "https://storage.googleapis.com/nomadnest/hotels/Ocean%20View%20Inn/Opo3WkhQ8WVXwBBYVz63LBRZP8hSaBtQ.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Ocean%20View%20Inn/HyoH5BLILKYlwyvGwE7JipdBhsGauXQE.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Ocean%20View%20Inn/jzu9yDKqsuPhy8GbkQ0gb2JMy967y8bO.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Ocean%20View%20Inn/x4oBTmIssvi4s2B2o9NRMJbjTJVrDpbN.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Ocean%20View%20Inn/HzSOZSFaQ3tAMdJ2VceONpTGejJvkWPf.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Ocean%20View%20Inn/gqRX9HPRvWeez3tEZr8gsinBQxTvQapO.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Ocean%20View%20Inn/PE2Njhcn8zCZGxDuG4uM2LMtdiigkHul.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Ocean%20View%20Inn/Bx6ZLUGHRqcE6OpDYBxYVyHCpOR6vb10.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Ocean%20View%20Inn/ELjL1pE3JNiKd3luXlfNZq8oiCr9QxYg.jpg"
+    "https://example.com/image7.jpg",
+    "https://example.com/image8.jpg"
   ],
   "ratings": {
     "1": 15,
@@ -209,10 +172,7 @@
       }
     ],
     "email": "hotel4@example.com"
-  },
-  "hotelName": "Ocean View Inn",
-  "minPrice": 20000,
-  "maxPrice": 45000
+  }
 },
 {
   "_id": {
@@ -224,15 +184,8 @@
     "longitude": 139.6917
   },
   "images": [
-    "https://storage.googleapis.com/nomadnest/hotels/Mountain%20Lodge/fdChpqnDtRh5WBGfEdNVD0JQY7kjkcxh.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Mountain%20Lodge/yuATAWqrbOkSaUVCXAPT0J6Q9pHhb83y.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Mountain%20Lodge/FTeetAuO0y4KFV2FbdF1Hsm05cZUctqp.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Mountain%20Lodge/cGcwU2CCbT9N8MGdONO0QgbX0gpsAqid.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Mountain%20Lodge/5inihysFuG5qxnpue2rCq5RGOJQoLrbf.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Mountain%20Lodge/5SjgOfbbphNFGC0pMRGo3GVMfMJ9vnyp.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Mountain%20Lodge/pb3AuDrRlAaJGZRGqxbG6ALVSNZG7mA3.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Mountain%20Lodge/g7QUpzv1sv4AQT6SWwfLl02icFeLara8.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Mountain%20Lodge/FJuL36nS9nyzvuvaip7tczeNZv1jIH5Z.jpg"
+    "https://example.com/image9.jpg",
+    "https://example.com/image10.jpg"
   ],
   "ratings": {
     "1": 35,
@@ -263,10 +216,7 @@
       }
     ],
     "email": "hotel5@example.com"
-  },
-  "hotelName": "Mountain Lodge",
-  "minPrice": 25000,
-  "maxPrice": 50000
+  }
 },
 {
   "_id": {
@@ -278,21 +228,14 @@
     "longitude": 55.296249
   },
   "images": [
-    "https://storage.googleapis.com/nomadnest/hotels/Golden%20Sands%20Hotel/lKf7CFIEmHgFXzzkI9lRlU5d7I5uFPbN.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Golden%20Sands%20Hotel/Fts5EVUSkCnOWWP7uhTK4ej2JcjUEgEH.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Golden%20Sands%20Hotel/1K1c9ckLvyXeP7sBHpAsi0MtS0UbwUZu.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Golden%20Sands%20Hotel/DajcTONTAmlOIxvLgIHMOTRIdYeuky2A.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Golden%20Sands%20Hotel/91wuoonoH744gIxRyAQPkgNWaxZnAFaf.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Golden%20Sands%20Hotel/nyf28LKrQb5IBCVCjWFm8O14edPkx8UL.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Golden%20Sands%20Hotel/XqXYxBynM9D4Ape8yyXpkG3HEsgs2tkA.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Golden%20Sands%20Hotel/nAOlVa0FeofOGNNW6X2vM6VQrdVW0qJW.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Golden%20Sands%20Hotel/kEBKs32NXXbaysgiPsVOqD2R1by3SUNw.jpg"
+    "https://example.com/image11.jpg",
+    "https://example.com/image12.jpg"
   ],
   "ratings": {
-    "1": 41,
-    "2": 81,
-    "3": 133,
-    "4": 251,
+    "1": 40,
+    "2": 80,
+    "3": 130,
+    "4": 250,
     "5": 380
   },
   "roomTypes": [
@@ -317,12 +260,6 @@
       }
     ],
     "email": "hotel6@example.com"
-  },
-  "hotelName": "Golden Sands Hotel",
-  "minPrice": 20000,
-  "maxPrice": 55000,
-  "updatedAt": {
-    "$date": "2024-04-24T10:43:12.896Z"
   }
 },
 {
@@ -335,15 +272,8 @@
     "longitude": 151.2093
   },
   "images": [
-    "https://storage.googleapis.com/nomadnest/hotels/Majestic%20Suites/RNEFK2cvfX5aoKxfObHih7hkOMWZ4GRX.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Majestic%20Suites/swiG7blOGfwrzqQvu7lbCrSdxJBWkjJw.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Majestic%20Suites/DOcXM9oVFTk6Uh0zeC25FXMTjBQC3wTG.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Majestic%20Suites/Xkvs8dB1VIa9S6Xn2OqFVawBmhlRwafG.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Majestic%20Suites/AVxDkQtu1alepX0zZoCcCXVRmnkpmv5b.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Majestic%20Suites/l3uE8iefjAFcMU0ajZSZP2kBlQCUNADm.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Majestic%20Suites/26aYDTaOqBhbHV62nVIYTtMfyPtkw1HV.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Majestic%20Suites/nDHMoml3RGiBMI3hz1dTqyMO3omwQT15.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Majestic%20Suites/rL0tFvf2QXRmSvRRVMpbKaTnZeTv498n.jpg"
+    "https://example.com/image13.jpg",
+    "https://example.com/image14.jpg"
   ],
   "ratings": {
     "1": 45,
@@ -374,10 +304,7 @@
       }
     ],
     "email": "hotel7@example.com"
-  },
-  "hotelName": "Majestic Suites",
-  "minPrice": 20000,
-  "maxPrice": 50000
+  }
 },
 {
   "_id": {
@@ -389,15 +316,8 @@
     "longitude": 13.405
   },
   "images": [
-    "https://storage.googleapis.com/nomadnest/hotels/Starlight%20Hotel/awZKDSn3LUY70RaIUoNLV4xvIrHFKle9.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Starlight%20Hotel/oAkicB9Mv6FeuOMDV7H38x55LKBNixaC.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Starlight%20Hotel/QIomVHvGH5IfajwrgPPCbfAqKsvuqfL8.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Starlight%20Hotel/7IZyWnWykQODgU7AhDovzjQujJdXm2LO.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Starlight%20Hotel/yNyKVN9vQCouny1QbY763OBD4pm7W0Wc.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Starlight%20Hotel/E0uUQh6BNAPLW6LaTqeUWxUC9yH7xy6A.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Starlight%20Hotel/sAQMzLHnSrsWejvXehnKQrAZtQmc6Nql.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Starlight%20Hotel/FwSLhXi5l4q9OtrqY5ZkkOmwwEZXctRL.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Starlight%20Hotel/efmyUg9zArXfcRVkIAYqrg4HFuzxlbCt.jpg"
+    "https://example.com/image15.jpg",
+    "https://example.com/image16.jpg"
   ],
   "ratings": {
     "1": 22,
@@ -428,10 +348,7 @@
       }
     ],
     "email": "hotel8@example.com"
-  },
-  "hotelName": "Starlight Hotel",
-  "minPrice": 15000,
-  "maxPrice": 45000
+  }
 },
 {
   "_id": {
@@ -443,15 +360,8 @@
     "longitude": 12.4964
   },
   "images": [
-    "https://storage.googleapis.com/nomadnest/hotels/Emerald%20Retreat/Tg65nLmjUKkderRPCGebhVOHTU5f91iZ.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Emerald%20Retreat/WT7Q0ckr4Qrar2D54E29fkiU07UGW76S.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Emerald%20Retreat/Gz6BcEJjypoZfIPyZn65ySI5Mc46jzSX.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Emerald%20Retreat/A88vkIUThuQMpvueFYqx3N5Fx5DNUZmP.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Emerald%20Retreat/70c5kIPePthEca0RYQHgKnMHyT5meqTf.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Emerald%20Retreat/Dd275fu5KH6cV7elcAfPlPhQwOsHc0Fn.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Emerald%20Retreat/1jUkBSCeHpJJMoSVIfPNfvcvLimNyIpD.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Emerald%20Retreat/MQBk4qbQOTOJX7Ynsw7p8k5B04r2XwaS.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Emerald%20Retreat/FIV4eLe4vWy1Hkq54rjBxsE8OH9Lt1NS.jpg"
+    "https://example.com/image17.jpg",
+    "https://example.com/image18.jpg"
   ],
   "ratings": {
     "1": 18,
@@ -482,10 +392,7 @@
       }
     ],
     "email": "hotel9@example.com"
-  },
-  "hotelName": "Emerald Retreat",
-  "minPrice": 25000,
-  "maxPrice": 50000
+  }
 },
 {
   "_id": {
@@ -497,15 +404,8 @@
     "longitude": 103.8198
   },
   "images": [
-    "https://storage.googleapis.com/nomadnest/hotels/Luxury%20Haven/ZEAwPdsSZ1VjuOEU3HurKplYMkuJgUHU.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Luxury%20Haven/gmti7xqMrLBMwhjsrZbOTQipqxC0SdDD.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Luxury%20Haven/BimsWDz80a5IuvAeD9qjC7Ihdgqh3R7Q.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Luxury%20Haven/zfRvnj5RVJdXptay0oufZQqSivpxo6nP.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Luxury%20Haven/LRE2Iw7oCLDVlfCX4SquOgC1MiBGTvre.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Luxury%20Haven/pxmn5LNVkgxso9xQWR4pJFxEOT7IWgRW.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Luxury%20Haven/5p5U9ZCmwoT6YPniAs4XGrVgVWqrSXC3.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Luxury%20Haven/g5rAmDIywnYmFhOKBdpOtUVahDTDRtFF.jpg",
-    "https://storage.googleapis.com/nomadnest/hotels/Luxury%20Haven/mAjO1Eh1QgUzEWYQUkgpbUaSZZNVOSOL.jpg"
+    "https://example.com/image19.jpg",
+    "https://example.com/image20.jpg"
   ],
   "ratings": {
     "1": 38,
@@ -536,8 +436,5 @@
       }
     ],
     "email": "hotel10@example.com"
-  },
-  "hotelName": "Luxury Haven",
-  "minPrice": 20000,
-  "maxPrice": 50000
+  }
 }]
