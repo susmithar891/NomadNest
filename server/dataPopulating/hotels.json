@@ -1,0 +1,472 @@
+[
+  {
+    "_id": {
+      "$oid": "6609fa242ee85f16d0490285"
+    },
+    "hotelName": "Hotel 1",
+    "location": "New York",
+    "mapsLocation": {
+      "latitude": 40.7128,
+      "longitude": -74.006
+    },
+    "images": [
+      "https://example.com/image1.jpg",
+      "https://example.com/image2.jpg"
+    ],
+    "ratings": {
+      "1": 20,
+      "2": 50,
+      "3": 100,
+      "4": 200,
+      "5": 300
+    },
+    "roomTypes": [
+      "Single",
+      "Double",
+      "Suite"
+    ],
+    "amenities": [
+      "Wifi",
+      "Pool",
+      "Gym"
+    ],
+    "contactInfo": {
+      "phone": [
+        {
+          "countryCode": "+1",
+          "phoneNumber": "1234567890"
+        },
+        {
+          "countryCode": "+1",
+          "phoneNumber": "0987654321"
+        }
+      ],
+      "email": "hotel1@example.com"
+    },
+    "minPrice": 0,
+    "MaxPrice": 200
+  },
+  {
+    "_id": {
+      "$oid": "6609fa242ee85f16d0490286"
+    },
+    "hotelName": "Hotel 2",
+    "location": "Los Angeles",
+    "mapsLocation": {
+      "latitude": 34.0522,
+      "longitude": -118.2437
+    },
+    "images": [
+      "https://example.com/image3.jpg",
+      "https://example.com/image4.jpg"
+    ],
+    "ratings": {
+      "1": 30,
+      "2": 60,
+      "3": 110,
+      "4": 210,
+      "5": 320
+    },
+    "roomTypes": [
+      "Single",
+      "Double",
+      "Suite"
+    ],
+    "amenities": [
+      "Wifi",
+      "Pool",
+      "Gym"
+    ],
+    "contactInfo": {
+      "phone": [
+        {
+          "countryCode": "+1",
+          "phoneNumber": "1234567890"
+        },
+        {
+          "countryCode": "+1",
+          "phoneNumber": "0987654321"
+        }
+      ],
+      "email": "hotel2@example.com"
+    },
+    "minPrice": 0,
+    "MaxPrice": 200
+  },
+  {
+    "_id": {
+      "$oid": "6609fa242ee85f16d0490287"
+    },
+    "hotelName": "Hotel 3",
+    "location": "London",
+    "mapsLocation": {
+      "latitude": 51.5074,
+      "longitude": -0.1278
+    },
+    "images": [
+      "https://example.com/image5.jpg",
+      "https://example.com/image6.jpg"
+    ],
+    "ratings": {
+      "1": 25,
+      "2": 55,
+      "3": 105,
+      "4": 195,
+      "5": 310
+    },
+    "roomTypes": [
+      "Single",
+      "Double",
+      "Suite"
+    ],
+    "amenities": [
+      "Wifi",
+      "Pool",
+      "Gym"
+    ],
+    "contactInfo": {
+      "phone": [
+        {
+          "countryCode": "+44",
+          "phoneNumber": "1234567890"
+        },
+        {
+          "countryCode": "+44",
+          "phoneNumber": "0987654321"
+        }
+      ],
+      "email": "hotel3@example.com"
+    },
+    "minPrice": 0,
+    "MaxPrice": 200
+  },
+  {
+    "_id": {
+      "$oid": "6609fa242ee85f16d0490288"
+    },
+    "hotelName": "Hotel 4",
+    "location": "Paris",
+    "mapsLocation": {
+      "latitude": 48.8566,
+      "longitude": 2.3522
+    },
+    "images": [
+      "https://example.com/image7.jpg",
+      "https://example.com/image8.jpg"
+    ],
+    "ratings": {
+      "1": 15,
+      "2": 45,
+      "3": 95,
+      "4": 180,
+      "5": 290
+    },
+    "roomTypes": [
+      "Single",
+      "Double",
+      "Suite"
+    ],
+    "amenities": [
+      "Wifi",
+      "Pool",
+      "Gym"
+    ],
+    "contactInfo": {
+      "phone": [
+        {
+          "countryCode": "+33",
+          "phoneNumber": "1234567890"
+        },
+        {
+          "countryCode": "+33",
+          "phoneNumber": "0987654321"
+        }
+      ],
+      "email": "hotel4@example.com"
+    },
+    "minPrice": 0,
+    "MaxPrice": 200
+  },
+  {
+    "_id": {
+      "$oid": "6609fa242ee85f16d0490289"
+    },
+    "hotelName": "Hotel 5",
+    "location": "Tokyo",
+    "mapsLocation": {
+      "latitude": 35.6895,
+      "longitude": 139.6917
+    },
+    "images": [
+      "https://example.com/image9.jpg",
+      "https://example.com/image10.jpg"
+    ],
+    "ratings": {
+      "1": 35,
+      "2": 70,
+      "3": 120,
+      "4": 230,
+      "5": 350
+    },
+    "roomTypes": [
+      "Single",
+      "Double",
+      "Suite"
+    ],
+    "amenities": [
+      "Wifi",
+      "Pool",
+      "Gym"
+    ],
+    "contactInfo": {
+      "phone": [
+        {
+          "countryCode": "+81",
+          "phoneNumber": "1234567890"
+        },
+        {
+          "countryCode": "+81",
+          "phoneNumber": "0987654321"
+        }
+      ],
+      "email": "hotel5@example.com"
+    },
+    "minPrice": 0,
+    "MaxPrice": 200
+  },
+  {
+    "_id": {
+      "$oid": "6609fa242ee85f16d049028a"
+    },
+    "hotelName": "Hotel 6",
+    "location": "Dubai",
+    "mapsLocation": {
+      "latitude": 25.276987,
+      "longitude": 55.296249
+    },
+    "images": [
+      "https://example.com/image11.jpg",
+      "https://example.com/image12.jpg"
+    ],
+    "ratings": {
+      "1": 40,
+      "2": 80,
+      "3": 130,
+      "4": 250,
+      "5": 380
+    },
+    "roomTypes": [
+      "Single",
+      "Double",
+      "Suite"
+    ],
+    "amenities": [
+      "Wifi",
+      "Pool",
+      "Gym"
+    ],
+    "contactInfo": {
+      "phone": [
+        {
+          "countryCode": "+971",
+          "phoneNumber": "1234567890"
+        },
+        {
+          "countryCode": "+971",
+          "phoneNumber": "0987654321"
+        }
+      ],
+      "email": "hotel6@example.com"
+    },
+    "minPrice": 0,
+    "MaxPrice": 200
+  },
+  {
+    "_id": {
+      "$oid": "6609fa242ee85f16d049028b"
+    },
+    "hotelName": "Hotel 7",
+    "location": "Sydney",
+    "mapsLocation": {
+      "latitude": -33.8688,
+      "longitude": 151.2093
+    },
+    "images": [
+      "https://example.com/image13.jpg",
+      "https://example.com/image14.jpg"
+    ],
+    "ratings": {
+      "1": 45,
+      "2": 85,
+      "3": 140,
+      "4": 270,
+      "5": 400
+    },
+    "roomTypes": [
+      "Single",
+      "Double",
+      "Suite"
+    ],
+    "amenities": [
+      "Wifi",
+      "Pool",
+      "Gym"
+    ],
+    "contactInfo": {
+      "phone": [
+        {
+          "countryCode": "+61",
+          "phoneNumber": "1234567890"
+        },
+        {
+          "countryCode": "+61",
+          "phoneNumber": "0987654321"
+        }
+      ],
+      "email": "hotel7@example.com"
+    },
+    "minPrice": 0,
+    "MaxPrice": 200
+  },
+  {
+    "_id": {
+      "$oid": "6609fa242ee85f16d049028c"
+    },
+    "hotelName": "Hotel 8",
+    "location": "Berlin",
+    "mapsLocation": {
+      "latitude": 52.52,
+      "longitude": 13.405
+    },
+    "images": [
+      "https://example.com/image15.jpg",
+      "https://example.com/image16.jpg"
+    ],
+    "ratings": {
+      "1": 22,
+      "2": 52,
+      "3": 102,
+      "4": 190,
+      "5": 300
+    },
+    "roomTypes": [
+      "Single",
+      "Double",
+      "Suite"
+    ],
+    "amenities": [
+      "Wifi",
+      "Pool",
+      "Gym"
+    ],
+    "contactInfo": {
+      "phone": [
+        {
+          "countryCode": "+49",
+          "phoneNumber": "1234567890"
+        },
+        {
+          "countryCode": "+49",
+          "phoneNumber": "0987654321"
+        }
+      ],
+      "email": "hotel8@example.com"
+    },
+    "minPrice": 0,
+    "MaxPrice": 200
+  },
+  {
+    "_id": {
+      "$oid": "6609fa242ee85f16d049028d"
+    },
+    "hotelName": "Hotel 9",
+    "location": "Rome",
+    "mapsLocation": {
+      "latitude": 41.9028,
+      "longitude": 12.4964
+    },
+    "images": [
+      "https://example.com/image17.jpg",
+      "https://example.com/image18.jpg"
+    ],
+    "ratings": {
+      "1": 18,
+      "2": 48,
+      "3": 98,
+      "4": 180,
+      "5": 280
+    },
+    "roomTypes": [
+      "Single",
+      "Double",
+      "Suite"
+    ],
+    "amenities": [
+      "Wifi",
+      "Pool",
+      "Gym"
+    ],
+    "contactInfo": {
+      "phone": [
+        {
+          "countryCode": "+39",
+          "phoneNumber": "1234567890"
+        },
+        {
+          "countryCode": "+39",
+          "phoneNumber": "0987654321"
+        }
+      ],
+      "email": "hotel9@example.com"
+    },
+    "minPrice": 0,
+    "MaxPrice": 200
+  },
+  {
+    "_id": {
+      "$oid": "6609fa242ee85f16d049028e"
+    },
+    "hotelName": "Hotel 10",
+    "location": "Singapore",
+    "mapsLocation": {
+      "latitude": 1.3521,
+      "longitude": 103.8198
+    },
+    "images": [
+      "https://example.com/image19.jpg",
+      "https://example.com/image20.jpg"
+    ],
+    "ratings": {
+      "1": 38,
+      "2": 75,
+      "3": 125,
+      "4": 240,
+      "5": 370
+    },
+    "roomTypes": [
+      "Single",
+      "Double",
+      "Suite"
+    ],
+    "amenities": [
+      "Wifi",
+      "Pool",
+      "Gym"
+    ],
+    "contactInfo": {
+      "phone": [
+        {
+          "countryCode": "+65",
+          "phoneNumber": "1234567890"
+        },
+        {
+          "countryCode": "+65",
+          "phoneNumber": "0987654321"
+        }
+      ],
+      "email": "hotel10@example.com"
+    },
+    "minPrice": 0,
+    "MaxPrice": 200
+  }
+]

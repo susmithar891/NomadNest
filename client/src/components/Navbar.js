@@ -1,11 +1,12 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import '../styling/navbar.module.css'
+import '../styling/navbar.css'
 import request from '../api/axios'
 import PropTypes from 'prop-types'
 
 
 const Navbar = (props) => {
+    
 
 
     return (
@@ -47,12 +48,7 @@ const Navbar = (props) => {
                                     >
                                         <div className="profile-pic">
                                             <img
-                                                src={props.user.profilePic}
-                                                className='rounded-circle'
-                                                style={{
-                                                    height : 60+"px",
-                                                    width : 60+"px"
-                                                }}
+                                                src="https://source.unsplash.com/250x250?girl"
                                                 alt="Profile Picture"
                                             />
                                         </div>

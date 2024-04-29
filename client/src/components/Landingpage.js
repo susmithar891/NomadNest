@@ -11,7 +11,6 @@ const Landingpage = () => {
     useEffect(() => {
 
         const checkToken = async() => {
-            
 
             try{
                 const res = await request.post('/api/check')

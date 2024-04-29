@@ -82,16 +82,6 @@ const hotelSchema = mongoose.Schema({
         email : {
             type : String,
         },
-    },
-    minPrice : {
-        type : Number,
-        required : true,
-        min : 0
-    },
-    maxPrice : {
-        type : Number,
-        required : true,
-        min : 0
     }
 
 },{timestamps : true})
@@ -99,6 +89,3 @@ const hotelSchema = mongoose.Schema({
 const hotel = mongoose.model("hotel",hotelSchema)
 
 module.exports = hotel
-
-
-// add minimum and maximum price to the hotel -> to show in homepage

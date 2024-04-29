@@ -6,14 +6,6 @@ const roomTypeSchema = mongoose.Schema({
         ref : 'hotel',
         required : true
     },
-    hotelName:{
-        type:String,
-        required : true 
-    },
-    roomPrev : {
-        type:String,
-        required :  true
-    },
     capacity : {
         adult : {
             type : Number,
@@ -31,6 +23,16 @@ const roomTypeSchema = mongoose.Schema({
         required : true,
     },
     price : {
+        type : Number,
+        min : 0,
+        required : true
+    },
+    avaliableRooms : {
+        type:Number,
+        min:0,
+        requried : true
+    },
+    reservedRooms:{
         type : Number,
         min : 0,
         required : true
