@@ -7,11 +7,16 @@ const ReserveCard = (props) => {
     inDate.setDate(inDate.getDate() - 1)
     let outDate = new Date(props.reserve.outDate)
     outDate.setDate(outDate.getDate() - 1)
+
     const handlePayment = async (e, reserveId) => {
         e.preventDefault()
         try {
             const res = await request.post(`api/user/${props.userState._id}/payment`, { reserveId: reserveId })
             console.log(res)
+            // if(res && res.url){
+
+                // window.open(res.url,"_blank")
+            // }
         }
         catch (e) {
             console.log(e)

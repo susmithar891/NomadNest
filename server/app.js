@@ -761,6 +761,8 @@ app.post('/api/user/:id/payment', async (req, res) => {
     //         cancel_url : `${process.env.CLIENT_URL}/failed`
     //     })
 
+    //     res.send({url : session.url})
+
     // }catch(e){
     //     res.status(500).send(e)
     // }
