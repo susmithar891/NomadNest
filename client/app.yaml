@@ -1,6 +1,5 @@
 runtime: nodejs14
-vm : true
-# env: standard
+env: standard
 # instance_class: F1
 # automatic_scaling:
 #   min_idle_instances: automatic
