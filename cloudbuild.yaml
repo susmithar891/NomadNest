@@ -1,33 +1,33 @@
 steps:
 # Install
-- name: 'gcr.io/cloud-builders/npm'
+- name: 'node'
     dir: 'server'
     args: ['install']
-- name: 'gcr.io/cloud-builders/npm'
+- name: 'node'
     dir: 'server'
     args: ['run', 'test']
 # Build
-- name: 'gcr.io/cloud-builders/npm'
+- name: 'node'
   dir: 'server'
   args: ['run', 'build']
 # Deploy
-- name: 'gcr.io/cloud-builders/npm'
+- name: 'node'
   dir: 'server'
   args: ['deploy']
 
 
-# - name: 'gcr.io/cloud-builders/npm'
+# - name: 'node'
 #     dir: 'client'
 #     args: ['install']
-# - name: 'gcr.io/cloud-builders/npm'
+# - name: 'node'
 #     dir: 'client'
 #     args: ['run', 'test']
 # # Build
-# - name: 'gcr.io/cloud-builders/npm'
+# - name: 'node'
 #   dir: 'client'
 #   args: ['run', 'build']
 # # Deploy
-# - name: 'gcr.io/cloud-builders/npm'
+# - name: 'node'
 #   dir: 'client'
 #   args: ['deploy']
 
