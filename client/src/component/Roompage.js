@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import ReactPannellum, { getConfig } from "react-pannellum";
+// import ReactPannellum, { getConfig } from "react-pannellum";
 import { useLocation, useParams } from 'react-router-dom'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -385,13 +385,13 @@ const Roompage = (props) => {
 
 			<dialog ref={previewBox} className='border  rounded'>
 				<div>
-					<ReactPannellum
+					{/* <ReactPannellum
 						id="1"
 						sceneId="firstScene"
 						imageSource={roomPrev}
 						config={config}
 						autoLoad={true}
-					/>
+					/> */}
 				</div>
 
 				<button type="button" className="btn btn-danger m-1" onClick={closeDialog}>Close</button>

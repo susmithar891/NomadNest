@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Navbar } from './Navbar'
 import Roomcard from './Roomcard'
 import request from '../api/axios'
-import MultiRangeSlider from "multi-range-slider-react";
+// import MultiRangeSlider from "multi-range-slider-react";
 // import MultiRangeSlider from "multi-range-slider-react";
 
 
