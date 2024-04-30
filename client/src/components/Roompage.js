@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
+import ReactPannellum, { getConfig } from "react-pannellum";
 import { useLocation, useParams } from 'react-router-dom'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import hotels from '../media/input.json'
 import { Navbar } from './Navbar'
-import '../styling/roompage.css'
+// import '../styling/roompage.module.css'
 import RatingBar from './RatingBar'
 import request from '../api/axios'
 import InputBox from './InputBox'
+import Slider from './Slider';
 // import CommentModel from './Profile/CommentModel';
 
 
@@ -23,8 +24,9 @@ const Roompage = (props) => {
 				console.log(err)
 			})
 	}
-
+	const location = useLocation()
 	const params = useParams()
+	console.log(params)
 	const hotelModel = {
 		"_id": "", // String
 		"hotelName": "", // String
@@ -72,7 +74,9 @@ const Roompage = (props) => {
 	const [checkedAval, setCheckedAval] = useState(false)
 	const [maxAdult, setmaxAdult] = useState(0)
 	const [maxChild, setmaxChild] = useState(0)
-	const [totalPrice,settotalPrice] = useState(0)
+	const [totalPrice, settotalPrice] = useState(0)
+	const [roomPrev, setroomPrev] = useState("/room_prev.jpg")
+	const [prevImg, setprevImg] = useState()
 
 	const handleDateChange = (range) => {
 		const [startDate, endDate] = range;
@@ -93,7 +97,7 @@ const Roompage = (props) => {
 			if (roomCount[index] < maxVal) {
 				roomCount[index] += 1
 				setroomCount([...roomCount])
-				settotalPrice(totalPrice => totalPrice+roomType[index].price)
+				settotalPrice(totalPrice => totalPrice + roomType[index].price)
 				setmaxAdult(maxAdult => maxAdult + roomType[index].capacity.adult)
 				setmaxChild(maxChild => maxChild + roomType[index].capacity.child)
 			}
@@ -102,7 +106,7 @@ const Roompage = (props) => {
 			if (roomCount[index] > 0) {
 				roomCount[index] -= 1
 				setroomCount([...roomCount])
-				settotalPrice(totalPrice => totalPrice-roomType[index].price)
+				settotalPrice(totalPrice => totalPrice - roomType[index].price)
 				setmaxAdult(maxAdult => maxAdult - roomType[index].capacity.adult)
 				setmaxChild(maxChild => maxChild - roomType[index].capacity.child)
 			}
@@ -128,6 +132,7 @@ const Roompage = (props) => {
 				hotelModel.MaxPrice = res.data.data.MaxPrice;
 				const maxRat = Math.max(...Object.values(hotel.ratings).map(Number));
 				setmaxRating(maxRat + Math.ceil(maxRat * 30 / 100))
+				setComments([...res.data.comments])
 				setUser(res.data.username)
 				let roomtypesData = res.data.roomtypes.map((ele) => {
 					return { ...ele, "rooms": [] }
@@ -151,7 +156,13 @@ const Roompage = (props) => {
 
 
 	const getData = async () => {
-		request.post(`/api/data`, { hotelId: params.id, inDate: startDate, outDate: endDate })
+		let sDate = new Date(startDate.toISOString())
+		let eDate = new Date(endDate.toISOString())
+		sDate = new Date(sDate.setDate(sDate.getDate()+1)).toISOString()
+		eDate = new Date(eDate.setDate(eDate.getDate()+1)).toISOString()
+		console.log(sDate," ",eDate)
+		request.post(`/api/data`, { hotelId: params.id, inDate: sDate, outDate: eDate })
+		
 			.then((res) => {
 				setroomType(roomType => roomType.map((rt) => {
 					if (res.data[rt.roomType]) {
@@ -200,10 +211,15 @@ const Roompage = (props) => {
 		}
 		try {
 			if (reserve && Object.keys(reserve).length > 0) {
+				let sDate = new Date(startDate.toISOString())
+				let eDate = new Date(endDate.toISOString())
+				sDate = new Date(sDate.setDate(sDate.getDate()+1)).toISOString()
+				eDate = new Date(eDate.setDate(eDate.getDate()+1)).toISOString()
+				console.log(sDate," ",eDate)
 				const res = await request.post(`/api/${params.id}/reserve`, {
 					reserve,
-					inDate: startDate,
-					outDate: endDate,
+					inDate: sDate,
+					outDate: eDate,
 					totalAdult: adultsCount,
 					totalChild: childCount
 				});
@@ -228,7 +244,7 @@ const Roompage = (props) => {
 					setmaxChild(0)
 				}
 			}
-			else{
+			else {
 				alert("Add Rooms to reserve")
 			}
 
@@ -241,25 +257,69 @@ const Roompage = (props) => {
 
 	}
 
+	const previewBox = useRef(null)
+
+	const toggleDialog = (e, roomPrev) => {
+		e.preventDefault()
+		console.log(roomPrev)
+		let imageToFetch = new Image();
+		console.log(previewBox.current)
+		// imageToFetch.src = roomPrev;
+		// setprevImg(imageToFetch)
+		// setroomPrev(roomPrev)
+		if (!previewBox.current) {
+			return;
+		}
+		if (previewBox.current.open) {
+			closeDialog();
+		} else {
+			// console.log(props.room)
+			previewBox.current.showModal();
+		}
+	};
+
+	const closeDialog = (e) => {
+		e.preventDefault()
+		if (!previewBox.current) {
+			return;
+		}
+		if (previewBox.current.open) {
+			previewBox.current.close();
+		}
+	}
+
+	const config = {
+		autoRotate: -2,
+		strings: {
+			loadingImg: "" // Empty string to remove the "Click to load panorama" overlay
+		}
+	};
+
 
 	return (
-		<>
-			<Navbar profile={true} user={user} logout={logout} navigateTo={`/home/${params.id}`}/>
 
-			<div className="container my-1 mb-3">
-				<div className="card">
-					<div className="row no-gutters">
-						<div className="col-lg-6">
-							<img src={require('../media/hotel2.jpeg')} className="card-img" alt="Oceanview Resort" />
+		<div className='bg-white'>
+			<Navbar profile={true} user={user} logout={logout} navigateTo={`/home/${params.id}`} />
+
+			<div className="container mt-3 mb-3">
+					<div className="row">
+						<div className="col-lg-6 mt-4">
+							<div className='card mt-5' style={{border : "none"}}>
+								<Slider images={hotel.images} />
+							</div>
 						</div>
 						<div className="col-lg-6">
 							<div className="card-body">
-								<h3 className="card-title my-3">{hotel.hotelname}</h3>
+								<div className='d-flex justify-content-center'>
+									<h3 className="card-title my-3">{hotel.hotelName}</h3>
+								</div>
 								<div className="card">
 									<div className="card-body">
-										<h5 className="card-title">Reserve Your Stay</h5>
+										<h5 className="d-flex justify-content-center">
+											<div className='pb-2'>Reserve Your Stay</div>
+										</h5>
 										<form>
-											<div className="row align-items-center">
+											<div className="align-items-center">
 												<InputBox label="Adults" state={adultsCount} stateFunc={setadultsCount} />
 												<InputBox label="Childs" state={childCount} stateFunc={setchildCount} />
 											</div>
@@ -274,16 +334,19 @@ const Roompage = (props) => {
 														startDate={startDate}
 														endDate={endDate}
 														selectsRange
+														// calendarPosition="right"
+														style={{
+															zIndex: 10
+														}}
 													/>
 												</div>
-												<button type="submit" className="btn btn-primary mt-3" onClick={handleCheck}>Check avaliablity</button>
+												<button type="submit" className="btn btn-primary mt-3" onClick={handleCheck}>Check availability</button>
 											</div>
 										</form>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
 				</div>
 			</div>
 
@@ -304,9 +367,12 @@ const Roompage = (props) => {
 										Rooms
 									</label>
 									<div className="input-group">
-										<button className='incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, false, -1)}>−</button>
-										<input type="text" className="form-control text-center" value={roomCount[index]} />
-										<button className='incre-btn' type="button" onClick={(e) => handleRoomcountChange(e, index, true, room.rooms.length)}>+</button>
+										<button className='btn btn-outline-dark' type="button" style={{zIndex : 0}} onClick={(e) => handleRoomcountChange(e, index, false, -1)}>−</button>
+										<input type="text" className="form-control text-center" value={roomCount[index]} readOnly={true} />
+										<button className='btn btn-outline-dark' type="button" style={{zIndex : 0}} onClick={(e) => handleRoomcountChange(e, index, true, room.rooms.length)}>+</button>
+									</div>
+									<div className='container m-3 input-group'>
+										<button className='btn btn-primary' style={{zIndex : 0}} onClick={(e) => { toggleDialog(e, room.roomPrev) }}>Room preview</button>
 									</div>
 								</div>
 							</div>
@@ -315,14 +381,28 @@ const Roompage = (props) => {
 				))}
 			</div>
 
+			<dialog ref={previewBox} className='border  rounded'>
+				<div>
+					<ReactPannellum
+						id="1"
+						sceneId="firstScene"
+						imageSource={roomPrev}
+						config={config}
+						autoLoad={true}
+					/>
+				</div>
+
+				<button type="button" className="btn btn-danger m-1" onClick={closeDialog}>Close</button>
+			</dialog>
+
 			<div className='d-flex justify-content-end mb-3'>
 				{/* <input type="text" value={maxAdult}></input>
 				<input type="text" value={maxChild}></input> */}
 				<div className='d-flex w-50'>
 					<label className="d-flex align-items-center m-4">
 						Total Price
-						</label>
-					<input type="text" className='text-center' value={totalPrice}></input>
+					</label>
+					<input type="text" className='text-center' value={totalPrice} readOnly={true}></input>
 				</div>
 				<button className='btn btn-primary' onClick={reserveRooms}>Reserve Rooms</button>
 			</div>
@@ -350,21 +430,30 @@ const Roompage = (props) => {
 							<div className="card-header">
 								Comments
 							</div>
-							<ul className="list-group list-group-flush" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-								
+							<ul className="list-group list-group-flush" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+								{comments.map((comment, index) => (
+									<li className="list-group-item d-flex" key={index}>
+										<img src={comment.user.profilePic} alt="User" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }} />
+										<div className='container'>
+											<div>
+												<strong>{comment.user.firstName}</strong>
+											</div>
+											<div className='container'>
+												<p>{comment.text}</p>
+											</div>
+										</div>
+									</li>
+								))}
 							</ul>
 						</div>
-						{/* <div className='d-flex justify-content-end m-3'>
-							<CommentModel/>
-						</div> */}
+						
 					</div>
 
 				</div>
 			</div>
 
+		</div>
 
-
-		</>
 	)
 }
 

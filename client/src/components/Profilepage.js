@@ -6,6 +6,7 @@ import ReserveInfo from './Profile/ReserveInfo'
 import ChangePass from './Profile/ChangePass'
 import { Navbar } from './Navbar'
 import request from '../api/axios'
+import ForgotPass from './Profile/ForgotPass'
 
 
 
@@ -15,6 +16,20 @@ const Profilepage = () => {
 	const navigate = useNavigate()
 	const [user, setUser] = useState({});
 	console.log(location)
+
+	const logout = async () => {
+        request.post('/api/logout')
+            .then(() => {
+                setUser(null)
+                console.log(user)
+				navigate("/")
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+
+
+    }
 	
 
 
@@ -76,6 +91,13 @@ const Profilepage = () => {
 								>
 									My Reservings
 								</Link>
+								<Link
+								className="list-group-item list-group-item-action"
+								data-toggle="list"
+								onClick={logout}
+								>
+									Log out
+								</Link>
 							</div>
 						</div>
 						<div className="col-md-9">
@@ -84,6 +106,7 @@ const Profilepage = () => {
 								{location.search === "" && <GeneralAccount userState={user} userFunc={setUser} />}
 								{location.search === "?account-change-password" && <ChangePass userState={user} userFunc={setUser} />}
 								{location.search === "?my-reservings" && <ReserveInfo userState={user} userFunc={setUser}/>}
+								{location.search === "?forgot-password" && <ForgotPass userState={user} userFunc={setUser}/>}
 
 							</div>
 						</div>

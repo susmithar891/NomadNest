@@ -7,18 +7,18 @@ const userSchema = mongoose.Schema({
     },
     lastName : {
         type : String,
-        required : true
+        // required : true
     },
     profilePic :{
         type : String,
+        default : "/profilepicture.webp"
     },
     email :{
         type : String,
         required : true
     },
     password : {
-        type : String,
-        required : true
+        type : String,        
     }
 },{timestamps : true});
 
