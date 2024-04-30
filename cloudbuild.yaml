@@ -16,20 +16,20 @@ steps:
   args: ['deploy']
 
 
-- name: 'gcr.io/cloud-builders/npm'
-    dir: 'client'
-    args: ['install']
-- name: 'gcr.io/cloud-builders/npm'
-    dir: 'client'
-    args: ['run', 'test']
-# Build
-- name: 'gcr.io/cloud-builders/npm'
-  dir: 'client'
-  args: ['run', 'build']
-# Deploy
-- name: 'gcr.io/cloud-builders/npm'
-  dir: 'client'
-  args: ['deploy']
+# - name: 'gcr.io/cloud-builders/npm'
+#     dir: 'client'
+#     args: ['install']
+# - name: 'gcr.io/cloud-builders/npm'
+#     dir: 'client'
+#     args: ['run', 'test']
+# # Build
+# - name: 'gcr.io/cloud-builders/npm'
+#   dir: 'client'
+#   args: ['run', 'build']
+# # Deploy
+# - name: 'gcr.io/cloud-builders/npm'
+#   dir: 'client'
+#   args: ['deploy']
 
 
 
