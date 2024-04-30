@@ -37,7 +37,7 @@ steps:
   - name: 'gcr.io/cloud-builders/npm'
     dir: 'client'
     entrypoint: 'npm'
-    args: ['run','strtIns']
+    args: ['install']
   # - name: 'gcr.io/cloud-builders/npm'
   #   dir: 'client'
   #   entrypoint: 'npm'
