@@ -37,7 +37,7 @@ steps:
   - name: 'gcr.io/cloud-builders/npm'
     dir: 'client'
     entrypoint: 'npm'
-    args: ['install --legacy-peer-deps']
+    args: ['run','strtIns']
   - name: 'gcr.io/cloud-builders/npm'
     dir: 'client'
     entrypoint: 'npm'
