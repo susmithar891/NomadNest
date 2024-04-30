@@ -1,8 +1,12 @@
 steps:
   - name: 'gcr.io/cloud-builders/npm'
+    dir: 'client'
+    entrypoint: 'npm'
     args: ['install']
 
   - name: 'gcr.io/cloud-builders/npm'
+    dir: 'client'
+    entrypoint: 'npm'
     args: ["run", "create-env"]
     env:
       - 'MONGO_URL=${_MONGO_URL}'
@@ -27,6 +31,7 @@ steps:
       - 'GOOGLE_OAUTH_UNIVERSE_DOMAIN=${_GOOGLE_OAUTH_UNIVERSE_DOMAIN}'
 
   - name: "gcr.io/cloud-builders/gcloud"
+    dir: 'client'
     args: ["app", "deploy", "app.yaml", "-v"]
 
 options:
