@@ -139,13 +139,13 @@ const redirectLogin = (req, res, next) => {
 
 }
 
-const stripeHandler = StripeCheckout.configure({
-    key : process.env.STRIPE_PUBLIC_KEY,
-    locale : 'en',
-    token : function(token){
+// const stripeHandler = StripeCheckout.configure({
+//     key : process.env.STRIPE_PUBLIC_KEY,
+//     locale : 'en',
+//     token : function(token){
         
-    }
-})
+//     }
+// })
 
 
 //api-endpoints
@@ -757,72 +757,76 @@ app.post('/api/user/:id/reservings', async (req, res) => {
 })
 
 app.post('/api/user/:id/payment', async (req, res) => {
-    let def_user;
-    if (req.cookies) {
-        def_user = verifyUser(req.cookies.session_token)
-    }
-    if (!def_user) {
-        res.status(401).send("Unauthoriazed")
-    }
+    // let def_user;
+    // if (req.cookies) {
+    //     def_user = verifyUser(req.cookies.session_token)
+    // }
+    // if (!def_user) {
+    //     res.status(401).send("Unauthoriazed")
+    // }
 
-    let user_det = null
-    try {
-        if (def_user) {
-            user_det = await user.findOne({ _id: def_user.id }).select('-password -updatedAt -email -createdAt -__v -_id')
-        }
-    }
-    catch (e) {
-        res.status(500).send(e)
-    }
+    // let user_det = null
+    // try {
+    //     if (def_user) {
+    //         user_det = await user.findOne({ _id: def_user.id }).select('-password -updatedAt -email -createdAt -__v -_id')
+    //     }
+    // }
+    // catch (e) {
+    //     res.status(500).send(e)
+    // }
 
-    let reserving
-    try {
-        reserving = await reserve.findOne({ _id: req.body.reserveId })
-    }
-    catch (e) {
-        res.status(500).send(e)
-    }
+    // let reserving
+    // try {
+    //     reserving = await reserve.findOne({ _id: req.body.reserveId })
+    // }
+    // catch (e) {
+    //     res.status(500).send(e)
+    // }
 
-    if (!reserving) {
-        res.status(400).send(e)
-    }
+    // if (!reserving) {
+    //     res.status(400).send(e)
+    // }
 
 
-    const hotelData = await hotel.findOne({ _id: reserving.hotelId })
-    const lineItems =  reserving.reservedRoomIds.map((roomId) => {
-        return {
-            price_data: {
-                currency: 'usd',
-                product_data: {
-                    // hotelName : hotelData.hotelName,
-                    // roomNo : roomId.roomNo,
-                    name: hotelData.hotelName + " " +roomId.roomNo
-                },
-                unit_amount: roomId.price
-            },
-            quantity: 1,
-        }
-    }
+    // const hotelData = await hotel.findOne({ _id: reserving.hotelId })
+    // const lineItems =  reserving.reservedRoomIds.map((roomId) => {
+    //     return {
+    //         price_data: {
+    //             currency: 'usd',
+    //             product_data: {
+    //                 // hotelName : hotelData.hotelName,
+    //                 // roomNo : roomId.roomNo,
+    //                 name: hotelData.hotelName + " " +roomId.roomNo
+    //             },
+    //             unit_amount: roomId.price
+    //         },
+    //         quantity: 1,
+    //     }
+    // }
 
-    )
+    // )
     
 
-    try {
-        const session = await stripe.checkout.sessions.create({
-            payment_method_types: ['card'],
-            mode: 'payment',
-            line_items: lineItems,
-            success_url : `${process.env.CLIENT_URL}/success`,
-            cancel_url : `${process.env.CLIENT_URL}/failed`
-        })
-    res.status(200).send({ sessionUrl: session.url });
+    // try {
+    //     const session = await stripeHandler.checkout.sessions.create({
+    //         payment_method_types: ['card'],
+    //         mode: 'payment',
+    //         line_items: lineItems,
+    //         success_url : `${process.env.CLIENT_URL}/success`,
+    //         cancel_url : `${process.env.CLIENT_URL}/failed`
+    //     })
+    // res.status(200).send({ sessionUrl: session.url });
         
-    }catch (e) {
-    // res.status(500).send(e)
-    console.log(e)
-}
+    // }catch (e) {
+    // // res.status(500).send(e)
+    // console.log(e)
+
+    res.send({"msg" :"collecting payment"})
+// }
 
     
+// }
+// )
 })
 
 app.post('/api/user/rate', async (req, res) => {
@@ -837,18 +841,18 @@ app.post('/api/user/rate', async (req, res) => {
     const password = req.body.password;
     const rating = req.body.rating;
     const text = req.body.comment;
-    try {
-        const reservation = await reserve.findOne({ _id: bookingId })
-        if (!reservation) {
-            res.sendStatus(403)
-        }
-        if (reservation.password !== password) {
-            res.sendStatus(401)
-        }
-        const new_comment = await new comment({ hotelId: reservation.hotelId, userId: def_user._id, rating: rating, text: text })
-        new_comment.save()
-        res.sendStatus(200)
-    }
+    // try {
+    //     const reservation = await reserve.findOne({ _id: bookingId })
+    //     if (!reservation) {
+    //         res.sendStatus(403)
+    //     }
+    //     if (reservation.password !== password) {
+    //         res.sendStatus(401)
+    //     }
+    //     const new_comment = await new comment({ hotelId: reservation.hotelId, userId: def_user._id, rating: rating, text: text })
+    //     new_comment.save()
+    //     res.sendStatus(200)
+    // }
 
     let reservation
     try {
@@ -861,9 +865,7 @@ app.post('/api/user/rate', async (req, res) => {
     if (!reservation) {
         return res.sendStatus(403)
     }
-    console.log(reservation)
-    const thatHotel = await hotel.findOne({ _id: reservation.hotelId })
-    console.log(thatHotel)
+    const thatHotel = await hotel.findOne({ _id: reservation.hotelId })    
     if (!thatHotel) {
         return res.status(400).send({ "error": "Invalid hotel Id" })
     }
