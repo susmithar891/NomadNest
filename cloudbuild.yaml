@@ -1,25 +1,50 @@
 steps:
-  # Install dependencies
-  - name: 'gcr.io/cloud-builders/npm'
-    dir: 'server'
-    entrypoint: 'npm'
+#   # Install dependencies
+#   - name: 'gcr.io/cloud-builders/npm'
+#     dir: 'server'
+#     entrypoint: 'npm'
+#     args: ['install']
+
+#   # Run tests
+#   # - name: 'gcr.io/cloud-builders/npm'
+#   #   dir: 'server'
+#   #   entrypoint: 'npm'
+#   #   args: ['run', 'test']
+
+#   # Build the application
+#   - name: 'gcr.io/cloud-builders/npm'
+#     dir: 'server'
+#     entrypoint: 'npm'
+#     args: ['run', 'build']
+
+#   # Deploy to Google App Engine
+#   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+#     dir: 'server'
+#     entrypoint: 'gcloud'
+#     args: 
+#       - 'app'
+#       - 'deploy'
+#       - 'app.yaml'
+#       - '--project'
+#       - 'centered-oasis-418917'
+#       - '--quiet'
+# options:
+#   defaultLogsBucketBehavior : REGIONAL_USER_OWNED_BUCKET
+# timeout: '1600s'  # Optional, adjust based on expected build times
+
+
+- name: 'gcr.io/cloud-builders/npm'
+    dir: 'client'
     args: ['install']
-
-  # Run tests
-  # - name: 'gcr.io/cloud-builders/npm'
-  #   dir: 'server'
-  #   entrypoint: 'npm'
-  #   args: ['run', 'test']
-
-  # Build the application
-  - name: 'gcr.io/cloud-builders/npm'
-    dir: 'server'
-    entrypoint: 'npm'
-    args: ['run', 'build']
-
-  # Deploy to Google App Engine
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    dir: 'server'
+- name: 'gcr.io/cloud-builders/npm'
+    dir: 'client'
+    args: ['run', 'test']
+# Build
+- name: 'gcr.io/cloud-builders/npm'
+  dir: 'client'
+  args: ['run', 'build']
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    dir: 'client'
     entrypoint: 'gcloud'
     args: 
       - 'app'
@@ -28,25 +53,8 @@ steps:
       - '--project'
       - 'centered-oasis-418917'
       - '--quiet'
+
 options:
   defaultLogsBucketBehavior : REGIONAL_USER_OWNED_BUCKET
-# timeout: '1600s'  # Optional, adjust based on expected build times
-
-
-# - name: 'node'
-#     dir: 'client'
-#     args: ['install']
-# - name: 'node'
-#     dir: 'client'
-#     args: ['run', 'test']
-# # Build
-# - name: 'node'
-#   dir: 'client'
-#   args: ['run', 'build']
-# # Deploy
-# - name: 'node'
-#   dir: 'client'
-#   args: ['deploy']
-
 
 
