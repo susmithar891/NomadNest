@@ -1,19 +1,35 @@
 steps:
-# Install
-- name: 'node'
+  # Install dependencies
+  - name: 'gcr.io/cloud-builders/npm'
     dir: 'server'
+    entrypoint: 'npm'
     args: ['install']
-- name: 'node'
+
+  # Run tests
+  - name: 'gcr.io/cloud-builders/npm'
     dir: 'server'
+    entrypoint: 'npm'
     args: ['run', 'test']
-# Build
-- name: 'node'
-  dir: 'server'
-  args: ['run', 'build']
-# Deploy
-- name: 'node'
-  dir: 'server'
-  args: ['deploy']
+
+  # Build the application
+  - name: 'gcr.io/cloud-builders/npm'
+    dir: 'server'
+    entrypoint: 'npm'
+    args: ['run', 'build']
+
+  # Deploy to Google App Engine
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    dir: 'server'
+    entrypoint: 'gcloud'
+    args: 
+      - 'app'
+      - 'deploy'
+      - 'app.yaml'
+      - '--project'
+      - '$PROJECT_ID'
+      - '--quiet'
+
+# timeout: '1600s'  # Optional, adjust based on expected build times
 
 
 # - name: 'node'
