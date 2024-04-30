@@ -1,12 +1,12 @@
-import { Navbar } from './components/Navbar'
+import { Navbar } from './component/Navbar'
 import { BrowserRouter, Switch, Route, Link, Routes, useParams } from "react-router-dom"
-import Login from './components/Login';
-import Register from './components/Register';
-import LandingPage from './components/Landingpage'
-import ContactUs from './components/ContactUs'
-import Profilepage from './components/Profilepage';
-import { Homepage } from './components/Homepage';
-import Roompage from './components/Roompage';
+import Login from './component/Login';
+import Register from './component/Register';
+import LandingPage from './component/Landingpage'
+import ContactUs from './component/ContactUs'
+import Profilepage from './component/Profilepage';
+import { Homepage } from './component/Homepage';
+import Roompage from './component/Roompage';
 
 function App() {
 

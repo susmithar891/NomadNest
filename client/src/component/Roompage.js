@@ -14,6 +14,8 @@ import Slider from './Slider';
 
 const Roompage = (props) => {
 	// const location = useLocation()
+
+	
 	const logout = async () => {
 		request.post('/api/logout')
 			.then(() => {
@@ -295,7 +297,6 @@ const Roompage = (props) => {
 		}
 	};
 
-
 	return (
 
 		<div className='bg-white'>
@@ -305,7 +306,8 @@ const Roompage = (props) => {
 					<div className="row">
 						<div className="col-lg-6 mt-4">
 							<div className='card mt-5' style={{border : "none"}}>
-								<Slider images={hotel.images} />
+								{hotel.images && <Slider images={hotel.images} />}
+								
 							</div>
 						</div>
 						<div className="col-lg-6">

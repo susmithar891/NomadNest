@@ -17,10 +17,11 @@
     "react-dom": "^18.2.0",
     "react-pannellum": "^0.2.14",
     "react-scripts": "5.0.1",
+    "swiper": "^11.1.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "strtIns" : "npm install --legacy-peer-deps",
+    "strtIns": "npm install --legacy-peer-deps",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!axios)/\"",
