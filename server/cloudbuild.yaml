@@ -32,7 +32,13 @@ steps:
 
   - name: "gcr.io/cloud-builders/gcloud"
     dir: 'server'
-    args: ["app", "deploy", "app.yaml", "-v"]
+    args: 
+      - 'app'
+      - 'deploy'
+      - 'app.yaml'
+      - '--project'
+      - 'centered-oasis-418917'
+      - '--quiet'
 
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
