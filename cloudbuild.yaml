@@ -26,7 +26,7 @@ steps:
       - 'deploy'
       - 'app.yaml'
       - '--project'
-      - '$PROJECT_ID'
+      - 'centered-oasis-418917'
       - '--quiet'
 
 # timeout: '1600s'  # Optional, adjust based on expected build times

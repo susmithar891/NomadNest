@@ -9,7 +9,7 @@ const projectId = 'centered-oasis-418917'
 const storage = new Storage({
     projectId,
     credentials : {
-        "type": process.env.GOOGLE_OAUTH_service_account,
+        "type": "service_account",
         "project_id": process.env.GOOGLE_OAUTH_project_id,
         "private_key_id": process.env.GOOGLE_OAUTH_private_key_id,
         "private_key": process.env.GOOGLE_OAUTH_private_key,
