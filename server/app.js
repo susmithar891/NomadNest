@@ -42,7 +42,7 @@ const { profile } = require("console")
 const app = express()
 port = process.env.PORT || 4000
 const corsOption = {
-    origin: ['http://localhost:3000'],
+    origin: ['http://localhost:3000',"https://centered-oasis-418917.wn.r.appspot.com/"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
 }
