@@ -1,4 +1,4 @@
-steps:
+# steps:
 #   # Install dependencies
 #   - name: 'gcr.io/cloud-builders/npm'
 #     dir: 'server'
@@ -33,20 +33,21 @@ steps:
 # timeout: '1600s'  # Optional, adjust based on expected build times
 
 
-- name: 'gcr.io/cloud-builders/npm'
+steps:
+  - name: 'gcr.io/cloud-builders/npm'
     dir: 'client'
     entrypoint: 'npm'
     args: ['install']
-- name: 'gcr.io/cloud-builders/npm'
+  - name: 'gcr.io/cloud-builders/npm'
     dir: 'client'
     entrypoint: 'npm'
     args: ['run', 'test']
-# Build
-- name: 'gcr.io/cloud-builders/npm'
-  dir: 'client'
-  entrypoint: 'npm'
-  args: ['run', 'build']
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  # Build
+  - name: 'gcr.io/cloud-builders/npm'
+    dir: 'client'
+    entrypoint: 'npm'
+    args: ['run', 'build']
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     dir: 'client'
     entrypoint: 'gcloud'
     args: 
@@ -58,6 +59,7 @@ steps:
       - '--quiet'
 
 options:
-  defaultLogsBucketBehavior : REGIONAL_USER_OWNED_BUCKET
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+
 
 
