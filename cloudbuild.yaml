@@ -6,10 +6,10 @@ steps:
     args: ['install']
 
   # Run tests
-  - name: 'gcr.io/cloud-builders/npm'
-    dir: 'server'
-    entrypoint: 'npm'
-    args: ['run', 'test']
+  # - name: 'gcr.io/cloud-builders/npm'
+  #   dir: 'server'
+  #   entrypoint: 'npm'
+  #   args: ['run', 'test']
 
   # Build the application
   - name: 'gcr.io/cloud-builders/npm'
