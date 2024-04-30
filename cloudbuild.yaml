@@ -35,13 +35,16 @@ steps:
 
 - name: 'gcr.io/cloud-builders/npm'
     dir: 'client'
+    entrypoint: 'npm'
     args: ['install']
 - name: 'gcr.io/cloud-builders/npm'
     dir: 'client'
+    entrypoint: 'npm'
     args: ['run', 'test']
 # Build
 - name: 'gcr.io/cloud-builders/npm'
   dir: 'client'
+  entrypoint: 'npm'
   args: ['run', 'build']
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     dir: 'client'
