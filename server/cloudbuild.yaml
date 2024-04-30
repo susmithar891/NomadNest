@@ -1,11 +1,11 @@
 steps:
   - name: 'gcr.io/cloud-builders/npm'
-    dir: 'client'
+    dir: 'server'
     entrypoint: 'npm'
     args: ['install']
 
   - name: 'gcr.io/cloud-builders/npm'
-    dir: 'client'
+    dir: 'server'
     entrypoint: 'npm'
     args: ["run", "create-env"]
     env:
@@ -31,7 +31,7 @@ steps:
       - 'GOOGLE_OAUTH_UNIVERSE_DOMAIN=${_GOOGLE_OAUTH_UNIVERSE_DOMAIN}'
 
   - name: "gcr.io/cloud-builders/gcloud"
-    dir: 'client'
+    dir: 'server'
     args: ["app", "deploy", "app.yaml", "-v"]
 
 options:
