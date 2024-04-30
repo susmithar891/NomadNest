@@ -28,7 +28,8 @@ steps:
       - '--project'
       - 'centered-oasis-418917'
       - '--quiet'
-
+options:
+  logging: CLOUD_LOGGING_ONLY
 # timeout: '1600s'  # Optional, adjust based on expected build times
 
 
