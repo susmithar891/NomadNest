@@ -44,7 +44,7 @@ port = process.env.PORT || 4000
 
 
 const corsOption = {
-    origin: ['http://localhost:3000',"https://centered-oasis-418917.wn.r.appspot.com/"],
+    origins: ["https://centered-oasis-418917.wn.r.appspot.com/"],
     // credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
 }
