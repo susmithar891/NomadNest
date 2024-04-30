@@ -2,10 +2,6 @@ const mongoose = require('mongoose')
 
 
 const roomSchema = mongoose.Schema({
-    isAC : {
-        type : Boolean,
-        requried : true
-    },
     roomType : {
         type : String,
         required : true
@@ -15,9 +11,9 @@ const roomSchema = mongoose.Schema({
         ref : 'hotel',
         required : true
     },
-    preview:{
-        type : String,
-        required : true
+    hotelName:{
+        type:String,
+        required : true 
     },
     roomNo : {
         type : Number,
