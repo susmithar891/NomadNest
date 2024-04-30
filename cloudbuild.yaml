@@ -41,6 +41,8 @@ steps:
   - name: 'gcr.io/cloud-builders/npm'
     dir: 'client'
     entrypoint: 'npm'
+    env : 
+      - 'CI=true'
     args: ['run', 'test']
   # Build
   - name: 'gcr.io/cloud-builders/npm'
