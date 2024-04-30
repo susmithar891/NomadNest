@@ -3,7 +3,7 @@
 #   - name: 'gcr.io/cloud-builders/npm'
 #     dir: 'server'
 #     entrypoint: 'npm'
-#     args: ['install']
+#     args: ['install ']
 
 #   # Run tests
 #   # - name: 'gcr.io/cloud-builders/npm'
@@ -37,7 +37,7 @@ steps:
   - name: 'gcr.io/cloud-builders/npm'
     dir: 'client'
     entrypoint: 'npm'
-    args: ['install']
+    args: ['install --legacy-peer-deps']
   - name: 'gcr.io/cloud-builders/npm'
     dir: 'client'
     entrypoint: 'npm'
