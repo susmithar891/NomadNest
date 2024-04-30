@@ -1,0 +1,420 @@
+[{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83ac"
+  },
+  "hotelId": "6609fa242ee85f16d0490285",
+  "capacity": {
+    "adult": 1,
+    "child": 1
+  },
+  "roomType": "Single",
+  "price": 25000,
+  "hotelName": "Grand Hotel",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Grand%20Hotel/Single.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83ad"
+  },
+  "hotelId": "6609fa242ee85f16d0490285",
+  "capacity": {
+    "adult": 2,
+    "child": 1
+  },
+  "roomType": "Double",
+  "price": 30000,
+  "hotelName": "Grand Hotel",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Grand%20Hotel/Double.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83ae"
+  },
+  "hotelId": "6609fa242ee85f16d0490285",
+  "capacity": {
+    "adult": 2,
+    "child": 2
+  },
+  "roomType": "Suite",
+  "price": 55000,
+  "hotelName": "Grand Hotel",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Grand%20Hotel/Suite.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83af"
+  },
+  "hotelId": "6609fa242ee85f16d0490286",
+  "capacity": {
+    "adult": 1,
+    "child": 1
+  },
+  "roomType": "Single",
+  "price": 15000,
+  "hotelName": "Royal Palace",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Royal%20Palace/Single.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83b0"
+  },
+  "hotelId": "6609fa242ee85f16d0490286",
+  "capacity": {
+    "adult": 2,
+    "child": 1
+  },
+  "roomType": "Double",
+  "price": 35000,
+  "hotelName": "Royal Palace",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Royal%20Palace/Double.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83b1"
+  },
+  "hotelId": "6609fa242ee85f16d0490286",
+  "capacity": {
+    "adult": 2,
+    "child": 2
+  },
+  "roomType": "Suite",
+  "price": 50000,
+  "hotelName": "Royal Palace",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Royal%20Palace/Suite.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83b2"
+  },
+  "hotelId": "6609fa242ee85f16d0490287",
+  "capacity": {
+    "adult": 1,
+    "child": 1
+  },
+  "roomType": "Single",
+  "price": 20000,
+  "hotelName": "Sunset Resort",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Sunset%20Resort/Single.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83b3"
+  },
+  "hotelId": "6609fa242ee85f16d0490287",
+  "capacity": {
+    "adult": 2,
+    "child": 1
+  },
+  "roomType": "Double",
+  "price": 35000,
+  "hotelName": "Sunset Resort",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Sunset%20Resort/Double.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83b4"
+  },
+  "hotelId": "6609fa242ee85f16d0490287",
+  "capacity": {
+    "adult": 2,
+    "child": 2
+  },
+  "roomType": "Suite",
+  "price": 55000,
+  "hotelName": "Sunset Resort",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Sunset%20Resort/Suite.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83b5"
+  },
+  "hotelId": "6609fa242ee85f16d0490288",
+  "capacity": {
+    "adult": 1,
+    "child": 1
+  },
+  "roomType": "Single",
+  "price": 20000,
+  "hotelName": "Ocean View Inn",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Ocean%20View%20Inn/Single.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83b6"
+  },
+  "hotelId": "6609fa242ee85f16d0490288",
+  "capacity": {
+    "adult": 2,
+    "child": 1
+  },
+  "roomType": "Double",
+  "price": 35000,
+  "hotelName": "Ocean View Inn",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Ocean%20View%20Inn/Double.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83b7"
+  },
+  "hotelId": "6609fa242ee85f16d0490288",
+  "capacity": {
+    "adult": 2,
+    "child": 2
+  },
+  "roomType": "Suite",
+  "price": 45000,
+  "hotelName": "Ocean View Inn",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Ocean%20View%20Inn/Suite.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83b8"
+  },
+  "hotelId": "6609fa242ee85f16d0490289",
+  "capacity": {
+    "adult": 1,
+    "child": 1
+  },
+  "roomType": "Single",
+  "price": 25000,
+  "hotelName": "Mountain Lodge",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Mountain%20Lodge/Single.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83b9"
+  },
+  "hotelId": "6609fa242ee85f16d0490289",
+  "capacity": {
+    "adult": 2,
+    "child": 1
+  },
+  "roomType": "Double",
+  "price": 35000,
+  "hotelName": "Mountain Lodge",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Mountain%20Lodge/Double.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83ba"
+  },
+  "hotelId": "6609fa242ee85f16d0490289",
+  "capacity": {
+    "adult": 2,
+    "child": 2
+  },
+  "roomType": "Suite",
+  "price": 50000,
+  "hotelName": "Mountain Lodge",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Mountain%20Lodge/Suite.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83bb"
+  },
+  "hotelId": "6609fa242ee85f16d049028a",
+  "capacity": {
+    "adult": 1,
+    "child": 1
+  },
+  "roomType": "Single",
+  "price": 20000,
+  "hotelName": "Golden Sands Hotel",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Golden%20Sands%20Hotel/Single.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83bc"
+  },
+  "hotelId": "6609fa242ee85f16d049028a",
+  "capacity": {
+    "adult": 2,
+    "child": 1
+  },
+  "roomType": "Double",
+  "price": 35000,
+  "hotelName": "Golden Sands Hotel",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Golden%20Sands%20Hotel/Double.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83bd"
+  },
+  "hotelId": "6609fa242ee85f16d049028a",
+  "capacity": {
+    "adult": 2,
+    "child": 2
+  },
+  "roomType": "Suite",
+  "price": 55000,
+  "hotelName": "Golden Sands Hotel",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Golden%20Sands%20Hotel/Suite.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83be"
+  },
+  "hotelId": "6609fa242ee85f16d049028b",
+  "capacity": {
+    "adult": 1,
+    "child": 1
+  },
+  "roomType": "Single",
+  "price": 20000,
+  "hotelName": "Majestic Suites",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Majestic%20Suites/Single.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83bf"
+  },
+  "hotelId": "6609fa242ee85f16d049028b",
+  "capacity": {
+    "adult": 2,
+    "child": 1
+  },
+  "roomType": "Double",
+  "price": 40000,
+  "hotelName": "Majestic Suites",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Majestic%20Suites/Double.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83c0"
+  },
+  "hotelId": "6609fa242ee85f16d049028b",
+  "capacity": {
+    "adult": 2,
+    "child": 2
+  },
+  "roomType": "Suite",
+  "price": 50000,
+  "hotelName": "Majestic Suites",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Majestic%20Suites/Suite.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83c1"
+  },
+  "hotelId": "6609fa242ee85f16d049028c",
+  "capacity": {
+    "adult": 1,
+    "child": 1
+  },
+  "roomType": "Single",
+  "price": 15000,
+  "hotelName": "Starlight Hotel",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Starlight%20Hotel/Single.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83c2"
+  },
+  "hotelId": "6609fa242ee85f16d049028c",
+  "capacity": {
+    "adult": 2,
+    "child": 1
+  },
+  "roomType": "Double",
+  "price": 40000,
+  "hotelName": "Starlight Hotel",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Starlight%20Hotel/Double.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83c3"
+  },
+  "hotelId": "6609fa242ee85f16d049028c",
+  "capacity": {
+    "adult": 2,
+    "child": 2
+  },
+  "roomType": "Suite",
+  "price": 45000,
+  "hotelName": "Starlight Hotel",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Starlight%20Hotel/Suite.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83c4"
+  },
+  "hotelId": "6609fa242ee85f16d049028d",
+  "capacity": {
+    "adult": 1,
+    "child": 1
+  },
+  "roomType": "Single",
+  "price": 25000,
+  "hotelName": "Emerald Retreat",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Emerald%20Retreat/Single.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83c5"
+  },
+  "hotelId": "6609fa242ee85f16d049028d",
+  "capacity": {
+    "adult": 2,
+    "child": 1
+  },
+  "roomType": "Double",
+  "price": 35000,
+  "hotelName": "Emerald Retreat",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Emerald%20Retreat/Double.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83c6"
+  },
+  "hotelId": "6609fa242ee85f16d049028d",
+  "capacity": {
+    "adult": 2,
+    "child": 2
+  },
+  "roomType": "Suite",
+  "price": 50000,
+  "hotelName": "Emerald Retreat",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Emerald%20Retreat/Suite.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83c7"
+  },
+  "hotelId": "6609fa242ee85f16d049028e",
+  "capacity": {
+    "adult": 1,
+    "child": 1
+  },
+  "roomType": "Single",
+  "price": 20000,
+  "hotelName": "Luxury Haven",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Luxury%20Haven/Single.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83c8"
+  },
+  "hotelId": "6609fa242ee85f16d049028e",
+  "capacity": {
+    "adult": 2,
+    "child": 1
+  },
+  "roomType": "Double",
+  "price": 35000,
+  "hotelName": "Luxury Haven",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Luxury%20Haven/Double.jpg"
+},
+{
+  "_id": {
+    "$oid": "662903bbdcfa0028a0fa83c9"
+  },
+  "hotelId": "6609fa242ee85f16d049028e",
+  "capacity": {
+    "adult": 2,
+    "child": 2
+  },
+  "roomType": "Suite",
+  "price": 50000,
+  "hotelName": "Luxury Haven",
+  "roomPrev": "https://storage.googleapis.com/nomadnest/roompreview/Luxury%20Haven/Suite.jpg"
+}]
