@@ -1,8 +1,10 @@
 import React from 'react'
 import request from '../../api/axios'
 import CommentModel from './CommentModel'
+import { useNavigate } from 'react-router-dom'
 
 const ReserveCard = (props) => {
+    const navigate = useNavigate()
     let inDate = new Date(props.reserve.inDate)
     inDate.setDate(inDate.getDate() - 1)
     let outDate = new Date(props.reserve.outDate)
@@ -13,10 +15,6 @@ const ReserveCard = (props) => {
         try {
             const res = await request.post(`api/user/${props.userState._id}/payment`, { reserveId: reserveId })
             console.log(res)
-            // if(res && res.url){
-
-                // window.open(res.url,"_blank")
-            // }
         }
         catch (e) {
             console.log(e)
@@ -55,7 +53,6 @@ const ReserveCard = (props) => {
                 {!props.reserve.isCancelled ?
                     <div className='container w-50 my-auto'>
                         {/* {!props.reserve.isVerified &&
-
                             <button type="button" className="btn btn-info container m-2 " onClick={handleVerification}>
                                 Verify
                             </button>

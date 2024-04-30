@@ -101,7 +101,6 @@ function generateRandomString(length) {
 
     return st;
 }
-
 const redirectHome = async (req, res, next) => {
     if (req.cookies && req.cookies.session_token && verifyUser(req.cookies.session_token)) {
         // res.redirect('/home')
@@ -139,6 +138,15 @@ const redirectLogin = (req, res, next) => {
     }
 
 }
+
+const stripeHandler = StripeCheckout.configure({
+    key : process.env.STRIPE_PUBLIC_KEY,
+    locale : 'en',
+    token : function(token){
+        
+    }
+})
+
 
 //api-endpoints
 app.get('/', async(req, res) => {
@@ -456,7 +464,6 @@ app.post('/api/google/sign-in', redirectHome, async (req, res) => {
         catch (err) {
             res.status(400).send(err)
         }
-
     }
 
 })
@@ -693,8 +700,6 @@ app.post('/api/:id/reserve', async (req, res) => {
     }
     let total_price = 0
     const dates = { in_date: new Date(req.body.inDate), out_date: new Date(req.body.outDate) }
-
-
     const curr_hotel = await hotel.findOne({ _id: req.params.id })
     await Promise.all(Object.entries(req.body.reserve).map(async ([key, value]) => {
         const fetch_rooms = await room.find({ hotelId: req.params.id, roomType: key })
@@ -752,21 +757,72 @@ app.post('/api/user/:id/reservings', async (req, res) => {
 })
 
 app.post('/api/user/:id/payment', async (req, res) => {
-    // try{
-    //     const session = await stripe.checkout.sessions.create({
-    //         payment_method_types : ['card'],
-    //         mode : 'payment',
-    //         line_items : req.body.hotels,
-    //         success_url : `${process.env.CLIENT_URL}/success`,
-    //         cancel_url : `${process.env.CLIENT_URL}/failed`
-    //     })
+    let def_user;
+    if (req.cookies) {
+        def_user = verifyUser(req.cookies.session_token)
+    }
+    if (!def_user) {
+        res.status(401).send("Unauthoriazed")
+    }
 
-    //     res.send({url : session.url})
+    let user_det = null
+    try {
+        if (def_user) {
+            user_det = await user.findOne({ _id: def_user.id }).select('-password -updatedAt -email -createdAt -__v -_id')
+        }
+    }
+    catch (e) {
+        res.status(500).send(e)
+    }
 
-    // }catch(e){
-    //     res.status(500).send(e)
-    // }
-    res.json({ msg: "hi" });
+    let reserving
+    try {
+        reserving = await reserve.findOne({ _id: req.body.reserveId })
+    }
+    catch (e) {
+        res.status(500).send(e)
+    }
+
+    if (!reserving) {
+        res.status(400).send(e)
+    }
+
+
+    const hotelData = await hotel.findOne({ _id: reserving.hotelId })
+    const lineItems =  reserving.reservedRoomIds.map((roomId) => {
+        return {
+            price_data: {
+                currency: 'usd',
+                product_data: {
+                    // hotelName : hotelData.hotelName,
+                    // roomNo : roomId.roomNo,
+                    name: hotelData.hotelName + " " +roomId.roomNo
+                },
+                unit_amount: roomId.price
+            },
+            quantity: 1,
+        }
+    }
+
+    )
+    
+
+    try {
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            mode: 'payment',
+            line_items: lineItems,
+            success_url : `${process.env.CLIENT_URL}/success`,
+            cancel_url : `${process.env.CLIENT_URL}/failed`
+        })
+    res.status(200).send({ sessionUrl: session.url });
+        
+    }catch (e) {
+    // res.status(500).send(e)
+    console.log(e)
+}
+
+    
 })
 
 app.post('/api/user/rate', async (req, res) => {
@@ -781,6 +837,19 @@ app.post('/api/user/rate', async (req, res) => {
     const password = req.body.password;
     const rating = req.body.rating;
     const text = req.body.comment;
+    try {
+        const reservation = await reserve.findOne({ _id: bookingId })
+        if (!reservation) {
+            res.sendStatus(403)
+        }
+        if (reservation.password !== password) {
+            res.sendStatus(401)
+        }
+        const new_comment = await new comment({ hotelId: reservation.hotelId, userId: def_user._id, rating: rating, text: text })
+        new_comment.save()
+        res.sendStatus(200)
+    }
+
     let reservation
     try {
         reservation = await reserve.findOne({ _id: new mongoose.Types.ObjectId(bookingId), password: password, userId: def_user.id })
@@ -854,6 +923,7 @@ app.post('/api/User/uploadPic', multer.single('profile'), async (req, res) => {
         const blob = bucket.file(`users/${profilepicname}`)
         blobstream = await blob.createWriteStream();
     }
+
     catch (e) {
         console.log(e)
         res.status(500).send(e);
