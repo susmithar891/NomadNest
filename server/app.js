@@ -55,13 +55,13 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cookieparser())
 app.use(cors(corsOption));
-app.use(session({
-    name: "user_sid",
-    secret: 'ed3a7a2101d71527f2df187812f4037ad4cb0ddf6e01ed78d21602175d413b80fd8a089c92cb1ee06c8377d6947eb475537f19893f016671b22fe6ac7728ad23',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60, secure: false, httpOnly: true }
-}))
+// app.use(session({
+//     name: "user_sid",
+//     secret: 'ed3a7a2101d71527f2df187812f4037ad4cb0ddf6e01ed78d21602175d413b80fd8a089c92cb1ee06c8377d6947eb475537f19893f016671b22fe6ac7728ad23',
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: { maxAge: 1000 * 60 * 60, secure: false, httpOnly: true }
+// }))
 
 
 //functions
@@ -158,6 +158,7 @@ app.get('/', async(req, res) => {
 app.post('/api/check', redirectHome, (req, res) => {
     res.send({ "msg": "No session detected" });
 })
+
 app.post("/api/sign-up", redirectHome, async (req, res) => {
 
     const checkaval_email = await user.findOne({ email: req.body.email });
@@ -175,7 +176,7 @@ app.post("/api/sign-up", redirectHome, async (req, res) => {
             const def_user = { firstname: newUser.firstname, id: newUser.id, lastName: newUser.lastname, email: newUser.email }
 
             const token = createToken(def_user);
-            res.cookie("session_token", token, { httpOnly: true ,secure : true});
+            res.cookie("session_token", token, { httpOnly: true ,secure : true,sameSite: 'None'});
 
             await newUser.save();
             res.sendStatus(200);
