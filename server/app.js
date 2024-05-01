@@ -518,30 +518,34 @@ app.post('/api/home/OnloadData', async (req, res) => {
     let def_user;
     if (req.cookies) {
         def_user = verifyUser(req.cookies.session_token)
+        res.status(200).send(def_user)
     }
+    res.status(200).send({"msg" : "hi"})
 
+    // try {
+    //     let user_det = null
+    //     if (def_user) {
+    //         user_det = await user.findOne({ _id: def_user.id }).select('-password -updatedAt -email -createdAt -__v -_id')
+    //     }
+    //     const qunt = {
+    //         username: user_det,
+    //         pageCount: pageCount,
+    //         data: pageData
+    //     }
 
-    try {
-        let user_det = null
-        if (def_user) {
-            user_det = await user.findOne({ _id: def_user.id }).select('-password -updatedAt -email -createdAt -__v -_id')
-        }
-        const qunt = {
-            username: user_det,
-            pageCount: pageCount,
-            data: pageData
-        }
-
-        res.status(200).send(qunt)
-    }
-    catch (err) {
-        console.log(err)
-        res.status(500).send(err)
-        // throw err
-    }
+    //     res.status(200).send(qunt)
+    // }
+    // catch (err) {
+    //     console.log(err)
+    //     res.status(500).send(err)
+    //     // throw err
+    // }
 
 
 })
+
+
+
 app.post('/api/home/data', async (req, res) => {
     const loc = req.query.location;
     const minP = parseInt(req.query.minPrice)
