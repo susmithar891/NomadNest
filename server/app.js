@@ -172,11 +172,10 @@ app.post("/api/sign-up", redirectHome, async (req, res) => {
 
             const newUser = await new user({ firstName: req.body.firstname, lastName: req.body.lastname, email: req.body.email, password: hashedPass });
 
-
             const def_user = { firstname: newUser.firstname, id: newUser.id, lastName: newUser.lastname, email: newUser.email }
 
             const token = createToken(def_user);
-            res.cookie("session_token", token, { httpOnly: true });
+            res.cookie("session_token", token, { httpOnly: true ,secure : true});
 
             await newUser.save();
             res.sendStatus(200);
@@ -215,6 +214,45 @@ app.post("/api/sign-in", redirectHome, async (req, res) => {
     }
 
 })
+
+app.post('/api/logout', redirectLogin, (req, res) => {
+    res.clearCookie('session_token');
+    res.end()
+    // res.status(200).json({"msg" : "user logged out successfully"})
+})
+
+app.post('/api/google/sign-in', redirectHome, async (req, res) => {
+    const credResponse = req.body.credentialResponse.credential;
+    const credResponseDecoded = jwtDecode(credResponse)
+    if (process.env.GOOGLE_OAUTH_CLIENT_ID_SIGNIN !== req.body.credentialResponse.clientId) {
+        res.status(403).send({ "error": "client Id's doesn't match" })
+    }
+    if (!credResponseDecoded.email_verified) {
+        res.status(401).send({ 'error': "email Id is not verified" })
+    }
+    const checkaval_email = await user.findOne({ email: credResponseDecoded.email });
+    if (checkaval_email) {
+        const def_user = { firstname: checkaval_email.firstname, id: checkaval_email.id, lastName: checkaval_email.lastname, email: checkaval_email.email }
+        const token = createToken(def_user);
+        res.cookie("session_token", token, { httpOnly: true });
+        res.sendStatus(200);
+    }
+    else {
+        try {
+            const newUser = await new user({ firstName: credResponseDecoded.given_name, lastName: credResponseDecoded.family_name, email: credResponseDecoded.email, profilePic: credResponseDecoded.picture });
+            const def_user = { firstname: newUser.firstname, id: newUser.id, lastName: newUser.lastname, email: newUser.email }
+            const token = createToken(def_user);
+            await newUser.save();
+            res.cookie("session_token", token, { httpOnly: true });
+            res.sendStatus(200);
+        }
+        catch (err) {
+            res.status(400).send(err)
+        }
+    }
+
+})
+
 
 
 app.post('/api/genOTP', async (req, res) => {
@@ -277,6 +315,9 @@ app.post('/api/verifyOTP', async (req, res) => {
         return res.status(500).send(e)
     }
 })
+
+
+
 
 app.post('/api/email-change', async (req, res) => {
     const user_otp = req.body.otp;
@@ -438,43 +479,17 @@ app.post('/api/forgot-pass', async (req, res) => {
     }
 })
 
-app.post('/api/google/sign-in', redirectHome, async (req, res) => {
-    const credResponse = req.body.credentialResponse.credential;
-    const credResponseDecoded = jwtDecode(credResponse)
-    if (process.env.GOOGLE_OAUTH_CLIENT_ID_SIGNIN !== req.body.credentialResponse.clientId) {
-        res.status(403).send({ "error": "client Id's doesn't match" })
-    }
-    if (!credResponseDecoded.email_verified) {
-        res.status(401).send({ 'error': "email Id is not verified" })
-    }
-    const checkaval_email = await user.findOne({ email: credResponseDecoded.email });
-    if (checkaval_email) {
-        const def_user = { firstname: checkaval_email.firstname, id: checkaval_email.id, lastName: checkaval_email.lastname, email: checkaval_email.email }
-        const token = createToken(def_user);
-        res.cookie("session_token", token, { httpOnly: true });
-        res.sendStatus(200);
-    }
-    else {
-        try {
-            const newUser = await new user({ firstName: credResponseDecoded.given_name, lastName: credResponseDecoded.family_name, email: credResponseDecoded.email, profilePic: credResponseDecoded.picture });
-            const def_user = { firstname: newUser.firstname, id: newUser.id, lastName: newUser.lastname, email: newUser.email }
-            const token = createToken(def_user);
-            await newUser.save();
-            res.cookie("session_token", token, { httpOnly: true });
-            res.sendStatus(200);
-        }
-        catch (err) {
-            res.status(400).send(err)
-        }
-    }
 
-})
 
-app.post('/api/logout', redirectLogin, (req, res) => {
-    res.clearCookie('session_token');
-    res.end()
-    // res.status(200).json({"msg" : "user logged out successfully"})
-})
+
+
+
+
+
+
+
+
+
 app.post('/api/home/OnloadData', async (req, res) => {
     const maxLimit = 4
     const pageStart = ((parseInt(req.query.page) - 1) * maxLimit)
