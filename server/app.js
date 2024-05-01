@@ -44,8 +44,8 @@ port = process.env.PORT || 4000
 
 
 const corsOption = {
-    origins: ["https://centered-oasis-418917.wn.r.appspot.com/"],
-    // credentials: true,
+    origin: process.env.CLIENT_URL,
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
 }
 
@@ -55,13 +55,13 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cookieparser())
 app.use(cors(corsOption));
-// app.use(session({
-//     name: "user_sid",
-//     secret: 'ed3a7a2101d71527f2df187812f4037ad4cb0ddf6e01ed78d21602175d413b80fd8a089c92cb1ee06c8377d6947eb475537f19893f016671b22fe6ac7728ad23',
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: { maxAge: 1000 * 60 * 60, secure: false, httpOnly: true }
-// }))
+app.use(session({
+    name: "user_sid",
+    secret: 'ed3a7a2101d71527f2df187812f4037ad4cb0ddf6e01ed78d21602175d413b80fd8a089c92cb1ee06c8377d6947eb475537f19893f016671b22fe6ac7728ad23',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60, secure: false, httpOnly: true }
+}))
 
 
 //functions
@@ -109,14 +109,7 @@ const redirectHome = async (req, res, next) => {
         // res.send({"msg" : "this is home"})
         try {
             let def_user = await user.findOne({ _id: verifyUser(req.cookies.session_token).id }).select('-password')
-            if (def_user) {
-                res.status(200).send({ redirect: 'home', user: def_user })
-            }
-            else {
-                res.clearCookie('session_token')
-                res.sendStatus(403)
-            }
-
+            res.status(200).send({ redirect: 'home', user: def_user })
         }
         catch (e) {
             console.log(e)
@@ -128,6 +121,7 @@ const redirectHome = async (req, res, next) => {
         next()
     }
 }
+
 
 const redirectLogin = (req, res, next) => {
     if (!verifyUser(req.cookies.session_token)) {
@@ -176,7 +170,7 @@ app.post("/api/sign-up", redirectHome, async (req, res) => {
             const def_user = { firstname: newUser.firstname, id: newUser.id, lastName: newUser.lastname, email: newUser.email }
 
             const token = createToken(def_user);
-            res.cookie("session_token", token, { httpOnly: true ,secure : true,sameSite: 'None'});
+            res.cookie("session_token", token, { httpOnly: true});
 
             await newUser.save();
             res.sendStatus(200);
@@ -250,6 +244,7 @@ app.post('/api/google/sign-in', redirectHome, async (req, res) => {
         catch (err) {
             res.status(400).send(err)
         }
+
     }
 
 })
