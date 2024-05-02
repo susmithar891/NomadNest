@@ -1,21 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react'
-// import ReactPannellum, { getConfig } from "react-pannellum";
 import { useLocation, useParams } from 'react-router-dom'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Navbar } from './Navbar'
-// import '../styling/roompage.module.css'
 import RatingBar from './RatingBar'
 import request from '../api/axios'
 import InputBox from './InputBox'
 import Slider from './Slider';
-// import CommentModel from './Profile/CommentModel';
-
 
 const Roompage = (props) => {
-	// const location = useLocation()
 
-	
+
 	const logout = async () => {
 		request.post('/api/logout')
 			.then(() => {
@@ -77,6 +72,7 @@ const Roompage = (props) => {
 	const [maxAdult, setmaxAdult] = useState(0)
 	const [maxChild, setmaxChild] = useState(0)
 	const [totalPrice, settotalPrice] = useState(0)
+	const [showprev, setshowprev] = useState(false)
 	const [roomPrev, setroomPrev] = useState("/room_prev.jpg")
 	const [prevImg, setprevImg] = useState()
 
@@ -160,11 +156,11 @@ const Roompage = (props) => {
 	const getData = async () => {
 		let sDate = new Date(startDate.toISOString())
 		let eDate = new Date(endDate.toISOString())
-		sDate = new Date(sDate.setDate(sDate.getDate()+1)).toISOString()
-		eDate = new Date(eDate.setDate(eDate.getDate()+1)).toISOString()
-		console.log(sDate," ",eDate)
+		sDate = new Date(sDate.setDate(sDate.getDate() + 1)).toISOString()
+		eDate = new Date(eDate.setDate(eDate.getDate() + 1)).toISOString()
+		console.log(sDate, " ", eDate)
 		request.post(`/api/data`, { hotelId: params.id, inDate: sDate, outDate: eDate })
-		
+
 			.then((res) => {
 				setroomType(roomType => roomType.map((rt) => {
 					if (res.data[rt.roomType]) {
@@ -215,9 +211,9 @@ const Roompage = (props) => {
 			if (reserve && Object.keys(reserve).length > 0) {
 				let sDate = new Date(startDate.toISOString())
 				let eDate = new Date(endDate.toISOString())
-				sDate = new Date(sDate.setDate(sDate.getDate()+1)).toISOString()
-				eDate = new Date(eDate.setDate(eDate.getDate()+1)).toISOString()
-				console.log(sDate," ",eDate)
+				sDate = new Date(sDate.setDate(sDate.getDate() + 1)).toISOString()
+				eDate = new Date(eDate.setDate(eDate.getDate() + 1)).toISOString()
+				console.log(sDate, " ", eDate)
 				const res = await request.post(`/api/${params.id}/reserve`, {
 					reserve,
 					inDate: sDate,
@@ -264,18 +260,16 @@ const Roompage = (props) => {
 	const toggleDialog = (e, roomPrev) => {
 		e.preventDefault()
 		console.log(roomPrev)
-		let imageToFetch = new Image();
-		console.log(previewBox.current)
-		// imageToFetch.src = roomPrev;
-		// setprevImg(imageToFetch)
-		// setroomPrev(roomPrev)
+		setroomPrev(roomPrev)
+		console.log(roomPrev)
+		
 		if (!previewBox.current) {
 			return;
 		}
 		if (previewBox.current.open) {
 			closeDialog();
 		} else {
-			// console.log(props.room)
+			setshowprev(true)
 			previewBox.current.showModal();
 		}
 	};
@@ -288,6 +282,7 @@ const Roompage = (props) => {
 		if (previewBox.current.open) {
 			previewBox.current.close();
 		}
+		setshowprev(false)
 	}
 
 	const config = {
@@ -303,56 +298,56 @@ const Roompage = (props) => {
 			<Navbar profile={true} user={user} logout={logout} navigateTo={`/home/${params.id}`} />
 
 			<div className="container mt-3 mb-3">
-					<div className="row">
-						<div className="col-lg-6 mt-4">
-							<div className='card mt-5' style={{border : "none"}}>
-								{hotel.images && <Slider images={hotel.images} />}
-								
-							</div>
-						</div>
-						<div className="col-lg-6">
-							<div className="card-body">
-								<div className='d-flex justify-content-center'>
-									<h3 className="card-title my-3">{hotel.hotelName}</h3>
-								</div>
-								<div className="card">
-									<div className="card-body">
-										<h5 className="d-flex justify-content-center">
-											<div className='pb-2'>Reserve Your Stay</div>
-										</h5>
-										<form>
-											<div className="align-items-center">
-												<InputBox label="Adults" state={adultsCount} stateFunc={setadultsCount} />
-												<InputBox label="Childs" state={childCount} stateFunc={setchildCount} />
-											</div>
+				<div className="row">
+					<div className="col-lg-6 mt-4">
+						<div className='card mt-5' style={{ border: "none" }}>
+							{hotel.images && <Slider images={hotel.images} />}
 
-											<div className="row mt-3">
-												<div className='mx-auto w-75'>
-													<label className='m-3'>Pick In and Out Dates</label>
-													<DatePicker
-														className='form-control'
-														selected={startDate}
-														onChange={handleDateChange}
-														startDate={startDate}
-														endDate={endDate}
-														selectsRange
-														// calendarPosition="right"
-														style={{
-															zIndex: 10
-														}}
-													/>
-												</div>
-												<button type="submit" className="btn btn-primary mt-3" onClick={handleCheck}>Check availability</button>
+						</div>
+					</div>
+					<div className="col-lg-6">
+						<div className="card-body">
+							<div className='d-flex justify-content-center'>
+								<h3 className="card-title my-3">{hotel.hotelName}</h3>
+							</div>
+							<div className="card">
+								<div className="card-body">
+									<h5 className="d-flex justify-content-center">
+										<div className='pb-2'>Reserve Your Stay</div>
+									</h5>
+									<form>
+										<div className="align-items-center">
+											<InputBox label="Adults" state={adultsCount} stateFunc={setadultsCount} />
+											<InputBox label="Childs" state={childCount} stateFunc={setchildCount} />
+										</div>
+
+										<div className="row mt-3">
+											<div className='mx-auto w-75'>
+												<label className='m-3'>Pick In and Out Dates</label>
+												<DatePicker
+													className='form-control'
+													selected={startDate}
+													onChange={handleDateChange}
+													startDate={startDate}
+													endDate={endDate}
+													selectsRange
+													// calendarPosition="right"
+													style={{
+														zIndex: 10
+													}}
+												/>
 											</div>
-										</form>
-									</div>
+											<button type="submit" className="btn btn-primary mt-3" onClick={handleCheck}>Check availability</button>
+										</div>
+									</form>
 								</div>
 							</div>
 						</div>
+					</div>
 				</div>
 			</div>
 
-			<div className="row m-auto">
+			<div className="row m-auto p-3">
 				{roomType.map((room, index) => (
 					<div className="col-lg-4 mb-4" key={index}>
 						<div className="card">
@@ -369,12 +364,12 @@ const Roompage = (props) => {
 										Rooms
 									</label>
 									<div className="input-group">
-										<button className='btn btn-outline-dark' type="button" style={{zIndex : 0}} onClick={(e) => handleRoomcountChange(e, index, false, -1)}>−</button>
+										<button className='btn btn-outline-dark' type="button" style={{ zIndex: 0 }} onClick={(e) => handleRoomcountChange(e, index, false, -1)}>−</button>
 										<input type="text" className="form-control text-center" value={roomCount[index]} readOnly={true} />
-										<button className='btn btn-outline-dark' type="button" style={{zIndex : 0}} onClick={(e) => handleRoomcountChange(e, index, true, room.rooms.length)}>+</button>
+										<button className='btn btn-outline-dark' type="button" style={{ zIndex: 0 }} onClick={(e) => handleRoomcountChange(e, index, true, room.rooms.length)}>+</button>
 									</div>
 									<div className='container m-3 input-group'>
-										<button className='btn btn-primary' style={{zIndex : 0}} onClick={(e) => { toggleDialog(e, room.roomPrev) }}>Room preview</button>
+										<button className='btn btn-primary' style={{ zIndex: 0 }} onClick={(e) => { toggleDialog(e, "/"+room.roomType+".jpg") }}>Room preview</button>
 									</div>
 								</div>
 							</div>
@@ -383,18 +378,17 @@ const Roompage = (props) => {
 				))}
 			</div>
 
-			<dialog ref={previewBox} className='border  rounded'>
+			<dialog ref={previewBox} className='border rounded'>
+
 				<div>
-					{/* <ReactPannellum
-						id="1"
-						sceneId="firstScene"
-						imageSource={roomPrev}
-						config={config}
-						autoLoad={true}
-					/> */}
+					{showprev && <a-scene embedded style={{height : "75vh" ,width : "90vh"}}>
+						<img id="panorama" src={roomPrev} />
+						<a-sky src="#panorama" rotation="0 -90 0 "></a-sky>
+					</a-scene>}
+
 				</div>
 
-				<button type="button" className="btn btn-danger m-1" onClick={closeDialog}>Close</button>
+				<button type="button" className="btn m-1" style={{backgroundColor : "#e3483d" , color : "white"}}onClick={closeDialog}>Close</button>
 			</dialog>
 
 			<div className='d-flex justify-content-end mb-3'>
@@ -448,7 +442,7 @@ const Roompage = (props) => {
 								))}
 							</ul>
 						</div>
-						
+
 					</div>
 
 				</div>
