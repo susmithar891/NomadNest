@@ -194,7 +194,7 @@ app.post("/api/sign-in", redirectHome, async (req, res) => {
 
 app.post('/api/logout', (req, res) => {
     // if(req.cookies && req.cookies.session_token){
-    res.clearCookie('session_token',{path:'/',domain:'nomad-api-dot-centered-oasis-418917.wn.r.appspot.com',httpOnly:true});
+    res.clearCookie('session_token',{path:'/',domain:process.env.COOKIE_DOMAIN,httpOnly:true});
     // res.clearCookie('session_token')
     // }
     res.end()
@@ -213,7 +213,7 @@ app.post('/api/google/sign-in', redirectHome, async (req, res) => {
     if (checkaval_email) {
         const def_user = { firstname: checkaval_email.firstname, id: checkaval_email._id, lastName: checkaval_email.lastname, email: checkaval_email.email }
         const token = createToken(def_user);
-        res.cookie("session_token", token, { maxAge: 60 * 60 * 24 * 365,httpOnly: true,sameSite : "none",secure : true});
+        res.cookie("session_token", token, { domain : process.env.COOKIE_DOMAIN,maxAge: 60 * 60 * 24 * 365,httpOnly: true,sameSite : "none",secure : true});
         return res.status(200).send({"msg" : "Logging In"});
     }
     else {
