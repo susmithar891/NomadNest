@@ -194,7 +194,7 @@ app.post("/api/sign-in", redirectHome, async (req, res) => {
 
 app.post('/api/logout', (req, res) => {
     // if(req.cookies && req.cookies.session_token){
-    res.clearCookie('session_token',{path:'/',domain:process.env.COOKIE_DOMAIN,httpOnly:true});
+    res.clearCookie('session_token',{path:'/',domain:process.env.COOKIE_DOMAIN,httpOnly:true,sameSite : "none",secure : true});
     // res.clearCookie('session_token')
     // }
     res.end()
