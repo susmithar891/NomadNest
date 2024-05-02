@@ -57,7 +57,7 @@ const Register = () => {
 
 			const response = await request.post("/api/sign-up", { firstname: firstName, lastname: lastName, email: email, password: pass });
 			console.log(response.data)
-			if (response.data === "OK") {
+			if (response.data && response.data.msg) {
 				if (location.state && location.state.navigateUrl) {
 					navigate(location.state.navigateUrl)
 				}

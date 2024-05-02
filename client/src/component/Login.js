@@ -26,7 +26,7 @@ const Login = () => {
 		try {
 			const response = await request.post("/api/sign-in", { email: email, password: pass, remember: remember });
 
-			if (response.data === "OK") {
+			if (response.data && response.data.msg) {
 				if (location.state && location.state.navigateUrl) {
 					navigate(location.state.navigateUrl)
 				}
