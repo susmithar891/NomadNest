@@ -34,7 +34,6 @@ const { accessSync } = require("fs")
 const { sendMail, sendOTP, sendPass } = require('./controllers/emailService')
 const genRandPass = require('./controllers/generatePass')
 const { profile } = require("console")
-// const { toNamespacedPath } = require("path/win32")
 
 
 
@@ -57,16 +56,6 @@ app.use(cookieparser())
 app.use(cors(corsOption));
 
 
-// app.use(session({
-//     name: "user_sid",
-//     secret: 'ed3a7a2101d71527f2df187812f4037ad4cb0ddf6e01ed78d21602175d413b80fd8a089c92cb1ee06c8377d6947eb475537f19893f016671b22fe6ac7728ad23',
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: { maxAge: 1000 * 60 * 60, secure: false, httpOnly: true }
-// }))
-
-
-//functions
 function createToken(user) {
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
 }
@@ -105,17 +94,17 @@ function generateRandomString(length) {
 
     return st;
 }
+
+
 const redirectHome = async (req, res, next) => {
     if (req.cookies && req.cookies.session_token && verifyUser(req.cookies.session_token)) {
-        // res.redirect('/home')
-        // res.send({"msg" : "this is home"})
         try {
             let def_user = await user.findOne({ _id: verifyUser(req.cookies.session_token).id }).select('-password')
-            res.status(200).send({ redirect: 'home', user: def_user })
+            return res.status(200).send({ redirect: 'home', user: def_user })
         }
         catch (e) {
             console.log(e)
-            res.sendStatus(403)
+            return res.status(403).send(e)
         }
 
     }
@@ -126,10 +115,8 @@ const redirectHome = async (req, res, next) => {
 
 
 const redirectLogin = (req, res, next) => {
-    if (!verifyUser(req.cookies.session_token)) {
-        // res.redirect('/')
+    if (!verifyUser(req.cookies.session_token)) {        
         res.status(403).send({ redirect: 'landing' })
-        // res.send({"msg" : "this is Login"})
     }
     else {
         next()
@@ -137,13 +124,6 @@ const redirectLogin = (req, res, next) => {
 
 }
 
-// const stripeHandler = StripeCheckout.configure({
-//     key : process.env.STRIPE_PUBLIC_KEY,
-//     locale : 'en',
-//     token : function(token){
-        
-//     }
-// })
 
 
 //api-endpoints
@@ -152,7 +132,7 @@ app.get('/', async(req, res) => {
 })
 
 app.post('/api/check', redirectHome, (req, res) => {
-    res.send({ "msg": "No session detected" });
+    res.status(200).send({ redirect: "/" })
 })
 
 app.post("/api/sign-up", redirectHome, async (req, res) => {
@@ -160,7 +140,7 @@ app.post("/api/sign-up", redirectHome, async (req, res) => {
     const checkaval_email = await user.findOne({ email: req.body.email });
 
     if (checkaval_email) {
-        res.status(409).json("Email already exists");
+        return res.status(409).json({"error" : "Email already exists"});
     }
     else {
         try {
@@ -169,17 +149,17 @@ app.post("/api/sign-up", redirectHome, async (req, res) => {
 
             const newUser = await new user({ firstName: req.body.firstname, lastName: req.body.lastname, email: req.body.email, password: hashedPass });
 
-            const def_user = { firstname: newUser.firstname, id: newUser.id, lastName: newUser.lastname, email: newUser.email }
+            const def_user = { firstname: newUser.firstName, id: newUser._id, email: newUser.email }
 
             const token = createToken(def_user);
             res.cookie("session_token", token, { httpOnly: true});
 
             await newUser.save();
-            res.sendStatus(200);
+            return res.status(200).send({"msg" : "user registered successfully"});
 
         }
         catch (err) {
-            res.status(400).send(err)
+            return res.status(400).send({"error" : err})
         }
 
     }
@@ -191,60 +171,59 @@ app.post("/api/sign-in", redirectHome, async (req, res) => {
     if (loggeduser) {
         await bcrypt.compare(req.body.password, loggeduser.password, (err, resp) => {
             if (err) {
-                return res.sendStatus(400)
+                return res.status(500).send({"error" : e})
             }
             if (resp) {
-                const user = { firstname: loggeduser.firstname, id: loggeduser.id, lastName: loggeduser.lastname, email: loggeduser.email }
+                const user = { firstname: loggeduser.firstName, id: loggeduser._id,email: loggeduser.email }
                 const token = createToken(user);
                 res.cookie("session_token", token, { httpOnly: true })
 
-                return res.sendStatus(200)
+                return res.status(200).send({"msg" : "Logging In"})
             }
             else {
-                return res.sendStatus(401)
+                return res.status(401).send({"error" : "Invalid username / password"})
             }
         })
 
     }
     else {
-        return res.status(400).send({ "error": "Invalid Credentials" })
+        return res.status(401).send({ "error": "Invalid Credentials" })
     }
 
 })
 
-app.post('/api/logout', redirectLogin, (req, res) => {
+app.post('/api/logout', (req, res) => {
     res.clearCookie('session_token');
     res.end()
-    // res.status(200).json({"msg" : "user logged out successfully"})
 })
 
 app.post('/api/google/sign-in', redirectHome, async (req, res) => {
     const credResponse = req.body.credentialResponse.credential;
     const credResponseDecoded = jwtDecode(credResponse)
     if (process.env.GOOGLE_OAUTH_CLIENT_ID_SIGNIN !== req.body.credentialResponse.clientId) {
-        res.status(403).send({ "error": "client Id's doesn't match" })
+        return res.status(403).send({ "error": "client Id's doesn't match" })
     }
     if (!credResponseDecoded.email_verified) {
-        res.status(401).send({ 'error': "email Id is not verified" })
+        return res.status(401).send({ 'error': "email Id is not verified" })
     }
     const checkaval_email = await user.findOne({ email: credResponseDecoded.email });
     if (checkaval_email) {
         const def_user = { firstname: checkaval_email.firstname, id: checkaval_email._id, lastName: checkaval_email.lastname, email: checkaval_email.email }
         const token = createToken(def_user);
         res.cookie("session_token", token, { httpOnly: true });
-        res.sendStatus(200);
+        return res.status(200).send({"msg" : "Logging In"});
     }
     else {
         try {
             const newUser = await new user({ firstName: credResponseDecoded.given_name, lastName: credResponseDecoded.family_name, email: credResponseDecoded.email, profilePic: credResponseDecoded.picture });
-            const def_user = { firstname: newUser.firstname, id: newUser._id, lastName: newUser.lastname, email: newUser.email }
+            const def_user = { firstname: newUser.firstName, id: newUser._id, email: newUser.email }
             const token = createToken(def_user);
             await newUser.save();
             res.cookie("session_token", token, { httpOnly: true });
-            res.sendStatus(200);
+            return res.status(200).send({"msg" : "Logging In"});
         }
         catch (err) {
-            res.status(400).send(err)
+            return res.status(400).send({"error" : err})
         }
 
     }
@@ -261,7 +240,7 @@ app.post('/api/genOTP', async (req, res) => {
         checkaval_email = await user.findOne({ email: user_email })
     }
     catch (e) {
-        return res.status(500).send(e)
+        return res.status(500).send({"error" : e})
     }
     if (checkaval_email) {
         return res.status(401).send({ "error": "Email is already registered" })
@@ -271,15 +250,27 @@ app.post('/api/genOTP', async (req, res) => {
         findEntry = await otp.findOne({ email: user_email });
     }
     catch (e) {
-        return res.status(500).send(e)
+        return res.status(500).send({"error" : e})
     }
     if (findEntry) {
         const del_entry = await otp.deleteMany({ email: user_email });
     }
-    await sendOTP(user_email, new_otp)
-    const new_entry = await new otp({ email: user_email, otp: new_otp });
-    await new_entry.save()
-    return res.sendStatus(200)
+    try{
+        await sendOTP(user_email, new_otp)
+    }
+    catch(e){
+        return res.status(500).send({"error" : "error in sending Email"})
+    }
+    try{
+        const new_entry = await new otp({ email: user_email, otp: new_otp });
+        await new_entry.save()
+        return res.status(200).send({"msg" : "OTP generated successfully"})
+    }
+    catch(e){
+        return res.status(500).send({"error" : e})
+    }
+    
+    
 
 })
 
@@ -294,7 +285,7 @@ app.post('/api/verifyOTP', async (req, res) => {
         checkaval_email = await user.findOne({ email: user_email })
     }
     catch (e) {
-        return res.status(500).send(e)
+        return res.status(500).send({"error" : e})
     }
     if (checkaval_email) {
         return res.status(401).send({ "error": "Email is already registered" })
@@ -303,14 +294,14 @@ app.post('/api/verifyOTP', async (req, res) => {
         const findEntry = await otp.findOne({ otp: user_otp, email: user_email })
         if (findEntry) {
             const delEntry = await otp.deleteMany({ email: user_email })
-            return res.sendStatus(200)
+            return res.status(200).send({"msg" : "valid OTP"})
         }
         else {
-            return res.sendStatus(403)
+            return res.status(403).send({"error" : "Invalid OTP"})
         }
     }
     catch (e) {
-        return res.status(500).send(e)
+        return res.status(500).send({"error" : e})
     }
 })
 
@@ -325,7 +316,7 @@ app.post('/api/email-change', async (req, res) => {
         checkaval_email = await user.findOne({ email: user_email })
     }
     catch (e) {
-        return res.status(500).send(e)
+        return res.status(500).send({"error" : e})
     }
     if (checkaval_email) {
         return res.status(401).send({ "error": "Email is already registered" })
@@ -335,10 +326,10 @@ app.post('/api/email-change', async (req, res) => {
         findEntry = await otp.findOne({ otp: user_otp, email: user_email })
     }
     catch (e) {
-        return res.status(500).send(e)
+        return res.status(500).send({"error" : e})
     }
     if (!findEntry) {
-        return res.sendStatus(403)
+        return res.staus(403).send({"error" : "Invalid OTP"})
     }
     let def_user;
     if (req.cookies) {
@@ -353,7 +344,7 @@ app.post('/api/email-change', async (req, res) => {
         return res.sendStatus(200)
     }
     else {
-        return res.sendStatus(403)
+        return res.status(403).send({"error": "Invalid Token"})
     }
 })
 
@@ -520,28 +511,25 @@ app.post('/api/home/OnloadData', async (req, res) => {
     let def_user;
     if (req.cookies) {
         def_user = verifyUser(req.cookies.session_token)
-        res.status(200).send(def_user)
     }
-    res.status(200).send({"msg" : "hi"})
 
-    // try {
-    //     let user_det = null
-    //     if (def_user) {
-    //         user_det = await user.findOne({ _id: def_user.id }).select('-password -updatedAt -email -createdAt -__v -_id')
-    //     }
-    //     const qunt = {
-    //         username: user_det,
-    //         pageCount: pageCount,
-    //         data: pageData
-    //     }
+    try {
+        let user_det = null
+        if (def_user) {
+            user_det = await user.findOne({ _id: def_user.id }).select('-password -updatedAt -email -createdAt -__v -_id')
+        }
+        const qunt = {
+            username: user_det,
+            pageCount: pageCount,
+            data: pageData
+        }
 
-    //     res.status(200).send(qunt)
-    // }
-    // catch (err) {
-    //     console.log(err)
-    //     res.status(500).send(err)
-    //     // throw err
-    // }
+        res.status(200).send(qunt)
+    }
+    catch (err) {
+        console.log(err)
+        res.status(500).send(err)
+    }
 
 
 })

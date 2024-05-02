@@ -6,7 +6,6 @@ import PropTypes from 'prop-types'
 
 
 const Navbar = (props) => {
-    
 
 
     return (
@@ -51,8 +50,8 @@ const Navbar = (props) => {
                                                 src={props.user.profilePic}
                                                 className='rounded-circle'
                                                 style={{
-                                                    height : 60+"px",
-                                                    width : 60+"px"
+                                                    height: 60 + "px",
+                                                    width: 60 + "px"
                                                 }}
                                                 alt="Profile Picture"
                                             />
@@ -77,10 +76,10 @@ const Navbar = (props) => {
                             </ul>
                             : <ul className="navbar-nav ms-auto mb-0 mb-lg-0 profile-menu">
                                 <li className="nav-item dropdown m-3">
-                                    <Link to="/sign-up" state={{navigateUrl : props.navigateTo}} className="dropdown-item">Sign Up</Link>
+                                    <Link to="/sign-up" state={{ navigateUrl: props.navigateTo }} className="dropdown-item">Sign Up</Link>
                                 </li>
                                 <li className="nav-item dropdown m-3">
-                                    <Link to="/sign-in" state={{navigateUrl : props.navigateTo}} className="dropdown-item">Sign In</Link>
+                                    <Link to="/sign-in" state={{ navigateUrl: props.navigateTo }} className="dropdown-item">Sign In</Link>
                                 </li>
 
                             </ul> : <></>}

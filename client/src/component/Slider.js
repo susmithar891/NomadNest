@@ -24,7 +24,6 @@ const Slider = (props) => {
                                 modules={[FreeMode, Navigation, Thumbs]}
                                 grabCursor={true}
                                 centeredSlides={true}
-                                loop={true}
                                 slidesPerView={'auto'}
                                 navigation={true}
                                 className="swiper_container m-1 row"

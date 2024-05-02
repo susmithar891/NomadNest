@@ -205,6 +205,7 @@ const Login = () => {
 													onSuccess={credentialResponse => {
 														request.post('api/google/sign-in',{credentialResponse})
 														.then((response) => {
+															console.log(response)
 															if (response.data === "OK") {
 																if (location.state && location.state.navigateUrl) {
 																	navigate(location.state.navigateUrl)
