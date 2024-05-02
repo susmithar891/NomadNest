@@ -55,13 +55,13 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cookieparser())
 app.use(cors(corsOption));
-app.use(session({
-    name: "user_sid",
-    secret: 'ed3a7a2101d71527f2df187812f4037ad4cb0ddf6e01ed78d21602175d413b80fd8a089c92cb1ee06c8377d6947eb475537f19893f016671b22fe6ac7728ad23',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60, secure: false, httpOnly: true }
-}))
+// app.use(session({
+//     name: "user_sid",
+//     secret: 'ed3a7a2101d71527f2df187812f4037ad4cb0ddf6e01ed78d21602175d413b80fd8a089c92cb1ee06c8377d6947eb475537f19893f016671b22fe6ac7728ad23',
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: { maxAge: 1000 * 60 * 60, secure: false, httpOnly: true }
+// }))
 
 
 //functions
@@ -227,7 +227,7 @@ app.post('/api/google/sign-in', redirectHome, async (req, res) => {
     }
     const checkaval_email = await user.findOne({ email: credResponseDecoded.email });
     if (checkaval_email) {
-        const def_user = { firstname: checkaval_email.firstname, id: checkaval_email.id, lastName: checkaval_email.lastname, email: checkaval_email.email }
+        const def_user = {id: checkaval_email.id, email: checkaval_email.email}
         const token = createToken(def_user);
         res.cookie("session_token", token, { httpOnly: true });
         res.sendStatus(200);
