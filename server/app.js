@@ -511,27 +511,25 @@ app.post('/api/home/OnloadData', async (req, res) => {
     let def_user;
     if (req.cookies) {
         def_user = verifyUser(req.cookies.session_token)
-        return res.send({"user" : def_user})
     }
 
-    res.send({"msg" : "No token"})
-    // try {
-    //     let user_det = null
-    //     if (def_user) {
-    //         user_det = await user.findOne({ _id: def_user.id }).select('-password -updatedAt -email -createdAt -__v -_id')
-    //     }
-    //     const qunt = {
-    //         username: user_det,
-    //         pageCount: pageCount,
-    //         data: pageData
-    //     }
+    try {
+        let user_det = null
+        if (def_user) {
+            user_det = await user.findOne({ _id: def_user.id }).select('-password -updatedAt -email -createdAt -__v -_id')
+        }
+        const qunt = {
+            username: user_det,
+            pageCount: pageCount,
+            data: pageData
+        }
 
-    //     res.status(200).send(qunt)
-    // }
-    // catch (err) {
-    //     console.log(err)
-    //     res.status(500).send(err)
-    // }
+        res.status(200).send(qunt)
+    }
+    catch (err) {
+        console.log(err)
+        res.status(500).send(err)
+    }
 
 
 })
