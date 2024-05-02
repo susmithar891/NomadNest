@@ -214,17 +214,6 @@ const Login = () => {
 																}
 															}
 															
-															// if (response.data && response.data.msg && response.data.msg === "Logging In") {
-															// 	if (location.state && location.state.navigateUrl) {
-															// 		navigate(location.state.navigateUrl)
-															// 	}
-															// 	else {
-															// 		navigate('/home')
-															// 	}
-															// }
-															// else if (response.data.redirect && response.data.redirect === "home") {
-															// 	navigate('/home')
-															// }
 														})
 														.catch((e)=>{
 															console.log(e)
