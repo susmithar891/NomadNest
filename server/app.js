@@ -152,7 +152,7 @@ app.post("/api/sign-up", redirectHome, async (req, res) => {
             const def_user = { firstname: newUser.firstName, id: newUser._id, email: newUser.email }
 
             const token = createToken(def_user);
-            res.cookie("session_token", token, {maxAge: 900000, httpOnly: true});
+            res.cookie("session_token", token, {maxAge: 60 * 60 * 24 * 365, httpOnly: true,sameSite : "none"});
 
             await newUser.save();
             return res.status(200).send({"msg" : "user registered successfully"});
@@ -176,7 +176,7 @@ app.post("/api/sign-in", redirectHome, async (req, res) => {
             if (resp) {
                 const user = { firstname: loggeduser.firstName, id: loggeduser._id,email: loggeduser.email }
                 const token = createToken(user);
-                res.cookie("session_token", token, { maxAge: 900000,httpOnly: true })
+                res.cookie("session_token", token, { maxAge: 60 * 60 * 24 * 365,httpOnly: true,sameSite : "none"})
 
                 return res.status(200).send({"msg" : "Logging In"})
             }
@@ -210,7 +210,7 @@ app.post('/api/google/sign-in', redirectHome, async (req, res) => {
     if (checkaval_email) {
         const def_user = { firstname: checkaval_email.firstname, id: checkaval_email._id, lastName: checkaval_email.lastname, email: checkaval_email.email }
         const token = createToken(def_user);
-        res.cookie("session_token", token, { maxAge: 900000,httpOnly: true });
+        res.cookie("session_token", token, { maxAge: 60 * 60 * 24 * 365,httpOnly: true,sameSite : "none"});
         return res.status(200).send({"msg" : "Logging In"});
     }
     else {
@@ -219,7 +219,7 @@ app.post('/api/google/sign-in', redirectHome, async (req, res) => {
             const def_user = { firstname: newUser.firstName, id: newUser._id, email: newUser.email }
             const token = createToken(def_user);
             await newUser.save();
-            res.cookie("session_token", token, { maxAge: 900000,httpOnly: true });
+            res.cookie("session_token", token, { maxAge: 60 * 60 * 24 * 365,httpOnly: true,sameSite : "none" });
             return res.status(200).send({"msg" : "Logging In"});
         }
         catch (err) {
