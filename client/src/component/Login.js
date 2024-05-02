@@ -205,18 +205,26 @@ const Login = () => {
 													onSuccess={credentialResponse => {
 														request.post('api/google/sign-in',{credentialResponse})
 														.then((response) => {
-															console.log(response)
-															if (response.data === "OK") {
+															if(response && response.data){
 																if (location.state && location.state.navigateUrl) {
 																	navigate(location.state.navigateUrl)
 																}
-																else {
+																else{
 																	navigate('/home')
 																}
 															}
-															if (response.data.redirect && response.data.redirect === "home") {
-																navigate('/home')
-															}
+															
+															// if (response.data && response.data.msg && response.data.msg === "Logging In") {
+															// 	if (location.state && location.state.navigateUrl) {
+															// 		navigate(location.state.navigateUrl)
+															// 	}
+															// 	else {
+															// 		navigate('/home')
+															// 	}
+															// }
+															// else if (response.data.redirect && response.data.redirect === "home") {
+															// 	navigate('/home')
+															// }
 														})
 														.catch((e)=>{
 															console.log(e)
