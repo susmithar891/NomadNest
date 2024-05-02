@@ -194,7 +194,7 @@ app.post("/api/sign-in", redirectHome, async (req, res) => {
 
 app.post('/api/logout', (req, res) => {
     if(req.cookies && req.cookies.token && req.cookies.session_token){
-        res.clearCookie('session_token');
+        res.clearCookie('session_token',{path : "/",domain : "nomad-api-dot-centered-oasis-418917.wn.r.appspot.com",});
     }
     res.end()
 })
