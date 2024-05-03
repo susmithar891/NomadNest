@@ -13,8 +13,14 @@ const ContactUs = () => {
 
 	const handleSubmit = async(e)=>{
 		e.preventDefault()
+		console.log(name)
 		try{
-			const res = await request.post("/queries", {name : name,email:email,phone:phone,message : message});
+			const res = await request.post("/api/queries", {name : name,email:email,phone:phone,message : message});
+			alert(res.data.msg)
+			setName("")
+			setEmail("")
+			setPhone("")
+			setMessage("")
 		}
 		catch(e){
 			console.log(e)
@@ -59,7 +65,7 @@ const ContactUs = () => {
 													className="form-control"
 													id="fullname"
 													name="fullname"
-													defaultValue=""
+													value={name}
 													required
 													onChange={(e) => {setName(e.target.value)}}
 												/>
@@ -86,7 +92,7 @@ const ContactUs = () => {
 														className="form-control"
 														id="email"
 														name="email"
-														defaultValue=""
+														value={email}
 														required
 														onChange={(e) => {setEmail(e.target.value)}}
 													/>
@@ -114,7 +120,7 @@ const ContactUs = () => {
 														className="form-control"
 														id="phone"
 														name="phone"
-														defaultValue=""
+														value={phone}
 														required
 														onChange={(e) => {setPhone(e.target.value)}}
 													/>
@@ -129,7 +135,7 @@ const ContactUs = () => {
 													id="message"
 													name="message"
 													rows={3}
-													defaultValue={""}
+													value={message}
 													required
 													onChange={(e) => {setMessage(e.target.value)}}
 												/>

@@ -30,6 +30,7 @@ const booking = require('./models/bookings.model')
 const reserve = require('./models/reserve.model')
 const otp = require('./models/otp.model')
 const forgotPass = require('./models/passotp.model')
+const query = require('./models/quries.model')
 const { accessSync } = require("fs")
 const { sendMail, sendOTP, sendPass ,cancelBook} = require('./controllers/emailService')
 const genRandPass = require('./controllers/generatePass')
@@ -1243,6 +1244,17 @@ app.post('/api/forgotpass/verifyotp', async (req, res) => {
 
 
 
+
+app.post('/api/queries',async(req,res) => {
+    try{
+        const que = await new query({name : req.body.name,email : req.body.email,phone : req.body.phone,message : req.body.message})
+        await que.save()
+        res.send({"msg" : "query sent succesfully"})
+    }
+    catch(e){
+        res.status(500).send(e)
+    }
+})
 
 
 app.listen(port, () => {
