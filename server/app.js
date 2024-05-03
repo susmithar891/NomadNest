@@ -45,7 +45,7 @@ const endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
 
 const corsOption = {
     origin: process.env.CLIENT_URL,
-    credentials: true,
+    // credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
 }
 
@@ -184,7 +184,8 @@ app.post("/api/sign-in", redirectHome, async (req, res) => {
             if (resp) {
                 const user = { firstname: loggeduser.firstName, id: loggeduser._id, email: loggeduser.email }
                 const token = createToken(user);
-                res.cookie("session_token", token, { domain: process.env.COOKIE_DOMAIN, maxAge: 60 * 60 * 24 * 365, httpOnly: true, sameSite: "none", secure: true })
+                // res.cookie("session_token", token, { domain: process.env.COOKIE_DOMAIN, maxAge: 60 * 60 * 24 * 365, httpOnly: true, sameSite: "none", secure: true })
+                res.cookie("session_token", token, {maxAge: 60 * 60 * 24 * 365, httpOnly: true, sameSite: "none", secure: true })
 
                 return res.status(200).send({ "msg": "Logging In" })
             }
