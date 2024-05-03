@@ -15,7 +15,7 @@ steps:
       - 'deploy'
       - 'app.yaml'
       - '--project'
-      - 'centered-oasis-418917'
+      - 'project2-422210'
       - '--quiet'
 
 options:

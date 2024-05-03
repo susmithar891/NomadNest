@@ -191,7 +191,7 @@ const Register = () => {
 										Sign Up
 									</button>
 									<div className='d-flex justify-content-center'>
-										<GoogleOAuthProvider clientId="261497187757-vom1lr1cbsr68nn53b5318sdflkp028r.apps.googleusercontent.com">
+										<GoogleOAuthProvider clientId="818963098694-uc2tind3all4ecjbvchc2nt9o6gj90jq.apps.googleusercontent.com">
 											<GoogleLogin className="btn btn-link btn-floating mx-1 p-2"
 												onSuccess={async (credentialResponse) => {
 													try {
