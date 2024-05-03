@@ -1121,10 +1121,10 @@ app.post('/api/User/uploadPic', multer.single('profile'), async (req, res) => {
     }
     try {
         blobstream.on('finish', async () => {
-            user_det.profilePic = `https://storage.googleapis.com/nomadnest/users/${profilepicname}`
+            user_det.profilePic = `https://storage.googleapis.com/nomadnest2/users/${profilepicname}`
             try {
                 await user_det.save()
-                res.status(200).send({ profilePic: `https://storage.googleapis.com/nomadnest/users/${profilepicname}` })
+                res.status(200).send({ profilePic: `https://storage.googleapis.com/nomadnest2/users/${profilepicname}` })
             }
             catch (e) {
                 res.status(500).send(e)
@@ -1254,6 +1254,80 @@ app.post('/api/queries',async(req,res) => {
     catch(e){
         res.status(500).send(e)
     }
+})
+
+
+app.post('/api/User/:reserveId/verify', multer.single('imgFile'), async (req, res) => {
+
+    
+
+    let def_user;
+    if (req.cookies) {
+        def_user = verifyUser(req.cookies.session_token)
+    }
+    if (!def_user) {
+        res.sendStatus(403)
+    }
+    let user_det
+    try {
+        user_det = await user.findOne({ _id: def_user.id })
+    } catch (e) {
+        res.status(500).send(e)
+    }
+    // if (req.file) {
+    //     const array_of_allowed_files = ['png', 'jpeg', 'jpg'];
+    //     const array_of_allowed_file_types = ['image/png', 'image/jpeg', 'image/jpg'];
+    //     const file_extension = req.file.originalname.slice(
+    //         ((req.file.originalname.lastIndexOf('.') - 1) >>> 0) + 2
+    //     );
+    //     if (!array_of_allowed_files.includes(file_extension) || !array_of_allowed_file_types.includes(req.file.mimetype)) {
+    //         return res.status(400).send({ error: 'Invalid file' });
+    //     }
+           
+    // }
+    // else {
+    //     return res.status(400).send({ error: "provide a image file to proceed" })
+    // }
+
+    let reserving
+    try{
+        reserving = await reserve.findOne({_id : req.params.reserveId})
+        reserving.isVerified = true
+        await reserving.save()
+        return res.send({"msg" : "file saved suucessfully"})
+    }
+    catch(e){
+        return res.send({error : "No such reservation found"})
+    }
+    // const randString = generateRandomString(32)
+    // const profilepicname = user_det.firstName + "_" + randString
+    // let blobstream
+    // try {
+    //     const blob = bucket.file(`users/${profilepicname}`)
+    //     blobstream = await blob.createWriteStream();
+    // }
+
+    // catch (e) {
+    //     console.log(e)
+    //     res.status(500).send(e);
+    // }
+    // try {
+    //     blobstream.on('finish', async () => {
+    //         user_det.profilePic = `https://storage.googleapis.com/nomadnest/users/${profilepicname}`
+    //         try {
+    //             await user_det.save()
+    //             res.status(200).send({ profilePic: `https://storage.googleapis.com/nomadnest/users/${profilepicname}` })
+    //         }
+    //         catch (e) {
+    //             res.status(500).send(e)
+    //         }
+
+    //     })
+    //     blobstream.end(req.file.buffer)
+    // } catch (e) {
+    //     res.status(500).send(e)
+    // }
+
 })
 
 
