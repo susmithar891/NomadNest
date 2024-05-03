@@ -52,14 +52,14 @@ const corsOption = {
 //middlewares
 app.use(express.static(path.join(__dirname, '/public')))
 app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
-// app.use((req, res, next) => {
-//     if (req.originalUrl.includes("/webhook")) {
-//         next();
-//     } else {
-//         express.json({ limit: "1mb" })(req, res, next);
-//     }
-// });
+// app.use(express.json())
+app.use((req, res, next) => {
+    if (req.originalUrl.includes("/webhook")) {
+        next();
+    } else {
+        express.json({ limit: "1mb" })(req, res, next);
+    }
+});
 app.use(cookieparser())
 app.use(cors(corsOption));
 
@@ -222,7 +222,7 @@ app.post('/api/google/sign-in', redirectHome, async (req, res) => {
     if (checkaval_email) {
         const def_user = { firstname: checkaval_email.firstname, id: checkaval_email._id, lastName: checkaval_email.lastname, email: checkaval_email.email }
         const token = createToken(def_user);
-        res.cookie("session_token", token, { domain: process.env.COOKIE_DOMAIN, maxAge: 60 * 60 * 24 * 365, httpOnly: true, sameSite: "none", secure: true });
+        res.cookie("session_token", token, {domain: process.env.COOKIE_DOMAIN, maxAge: 60 * 60 * 24 * 365, httpOnly: true, sameSite: "none", secure: true });
         // res.cookie("session_token", token, {maxAge: 60 * 60 * 24 * 365, httpOnly: true, sameSite: "none", secure: true });
         return res.status(200).send({ "msg": "Logging In" });
     }
@@ -232,7 +232,7 @@ app.post('/api/google/sign-in', redirectHome, async (req, res) => {
             const def_user = { firstname: newUser.firstName, id: newUser._id, email: newUser.email }
             const token = createToken(def_user);
             await newUser.save();
-            res.cookie("session_token", token, { domain: process.env.COOKIE_DOMAIN, maxAge: 60 * 60 * 24 * 365, httpOnly: true, sameSite: "none", secure: true });
+            res.cookie("session_token", token, {domain: process.env.COOKIE_DOMAIN, maxAge: 60 * 60 * 24 * 365, httpOnly: true, sameSite: "none", secure: true });
             // res.cookie("session_token", token, {maxAge: 60 * 60 * 24 * 365, httpOnly: true, sameSite: "none", secure: true });
             return res.status(200).send({ "msg": "Logging In" });
         }
