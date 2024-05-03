@@ -40,6 +40,7 @@ const { profile } = require("console")
 //definitions
 const app = express()
 port = process.env.PORT || 4000
+const endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
 
 
 const corsOption = {
@@ -51,7 +52,14 @@ const corsOption = {
 //middlewares
 app.use(express.static(path.join(__dirname, '/public')))
 app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
+// app.use(express.json())
+app.use((req, res, next) => {
+    if (req.originalUrl.includes("/webhook")) {
+        next();
+    } else {
+        express.json({ limit: "1mb" })(req, res, next);
+    }
+});
 app.use(cookieparser())
 app.use(cors(corsOption));
 
@@ -115,7 +123,7 @@ const redirectHome = async (req, res, next) => {
 
 
 const redirectLogin = (req, res, next) => {
-    if (!verifyUser(req.cookies.session_token)) {        
+    if (!verifyUser(req.cookies.session_token)) {
         res.status(403).send({ redirect: 'landing' })
     }
     else {
@@ -127,7 +135,7 @@ const redirectLogin = (req, res, next) => {
 
 
 //api-endpoints
-app.get('/', async(req, res) => {
+app.get('/', async (req, res) => {
     res.status(200).send("hoi")
 })
 
@@ -140,7 +148,7 @@ app.post("/api/sign-up", redirectHome, async (req, res) => {
     const checkaval_email = await user.findOne({ email: req.body.email });
 
     if (checkaval_email) {
-        return res.status(409).json({"error" : "Email already exists"});
+        return res.status(409).json({ "error": "Email already exists" });
     }
     else {
         try {
@@ -152,14 +160,14 @@ app.post("/api/sign-up", redirectHome, async (req, res) => {
             const def_user = { firstname: newUser.firstName, id: newUser._id, email: newUser.email }
 
             const token = createToken(def_user);
-            res.cookie("session_token", token, {domain:process.env.COOKIE_DOMAIN,maxAge: 60 * 60 * 24 * 365, httpOnly: true,sameSite : "none",secure : true});
+            res.cookie("session_token", token, { domain: process.env.COOKIE_DOMAIN, maxAge: 60 * 60 * 24 * 365, httpOnly: true, sameSite: "none", secure: true });
 
             await newUser.save();
-            return res.status(200).send({"msg" : "user registered successfully"});
+            return res.status(200).send({ "msg": "user registered successfully" });
 
         }
         catch (err) {
-            return res.status(400).send({"error" : err})
+            return res.status(400).send({ "error": err })
         }
 
     }
@@ -171,17 +179,17 @@ app.post("/api/sign-in", redirectHome, async (req, res) => {
     if (loggeduser) {
         await bcrypt.compare(req.body.password, loggeduser.password, (err, resp) => {
             if (err) {
-                return res.status(500).send({"error" : e})
+                return res.status(500).send({ "error": e })
             }
             if (resp) {
-                const user = { firstname: loggeduser.firstName, id: loggeduser._id,email: loggeduser.email }
+                const user = { firstname: loggeduser.firstName, id: loggeduser._id, email: loggeduser.email }
                 const token = createToken(user);
-                res.cookie("session_token", token, {domain:process.env.COOKIE_DOMAIN, maxAge: 60 * 60 * 24 * 365,httpOnly: true,sameSite : "none",secure : true})
+                res.cookie("session_token", token, { domain: process.env.COOKIE_DOMAIN, maxAge: 60 * 60 * 24 * 365, httpOnly: true, sameSite: "none", secure: true })
 
-                return res.status(200).send({"msg" : "Logging In"})
+                return res.status(200).send({ "msg": "Logging In" })
             }
             else {
-                return res.status(401).send({"error" : "Invalid username / password"})
+                return res.status(401).send({ "error": "Invalid username / password" })
             }
         })
 
@@ -194,7 +202,7 @@ app.post("/api/sign-in", redirectHome, async (req, res) => {
 
 app.post('/api/logout', (req, res) => {
     // if(req.cookies && req.cookies.session_token){
-    res.clearCookie('session_token',{path:'/',domain:process.env.COOKIE_DOMAIN,httpOnly:true,sameSite : "none",secure : true});
+    res.clearCookie('session_token', { path: '/', domain: process.env.COOKIE_DOMAIN, httpOnly: true, sameSite: "none", secure: true });
     // res.clearCookie('session_token')
     // }
     res.end()
@@ -213,8 +221,8 @@ app.post('/api/google/sign-in', redirectHome, async (req, res) => {
     if (checkaval_email) {
         const def_user = { firstname: checkaval_email.firstname, id: checkaval_email._id, lastName: checkaval_email.lastname, email: checkaval_email.email }
         const token = createToken(def_user);
-        res.cookie("session_token", token, { domain : process.env.COOKIE_DOMAIN,maxAge: 60 * 60 * 24 * 365,httpOnly: true,sameSite : "none",secure : true});
-        return res.status(200).send({"msg" : "Logging In"});
+        res.cookie("session_token", token, { domain: process.env.COOKIE_DOMAIN, maxAge: 60 * 60 * 24 * 365, httpOnly: true, sameSite: "none", secure: true });
+        return res.status(200).send({ "msg": "Logging In" });
     }
     else {
         try {
@@ -222,16 +230,19 @@ app.post('/api/google/sign-in', redirectHome, async (req, res) => {
             const def_user = { firstname: newUser.firstName, id: newUser._id, email: newUser.email }
             const token = createToken(def_user);
             await newUser.save();
-            res.cookie("session_token", token, {domain:process.env.COOKIE_DOMAIN, maxAge: 60 * 60 * 24 * 365,httpOnly: true,sameSite : "none",secure : true});
-            return res.status(200).send({"msg" : "Logging In"});
+            res.cookie("session_token", token, { domain: process.env.COOKIE_DOMAIN, maxAge: 60 * 60 * 24 * 365, httpOnly: true, sameSite: "none", secure: true });
+            return res.status(200).send({ "msg": "Logging In" });
         }
         catch (err) {
-            return res.status(400).send({"error" : err})
+            return res.status(400).send({ "error": err })
         }
 
     }
 
 })
+
+
+
 
 
 
@@ -243,7 +254,7 @@ app.post('/api/genOTP', async (req, res) => {
         checkaval_email = await user.findOne({ email: user_email })
     }
     catch (e) {
-        return res.status(500).send({"error" : e})
+        return res.status(500).send({ "error": e })
     }
     if (checkaval_email) {
         return res.status(401).send({ "error": "Email is already registered" })
@@ -253,27 +264,27 @@ app.post('/api/genOTP', async (req, res) => {
         findEntry = await otp.findOne({ email: user_email });
     }
     catch (e) {
-        return res.status(500).send({"error" : e})
+        return res.status(500).send({ "error": e })
     }
     if (findEntry) {
         const del_entry = await otp.deleteMany({ email: user_email });
     }
-    try{
+    try {
         await sendOTP(user_email, new_otp)
     }
-    catch(e){
-        return res.status(500).send({"error" : "error in sending Email"})
+    catch (e) {
+        return res.status(500).send({ "error": "error in sending Email" })
     }
-    try{
+    try {
         const new_entry = await new otp({ email: user_email, otp: new_otp });
         await new_entry.save()
-        return res.status(200).send({"msg" : "OTP generated successfully"})
+        return res.status(200).send({ "msg": "OTP generated successfully" })
     }
-    catch(e){
-        return res.status(500).send({"error" : e})
+    catch (e) {
+        return res.status(500).send({ "error": e })
     }
-    
-    
+
+
 
 })
 
@@ -288,7 +299,7 @@ app.post('/api/verifyOTP', async (req, res) => {
         checkaval_email = await user.findOne({ email: user_email })
     }
     catch (e) {
-        return res.status(500).send({"error" : e})
+        return res.status(500).send({ "error": e })
     }
     if (checkaval_email) {
         return res.status(401).send({ "error": "Email is already registered" })
@@ -297,14 +308,14 @@ app.post('/api/verifyOTP', async (req, res) => {
         const findEntry = await otp.findOne({ otp: user_otp, email: user_email })
         if (findEntry) {
             const delEntry = await otp.deleteMany({ email: user_email })
-            return res.status(200).send({"msg" : "valid OTP"})
+            return res.status(200).send({ "msg": "valid OTP" })
         }
         else {
-            return res.status(403).send({"error" : "Invalid OTP"})
+            return res.status(403).send({ "error": "Invalid OTP" })
         }
     }
     catch (e) {
-        return res.status(500).send({"error" : e})
+        return res.status(500).send({ "error": e })
     }
 })
 
@@ -319,7 +330,7 @@ app.post('/api/email-change', async (req, res) => {
         checkaval_email = await user.findOne({ email: user_email })
     }
     catch (e) {
-        return res.status(500).send({"error" : e})
+        return res.status(500).send({ "error": e })
     }
     if (checkaval_email) {
         return res.status(401).send({ "error": "Email is already registered" })
@@ -329,10 +340,10 @@ app.post('/api/email-change', async (req, res) => {
         findEntry = await otp.findOne({ otp: user_otp, email: user_email })
     }
     catch (e) {
-        return res.status(500).send({"error" : e})
+        return res.status(500).send({ "error": e })
     }
     if (!findEntry) {
-        return res.staus(403).send({"error" : "Invalid OTP"})
+        return res.staus(403).send({ "error": "Invalid OTP" })
     }
     let def_user;
     if (req.cookies) {
@@ -347,7 +358,7 @@ app.post('/api/email-change', async (req, res) => {
         return res.sendStatus(200)
     }
     else {
-        return res.status(403).send({"error": "Invalid Token"})
+        return res.status(403).send({ "error": "Invalid Token" })
     }
 })
 
@@ -536,8 +547,6 @@ app.post('/api/home/OnloadData', async (req, res) => {
 
 
 })
-
-
 
 app.post('/api/home/data', async (req, res) => {
     const loc = req.query.location;
@@ -766,78 +775,247 @@ app.post('/api/user/:id/reservings', async (req, res) => {
 
 })
 
-app.post('/api/user/:id/payment', async (req, res) => {
-    // let def_user;
-    // if (req.cookies) {
-    //     def_user = verifyUser(req.cookies.session_token)
-    // }
-    // if (!def_user) {
-    //     res.status(401).send("Unauthoriazed")
-    // }
-
-    // let user_det = null
-    // try {
-    //     if (def_user) {
-    //         user_det = await user.findOne({ _id: def_user.id }).select('-password -updatedAt -email -createdAt -__v -_id')
-    //     }
-    // }
-    // catch (e) {
-    //     res.status(500).send(e)
-    // }
-
-    // let reserving
-    // try {
-    //     reserving = await reserve.findOne({ _id: req.body.reserveId })
-    // }
-    // catch (e) {
-    //     res.status(500).send(e)
-    // }
-
-    // if (!reserving) {
-    //     res.status(400).send(e)
-    // }
 
 
-    // const hotelData = await hotel.findOne({ _id: reserving.hotelId })
-    // const lineItems =  reserving.reservedRoomIds.map((roomId) => {
-    //     return {
-    //         price_data: {
-    //             currency: 'usd',
-    //             product_data: {
-    //                 // hotelName : hotelData.hotelName,
-    //                 // roomNo : roomId.roomNo,
-    //                 name: hotelData.hotelName + " " +roomId.roomNo
-    //             },
-    //             unit_amount: roomId.price
-    //         },
-    //         quantity: 1,
-    //     }
-    // }
 
-    // )
-    
+app.post('/api/user/payment', async (req, res) => {
+    let def_user;
+    if (req.cookies) {
+        def_user = verifyUser(req.cookies.session_token)
+    }
+    if (!def_user) {
+        return res.status(401).send("Unauthoriazed")
+    }
 
-    // try {
-    //     const session = await stripeHandler.checkout.sessions.create({
-    //         payment_method_types: ['card'],
-    //         mode: 'payment',
-    //         line_items: lineItems,
-    //         success_url : `${process.env.CLIENT_URL}/success`,
-    //         cancel_url : `${process.env.CLIENT_URL}/failed`
-    //     })
-    // res.status(200).send({ sessionUrl: session.url });
-        
-    // }catch (e) {
-    // // res.status(500).send(e)
-    // console.log(e)
+    let user_det = null
+    try {
+        if (def_user) {
+            user_det = await user.findOne({ _id: def_user.id }).select('-password -updatedAt -email -createdAt -__v -_id')
+        }
+    }
+    catch (e) {
+        return res.status(500).send(e)
+    }
 
-    res.send({"msg" :"collecting payment"})
-// }
+    let reserving
+    try {
+        reserving = await reserve.findOne({ _id: req.body.reserveId })
 
-    
-// }
-// )
+    }
+    catch (e) {
+        return res.status(500).send(e)
+    }
+
+    if (!reserving) {
+        return res.status(400).send({ "error": "no resevartion found" })
+    }
+
+    let hotelData;
+    try {
+        hotelData = await hotel.findOne({ _id: reserving.hotelId })
+    }
+    catch(e){
+        return res.status(500).send({ error: e })
+    }
+    if (!hotelData) {
+        return res.status(400).send({ "error": "No such hotel Id" })
+    }
+    const lineItems = reserving.reservedRoomIds.map((roomId) => {
+        return {
+            price_data: {
+                currency: 'usd',
+                product_data: {
+                    name: hotelData.hotelName + " " + roomId.roomNo
+                },
+                unit_amount: roomId.price
+            },
+            quantity: 1,
+        }
+    }
+
+    )
+
+
+    try {
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            mode: 'payment',
+            line_items: lineItems,
+            success_url: `${process.env.CLIENT_URL}/success`,
+            cancel_url: `${process.env.CLIENT_URL}/failed`
+        })
+        reserving.sessionId = session.id
+        await reserving.save()
+        res.status(200).send({ sessionUrl: session.url });
+
+    } catch (e) {
+        res.status(500).send({error : e})
+    }
+
+
 })
+
+
+app.post('/webhook', express.raw({ type: 'application/json' }), async (request, response) => {
+    const sig = request.headers['stripe-signature'];
+
+    let event;
+
+    try {
+        event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+    } catch (err) {
+        response.status(400).send(`Webhook Error: ${err.message}`);
+        return;
+    }
+
+    if (!event) {
+        console.log("no such event")
+    }
+
+
+    // Handle the event
+    switch (event.type) {
+
+        case 'charge.expired':
+            const chargeExpired = event.data.object;
+            // console.log(event.data.object)
+            break;
+        case 'charge.failed':
+            const chargeFailed = event.data.object;
+            // console.log(event.data.object)
+            break;
+        case 'charge.refunded':
+            const chargeRefunded = event.data.object;
+            // console.log(event.data.object)
+            break;
+        case 'payment_intent.succeeded':
+            const paymentIntentSucceeded = event.data.object;
+            // Then define and call a function to handle the event payment_intent.succeeded
+
+
+            break;
+        case 'checkout.session.async_payment_succeeded':
+            const checkoutSessionAsyncPaymentSucceeded = event.data.object;
+            break;
+        case 'checkout.session.completed':
+            const checkoutSessionCompleted = event.data.object;
+            const sessId = checkoutSessionCompleted.id;
+            const amount = checkoutSessionCompleted.amount_total;
+            const paymentIntent = checkoutSessionCompleted.payment_intent;
+            const paymentType = "card";
+            let reservation;
+            try{
+                reservation = await reserve.findOne({sessionId : sessId})
+                reservation.isPaid = true;
+            }
+            catch(e){
+                return response.status(500).send(e)
+            }
+            if(!reservation){
+                return response.sendStatus(400)    
+            }
+            
+            try{
+                const new_booking = await new booking({sessionId :sessId,paymentType : paymentType,userId :reservation.userId,hotelId : reservation.hotelId,amountPaid : amount,paymentIntent : paymentIntent});
+                await new_booking.save()
+                await reservation.save()
+            }
+            catch(e){
+                return response.status(500).send(e)
+            }
+            
+            
+            
+
+            break;
+        case 'charge.succeeded':
+            const chargeSucceeded = event.data.object;
+
+
+            // const new_booking = new booking({transactionId : transId,paymentIntent : paymentIntent,paymentType : paymentType,amountPaid : amount})
+
+            break;
+    }
+
+    // Return a 200 response to acknowledge receipt of the event
+    response.send();
+});
+
+app.post('/api/reserving/cancel', async (req, res) => {
+    const reserveId = req.body.reserveId
+    let def_user;
+    if (req.cookies) {
+        def_user = verifyUser(req.cookies.session_token)
+    }
+    if (!def_user) {
+        res.sendStatus(403)
+    }
+    let user_det
+    try {
+        user_det = await user.findOne({ _id: def_user.id })
+    } catch (e) {
+        res.status(500).send(e)
+    }
+    if (!user_det) {
+        res.sendStatus(403)
+    }
+
+    let reservation
+    try {
+        reservation = await reserve.findOne({ _id: reserveId, userId: user_det._id })
+        // console.log(reservation)
+    } catch (e) {
+        res.status(500).send(e)
+    }
+
+    if (!reservation) {
+        res.status(400).send({ error: "no such reservation" })
+    }
+
+    let bookingInfo;
+    try{
+        bookingInfo = await booking.findOne({sessionId : reservation.sessionId})
+        const refund = await stripe.refunds.create({
+            payment_intent: bookingInfo.paymentIntent,
+            amount:bookingInfo.amountPaid,
+        });
+    }catch(e){
+        res.status(500).send({error : e})
+    }
+
+    if (reservation.inDate <= new Date(Date.now())) {
+        res.status(400).send({ error: "you can't cancel this reservation" })
+    }
+
+    reservation.reservedRoomIds.forEach(async (reser) => {
+        let findRoom
+        try {
+            findRoom = await room.findOne({ _id: reser.roomID })
+            const newresDates = findRoom.reservedDates.filter((dates) => {
+                console.log((dates.in_date).toISOString() !== (reservation.inDate).toISOString() || dates.out_date.toISOString() !== reservation.outDate.toISOString())
+                return (dates.in_date.toISOString() !== reservation.inDate.toISOString() || dates.out_date.toISOString() !== reservation.outDate.toISOString())
+            })
+            console.log(newresDates)
+            findRoom.reservedDates = newresDates
+            console.log(findRoom)
+            await findRoom.save()
+        }
+        catch (e) {
+            console.log(e)
+            res.status(500).send(e)
+        }
+    })
+    
+    reservation.isCancelled = true;
+    await reservation.save();
+    res.sendStatus(200)
+
+})
+
+
+
+
+
 
 app.post('/api/user/rate', async (req, res) => {
     let def_user;
@@ -875,7 +1053,7 @@ app.post('/api/user/rate', async (req, res) => {
     if (!reservation) {
         return res.sendStatus(403)
     }
-    const thatHotel = await hotel.findOne({ _id: reservation.hotelId })    
+    const thatHotel = await hotel.findOne({ _id: reservation.hotelId })
     if (!thatHotel) {
         return res.status(400).send({ "error": "Invalid hotel Id" })
     }
@@ -941,7 +1119,7 @@ app.post('/api/User/uploadPic', multer.single('profile'), async (req, res) => {
         res.status(500).send(e);
     }
     try {
-        blobstream.on('finish', async () => {            
+        blobstream.on('finish', async () => {
             user_det.profilePic = `https://storage.googleapis.com/nomadnest/users/${profilepicname}`
             try {
                 await user_det.save()
@@ -953,7 +1131,7 @@ app.post('/api/User/uploadPic', multer.single('profile'), async (req, res) => {
 
         })
         blobstream.end(req.file.buffer)
-    }catch(e){
+    } catch (e) {
         res.status(500).send(e)
     }
 
@@ -983,65 +1161,6 @@ app.post('/api/User/uploadPic', multer.single('profile'), async (req, res) => {
     // catch (e) {
     //     res.status(500).send(e)
     // }
-})
-
-app.post('/api/reserving/cancel', async (req, res) => {
-    const reserveId = req.body.reserveId
-    let def_user;
-    if (req.cookies) {
-        def_user = verifyUser(req.cookies.session_token)
-    }
-    if (!def_user) {
-        res.sendStatus(403)
-    }
-    let user_det
-    try {
-        user_det = await user.findOne({ _id: def_user.id })
-    } catch (e) {
-        res.status(500).send(e)
-    }
-    if (!user_det) {
-        res.sendStatus(403)
-    }
-
-    let reservation
-    try {
-        reservation = await reserve.findOne({ _id: reserveId, userId: user_det._id })
-        // console.log(reservation)
-    } catch (e) {
-        res.status(500).send(e)
-    }
-
-    if (!reservation) {
-        res.status(400).send({ error: "no such reservation" })
-    }
-
-    if (reservation.inDate <= new Date(Date.now())) {
-        res.status(400).send({ error: "you can't cancel this reservation" })
-    }
-
-    reservation.reservedRoomIds.forEach(async (reser) => {
-        let findRoom
-        try {
-            findRoom = await room.findOne({ _id: reser.roomID })
-            const newresDates = findRoom.reservedDates.filter((dates) => {
-                console.log((dates.in_date).toISOString() !== (reservation.inDate).toISOString() || dates.out_date.toISOString() !== reservation.outDate.toISOString())
-                return (dates.in_date.toISOString() !== reservation.inDate.toISOString() || dates.out_date.toISOString() !== reservation.outDate.toISOString())
-            })
-            console.log(newresDates)
-            findRoom.reservedDates = newresDates
-            console.log(findRoom)
-            await findRoom.save()
-        }
-        catch (e) {
-            console.log(e)
-            res.status(500).send(e)
-        }
-    })
-    reservation.isCancelled = true;
-    await reservation.save();
-    res.sendStatus(200)
-
 })
 
 app.post('/api/forgotpass/sendotp', async (req, res) => {
@@ -1121,6 +1240,8 @@ app.post('/api/forgotpass/verifyotp', async (req, res) => {
         return res.status(500).send(e)
     }
 })
+
+
 
 
 

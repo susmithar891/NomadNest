@@ -61,9 +61,8 @@ const reserveSchema = mongoose.Schema({
         type : Boolean,
         deafult : false
     },
-    bookingId : {
+    sessionId : {
         type: String,
-        ref : 'booking',
     },
     hotelName : {
         type : String,

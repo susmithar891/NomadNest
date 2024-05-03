@@ -13,8 +13,13 @@ const ReserveCard = (props) => {
     const handlePayment = async (e, reserveId) => {
         e.preventDefault()
         try {
-            const res = await request.post(`api/user/${props.userState._id}/payment`, { reserveId: reserveId })
+            console.log(reserveId)
+            const res = await request.post(`api/user/payment`, { reserveId: reserveId })
             console.log(res)
+            if(res.data.sessionUrl){
+                
+                window.open(res.data.sessionUrl,"_blank")
+            }
         }
         catch (e) {
             console.log(e)
@@ -58,7 +63,7 @@ const ReserveCard = (props) => {
                             </button>
                         } */}
                         {new Date(Date.now()) < inDate && <button className='btn btn-warning container m-2' onClick={handleCancel}>Cancel</button>}
-                        <button type="button" className="btn btn-success container m-2 " onClick={(e) => handlePayment(e, props.reserve.id)}>
+                        <button type="button" className="btn btn-success container m-2 " onClick={(e) => handlePayment(e, props.reserve._id)}>
                             Pay
                         </button>
                         {new Date(Date.now()) > inDate && <CommentModel reserveId={props.reserve._id} />}                    
