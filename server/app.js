@@ -52,14 +52,14 @@ const corsOption = {
 //middlewares
 app.use(express.static(path.join(__dirname, '/public')))
 app.use(express.urlencoded({ extended: true }))
-// app.use(express.json())
-app.use((req, res, next) => {
-    if (req.originalUrl.includes("/webhook")) {
-        next();
-    } else {
-        express.json({ limit: "1mb" })(req, res, next);
-    }
-});
+app.use(express.json())
+// app.use((req, res, next) => {
+//     if (req.originalUrl.includes("/webhook")) {
+//         next();
+//     } else {
+//         express.json({ limit: "1mb" })(req, res, next);
+//     }
+// });
 app.use(cookieparser())
 app.use(cors(corsOption));
 
