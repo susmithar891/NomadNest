@@ -31,7 +31,7 @@ const reserve = require('./models/reserve.model')
 const otp = require('./models/otp.model')
 const forgotPass = require('./models/passotp.model')
 const { accessSync } = require("fs")
-const { sendMail, sendOTP, sendPass } = require('./controllers/emailService')
+const { sendMail, sendOTP, sendPass ,cancelBook} = require('./controllers/emailService')
 const genRandPass = require('./controllers/generatePass')
 const { profile } = require("console")
 
@@ -797,7 +797,7 @@ app.post('/api/user/payment', async (req, res) => {
         }
     }
     catch (e) {
-        return res.status(500).send(e)
+        return res.status(403).send(e)
     }
 
     let reserving
@@ -806,7 +806,7 @@ app.post('/api/user/payment', async (req, res) => {
 
     }
     catch (e) {
-        return res.status(500).send(e)
+        return res.status(401).send(e)
     }
 
     if (!reserving) {
@@ -818,14 +818,14 @@ app.post('/api/user/payment', async (req, res) => {
         hotelData = await hotel.findOne({ _id: reserving.hotelId })
     }
     catch(e){
-        return res.status(500).send({ error: e })
+        return res.status(404).send({ error : e })
     }
     if (!hotelData) {
         return res.status(400).send({ "error": "No such hotel Id" })
     }
     const lineItems = reserving.reservedRoomIds.map((roomId) => {
         return {
-            price_data: {
+            price_data: {   
                 currency: 'usd',
                 product_data: {
                     name: hotelData.hotelName + " " + roomId.roomNo
@@ -848,6 +848,7 @@ app.post('/api/user/payment', async (req, res) => {
             cancel_url: `${process.env.CLIENT_URL}/failed`
         })
         reserving.sessionId = session.id
+        reserving.isPaid = true;
         await reserving.save()
         res.status(200).send({ sessionUrl: session.url });
 
@@ -966,7 +967,6 @@ app.post('/api/reserving/cancel', async (req, res) => {
     let reservation
     try {
         reservation = await reserve.findOne({ _id: reserveId, userId: user_det._id })
-        // console.log(reservation)
     } catch (e) {
         res.status(500).send(e)
     }
@@ -978,10 +978,7 @@ app.post('/api/reserving/cancel', async (req, res) => {
     let bookingInfo;
     try{
         bookingInfo = await booking.findOne({sessionId : reservation.sessionId})
-        const refund = await stripe.refunds.create({
-            payment_intent: bookingInfo.paymentIntent,
-            amount:bookingInfo.amountPaid,
-        });
+
     }catch(e){
         res.status(500).send({error : e})
     }
@@ -998,10 +995,10 @@ app.post('/api/reserving/cancel', async (req, res) => {
                 console.log((dates.in_date).toISOString() !== (reservation.inDate).toISOString() || dates.out_date.toISOString() !== reservation.outDate.toISOString())
                 return (dates.in_date.toISOString() !== reservation.inDate.toISOString() || dates.out_date.toISOString() !== reservation.outDate.toISOString())
             })
-            console.log(newresDates)
             findRoom.reservedDates = newresDates
-            console.log(findRoom)
+            await cancelBook(user_det.email,reservation._id,reservation.price,reservation.hotelName)
             await findRoom.save()
+
         }
         catch (e) {
             console.log(e)

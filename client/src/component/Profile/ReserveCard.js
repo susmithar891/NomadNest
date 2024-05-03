@@ -3,6 +3,7 @@ import request from '../../api/axios'
 import CommentModel from './CommentModel'
 import { useNavigate } from 'react-router-dom'
 
+
 const ReserveCard = (props) => {
     const navigate = useNavigate()
     let inDate = new Date(props.reserve.inDate)
@@ -10,15 +11,23 @@ const ReserveCard = (props) => {
     let outDate = new Date(props.reserve.outDate)
     outDate.setDate(outDate.getDate() - 1)
 
+
+
+
     const handlePayment = async (e, reserveId) => {
         e.preventDefault()
         try {
             console.log(reserveId)
             const res = await request.post(`api/user/payment`, { reserveId: reserveId })
             console.log(res)
-            if(res.data.sessionUrl){
-                
-                window.open(res.data.sessionUrl,"_blank")
+            if (res.data.sessionUrl) {
+                props.reserveFunc(props.reservings.map(item => {
+                    if (item._id === props.reserve._id) {
+                        return { ...item, isPaid: true };
+                    }
+                    return item;
+                }));
+                window.open(res.data.sessionUrl, "_blank")
             }
         }
         catch (e) {
@@ -35,7 +44,12 @@ const ReserveCard = (props) => {
         e.preventDefault()
         try {
             const res = await request.post('/api/reserving/cancel', { reserveId: props.reserve._id })
-            console.log(res)
+            props.reserveFunc(props.reservings.map(item => {
+                if (item._id === props.reserve._id) {
+                    return { ...item, isCancelled: true };
+                }
+                return item;
+            }));
 
         } catch (e) {
             console.log(e)
@@ -63,13 +77,17 @@ const ReserveCard = (props) => {
                             </button>
                         } */}
                         {new Date(Date.now()) < inDate && <button className='btn btn-warning container m-2' onClick={handleCancel}>Cancel</button>}
-                        <button type="button" className="btn btn-success container m-2 " onClick={(e) => handlePayment(e, props.reserve._id)}>
-                            Pay
-                        </button>
-                        {new Date(Date.now()) > inDate && <CommentModel reserveId={props.reserve._id} />}                    
-                    </div> : 
+                        {!props.reserve.isPaid ?
+                            <button type="button" className="btn btn-primary container m-2" onClick={(e) => handlePayment(e, props.reserve._id)}>
+                                Pay
+                            </button> :
+                            <button type="button" className="btn btn-warning container m-2" onClick={(e) => handlePayment(e, props.reserve._id)} disabled>Paid</button>
+                        }
+
+                        {new Date(Date.now()) > inDate && <CommentModel reserveId={props.reserve._id} />}
+                    </div> :
                     <div className='container w-50 my-auto'>
-                        <button disabled className='btn btn-outline container m-2' style={{color : "red"}}>Cancelled</button>
+                        <button disabled className='btn btn-outline container m-2' style={{ color: "red" }}>Cancelled</button>
                     </div>
                 }
 

@@ -9,18 +9,26 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-// const transporter = nodemailer.createTransport({
-//     host: 'smtp.gmail.com',
-//     port: 465,
-//     secure: true,
-//     auth: {
-//      type: 'OAuth2',
-//      user: 'nomadnestservice@centered-oasis-418917.iam.gserviceaccount.com',  // Your email address
-//      serviceClient: process.env.GOOGLE_OAUTH_CLIENT_ID,
-//      privateKey: process.env.GOOGLE_OAUTH_private_key,
-//      accessUrl: "https://www.googleapis.com/oauth2/v4/token"
-//     }
-//  })
+
+const cancelBook = (to_user,reserveId,totalPrice,hotelName) => {
+    var mailOptions = {
+        from: process.env.EMAIL,
+        to: to_user,
+        subject: `NomadNest : Cancellation of Reserved rooms in hotel ${hotelName}`,
+        text: `you have cancelled your reseravtion with Reservation ID: ${reserveId}. \n A total of ${totalPrice} is refuneded into your account` // Plain text body
+    };
+    transporter.sendMail(mailOptions,function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+}
+
+
+
+
 
 const sendMail = (to_user,reserveId, roomNums, password,totalPrice,hotelName) => {
     var mailOptions = {
@@ -73,6 +81,7 @@ const sendPass = (to_user,pass) => {
 module.exports = {
     sendMail,
     sendOTP,
-    sendPass
+    sendPass,
+    cancelBook
 }
 
