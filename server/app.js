@@ -996,7 +996,7 @@ app.post('/api/reserving/cancel', async (req, res) => {
                 return (dates.in_date.toISOString() !== reservation.inDate.toISOString() || dates.out_date.toISOString() !== reservation.outDate.toISOString())
             })
             findRoom.reservedDates = newresDates
-            await cancelBook(user_det.email,reservation._id,reservation.price,reservation.hotelName)
+            await cancelBook(user_det.email,reservation._id,reservation.price,reservation.hotelName,reservation.isPaid)
             await findRoom.save()
 
         }

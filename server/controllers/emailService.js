@@ -10,12 +10,12 @@ var transporter = nodemailer.createTransport({
 });
 
 
-const cancelBook = (to_user,reserveId,totalPrice,hotelName) => {
+const cancelBook = (to_user,reserveId,totalPrice,hotelName,isPaid) => {
     var mailOptions = {
         from: process.env.EMAIL,
         to: to_user,
         subject: `NomadNest : Cancellation of Reserved rooms in hotel ${hotelName}`,
-        text: `you have cancelled your reseravtion with Reservation ID: ${reserveId}. \n A total of ${totalPrice} is refuneded into your account` // Plain text body
+        text: isPaid ? `Your reseravtion with Reservation ID: ${reserveId} has been cancelled. \n A total of ${totalPrice} is refuneded into your account` : `Your reseravtion with Reservation ID: ${reserveId} has been cancelled.` // Plain text body
     };
     transporter.sendMail(mailOptions,function (error, info) {
         if (error) {
