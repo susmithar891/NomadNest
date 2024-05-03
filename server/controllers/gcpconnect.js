@@ -4,7 +4,7 @@ require('dotenv').config()
 
 
 
-const projectId = 'centered-oasis-418917'
+const projectId = process.env.GOOGLE_OAUTH_PROJECT_ID
 
 const storage = new Storage({
     projectId,
@@ -33,7 +33,7 @@ const multer = Multer({
 })
 
 
-const bucket = storage.bucket('nomadnest')
+const bucket = storage.bucket('nomadnest2')
 
 
 module.exports = { multer, bucket }
