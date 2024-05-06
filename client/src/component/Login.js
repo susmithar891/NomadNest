@@ -192,7 +192,7 @@ const Login = () => {
 										Password
 									</label>
 										<div>
-											<Link to="?forgot-password" target={"_blank"}>forgot password ?</Link>
+											<Link to="?forgot-password" target={"_blank"}>forgot password ??</Link>
 										</div>
 									</div>
 									<div>
