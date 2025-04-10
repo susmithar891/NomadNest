@@ -1,6 +1,6 @@
 # 🏡 NomadNest
 
-NomadNest is a full-stack web application that supports digital nomads by offering affordable and flexible housing options tailored to their lifestyle needs.
+NomadNest is a full-stack web application that supports digital nomads by offering affordable and flexible stay options tailored to their lifestyle needs providing 360 degree virtual view.
 
 ---
 
@@ -19,7 +19,6 @@ NomadNest is a full-stack web application that supports digital nomads by offeri
 
 ### Backend
 - **Node.js**
-- **Express.js**
 
 ### Database
 - **MongoDB**
@@ -32,7 +31,7 @@ NomadNest is a full-stack web application that supports digital nomads by offeri
 - 🔍 Filter housing options by price, amenities, or duration
 - 💬 User authentication and profile management
 - 🗂 Save favorite properties and booking history
-- ⚙️ Admin panel for listing management
+- ⚙️ 360 degree virtual view
 
 ---
 
