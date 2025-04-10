@@ -1,6 +1,57 @@
-# Nomad Nest
+# 🏡 NomadNest
 
-NomadNest supports digital nomads by providing affordable and flexible housing options tailored to their needs.
+NomadNest is a full-stack web application that supports digital nomads by offering affordable and flexible housing options tailored to their lifestyle needs.
+
+---
+
+## 🌍 Project Overview
+
+**NomadNest** aims to help remote workers and digital nomads easily discover, compare, and book short to mid-term housing options around the world. With a sleek user interface and reliable backend, it delivers a seamless experience for finding the perfect place to live and work.
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **HTML5**
+- **CSS3**
+- **React.js**
+
+### Backend
+- **Node.js**
+- **Express.js**
+
+### Database
+- **MongoDB**
+
+---
+
+## 📦 Features
+
+- 🌐 Explore listings across different cities
+- 🔍 Filter housing options by price, amenities, or duration
+- 💬 User authentication and profile management
+- 🗂 Save favorite properties and booking history
+- ⚙️ Admin panel for listing management
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+Make sure you have the following installed:
+- Node.js (v14+)
+- npm or yarn
+- MongoDB (local or remote)
+- Git
+
+---
+
+### 📁 Clone the Repository
+```bash
+git clone https://github.com/yourusername/NomadNest.git
+cd NomadNest
+
 
 ## Run Locally
 
